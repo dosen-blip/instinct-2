@@ -33,9 +33,9 @@
   ];
 
   const mobileLineupNext = [
-    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-next-dj-cobb') },
-    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-next-seb-balla') },
-    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-next-babyjake') }
+    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-next-dj-cobb'), position: 'center 36%' },
+    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-next-seb-balla'), position: 'center 59%' },
+    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-next-babyjake'), position: 'center 50%' }
   ];
 
   const recaps = {
@@ -359,21 +359,65 @@
   function render() {
     const app = document.getElementById('app');
     const route = getRoute();
+    let page = '';
 
     if (route === 'index') {
-      app.innerHTML = renderHome();
+      page = renderHome();
     } else if (route === 'next-event') {
-      app.innerHTML = renderNextEvent();
+      page = renderNextEvent();
     } else if (recaps[route]) {
-      app.innerHTML = renderRecap(recaps[route]);
+      page = renderRecap(recaps[route]);
     } else if (artists[route]) {
-      app.innerHTML = renderArtist(artists[route]);
+      page = renderArtist(artists[route]);
     } else {
-      app.innerHTML = renderMissing();
+      page = renderMissing();
     }
 
+    app.innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
     setupLightbox();
     document.documentElement.dataset.route = route;
+  }
+
+  function siteHeader(route) {
+    const isRecap = Boolean(recaps[route]);
+    const isArtist = Boolean(artists[route]);
+    const linkClass = (name) => (route === name ? ' class="is-active"' : '');
+
+    return `
+      <header class="site-header">
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a class="site-brand ${route === 'index' ? 'is-active' : ''}" href="${routes.home}">
+            <span aria-hidden="true">IG</span>
+            <strong>Instinct Groove</strong>
+          </a>
+          <div class="site-nav__links">
+            <a${linkClass('next-event')} href="${routes.next}">Next Event</a>
+            <details class="site-nav-menu ${isRecap ? 'is-active' : ''}">
+              <summary>Recaps</summary>
+              <div>
+                <a${linkClass('vol-1')} href="${routes.vol1}">Vol. 1</a>
+                <a${linkClass('vol-2')} href="${routes.vol2}">Vol. 2</a>
+                <a${linkClass('vol-3')} href="${routes.vol3}">Vol. 3</a>
+                <a${linkClass('vol-4')} href="${routes.vol4}">Vol. 4</a>
+              </div>
+            </details>
+            <details class="site-nav-menu ${isArtist ? 'is-active' : ''}">
+              <summary>Artists</summary>
+              <div>
+                <a${linkClass('dj-cobb')} href="${routes.djCobb}">DJ Cobb</a>
+                <a${linkClass('seb-b-balla')} href="${routes.sebBalla}">Seb B/Balla</a>
+                <a${linkClass('babyjake')} href="${routes.babyjake}">BabyJake</a>
+                <a${linkClass('ty-groove')} href="${routes.ty}">Ty Groove</a>
+                <a${linkClass('seb-couture')} href="${routes.seb}">Seb Couture</a>
+                <a${linkClass('dose')} href="${routes.dose}">D.O.S.E</a>
+              </div>
+            </details>
+            <a href="${links.mobileTickets}" target="_blank" rel="noreferrer">Tickets</a>
+            <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+        </nav>
+      </header>
+    `;
   }
 
   function renderHome() {
@@ -382,14 +426,6 @@
         <div class="desktop-view">
           <section class="home-hero section-border">
             <img class="home-hero__image" src="${asset('home-hero')}" alt="Instinct Groove artwork">
-            <div class="top-contact">
-              <a href="${links.instagram}" target="_blank" rel="noreferrer">@Instinct.groove</a>
-              <a href="${links.email}">Info@instinctgroove.net</a>
-            </div>
-            <nav class="top-actions" aria-label="Primary">
-              <a href="${routes.next}">Next event</a>
-              <a href="${links.tickets}" target="_blank" rel="noreferrer">Tickets</a>
-            </nav>
             <p class="home-hero__tagline">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p>
           </section>
 
@@ -449,13 +485,6 @@
   function renderMobileHome() {
     return `
       <div class="mobile-view mobile-home">
-        <header class="mobile-home-header">
-          <a class="mobile-home-company" href="${routes.home}">
-            <img src="${asset('mobile-mcp-home-logo')}" alt="">
-            <span>Instinct Groove</span>
-          </a>
-          <a class="mobile-home-next" href="${routes.next}">Next event</a>
-        </header>
         <section class="mobile-home-hero">
           <img src="${asset('mobile-mcp-home-hero')}" alt="Instinct Groove artwork">
           <p class="mobile-home-welcome">Welcome to.....</p>
@@ -502,12 +531,6 @@
           <p>Limited capacity</p>
           <a href="${links.mobileTickets}" target="_blank" rel="noreferrer">Buy Tickets</a>
         </section>
-        <footer class="mobile-home-footer">
-          <a href="${links.instagram}" target="_blank" rel="noreferrer">@Instinct.groove</a>
-          <a href="${links.email}">Info@instinctgroove.net</a>
-          <p>INSTINCT GROOVE</p>
-          <p>Ottawa's Minimal Tech & House Experience</p>
-        </footer>
       </div>
     `;
   }
@@ -565,7 +588,6 @@
           </section>
 
           ${ticketCta('Limited capacity')}
-          ${footer()}
         </div>
         ${renderMobileNextEvent()}
       </div>
@@ -603,10 +625,9 @@
         </section>
         <section class="mobile-drinks">
           <h2>Feature Drinks</h2>
-          ${mobileDrinkCard('COCKTAIL', 'Festival Fuel', 'Need that Post Festival boost? Well Vodka, curaçao, OJ, and redbull may be what you need.', asset('mobile-mcp-drink-festival-fuel'), 'pink')}
-          ${mobileDrinkCard('SHOT', 'Liquid Cocaine', 'Bold, sharp, and gone in a second. Not for the faint of heart.', asset('mobile-mcp-drink-liquid-cocaine'), 'purple')}
+          ${mobileDrinkCard('COCKTAIL', 'Festival Fuel', 'Need that Post Festival boost? Well Vodka, curaçao, OJ, and redbull may be what you need.', asset('mobile-mcp-drink-festival-fuel'), 'pink', 'center 45%')}
+          ${mobileDrinkCard('SHOT', 'Liquid Cocaine', 'Bold, sharp, and gone in a second. Not for the faint of heart.', asset('mobile-mcp-drink-liquid-cocaine'), 'purple', 'center 45%')}
         </section>
-        ${mobileFooter()}
       </article>
     `;
   }
@@ -614,17 +635,17 @@
   function mobileLineupCard(artist) {
     return `
       <a class="mobile-lineup-card" href="${artist.href}">
-        <img src="${artist.image}" alt="${artist.name}">
+        ${mediaImage(artist.image, artist.name, '', artist.position)}
         <span>${artist.name}</span>
       </a>
     `;
   }
 
-  function mobileDrinkCard(type, title, text, image, tone) {
+  function mobileDrinkCard(type, title, text, image, tone, position) {
     return `
       <article class="mobile-drink-card mobile-drink-card--${tone}">
         <div>
-          <img src="${image}" alt="${title}">
+          ${mediaImage(image, title, '', position)}
           <span>${type}</span>
         </div>
         <h3>${title}</h3>
@@ -644,7 +665,6 @@
     return `
       <div class="with-mobile">
         <article class="desktop-view recap-page recap-page--${recap.layout}">
-          ${recapNav(currentSlug)}
           <section class="recap-intro">
             <div class="section-kicker ${recap.layout === 'centered' ? 'section-kicker--center' : ''}"><span></span>${recap.eyebrow}<span></span></div>
             <h1>${recap.title}</h1>
@@ -699,7 +719,6 @@
             <a href="${mobile.nextHref}">${mobile.nextLabel} →</a>
           </nav>
         </section>
-        ${mobileFooter()}
       </article>
     `;
   }
@@ -756,7 +775,6 @@
     const desktop = `
       <article class="desktop-view artist-page">
         <section class="artist-hero">
-          <a class="corner-home" href="${routes.home}">Instinct Groove</a>
           <div class="artist-hero__glow"></div>
           <h1>${artist.name}</h1>
           <div class="artist-socials">
@@ -800,7 +818,6 @@
         <section class="qa-block qa-block--left">
           ${qa(artist.qas[2])}
         </section>
-        ${footer()}
       </article>
     `;
 
@@ -853,7 +870,6 @@
         <nav class="mobile-artist-nav" aria-label="Artist navigation">
           ${mobile.nav.map((item) => `<a href="${item.href}">${item.label}</a>`).join('')}
         </nav>
-        ${mobileFooter()}
       </article>
     `;
   }
@@ -900,6 +916,12 @@
     `;
   }
 
+  function mediaImage(src, alt, className = '', position = '') {
+    const classAttr = className ? ` class="${className}"` : '';
+    const styleAttr = position ? ` style="--media-position: ${position}"` : '';
+    return `<img${classAttr} src="${src}" alt="${alt}"${styleAttr}>`;
+  }
+
   function ticketCta(copy) {
     return `
       <section class="ticket-cta">
@@ -910,12 +932,17 @@
     `;
   }
 
-  function footer() {
-    return `<footer class="site-footer"><a href="${routes.home}">© 2025 Instinct Groove</a></footer>`;
-  }
-
-  function mobileFooter() {
-    return `<footer class="mobile-footer"><a href="${routes.home}">© 2025 Instinct Groove</a></footer>`;
+  function siteFooter() {
+    return `
+      <footer class="site-footer">
+        <a class="site-footer__brand" href="${routes.home}">Instinct Groove</a>
+        <div>
+          <a href="${links.instagram}" target="_blank" rel="noreferrer">@Instinct.groove</a>
+          <a href="${links.email}">Info@instinctgroove.net</a>
+        </div>
+        <p>Ottawa's Minimal Tech & House Experience</p>
+      </footer>
+    `;
   }
 
   function renderMissing() {
