@@ -26,16 +26,20 @@
     curtis: 'https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
   };
 
+  // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
+  const homePreviewVideo = './assets/home-preview.mp4';
+
   const lineupNext = [
-    { name: 'Ty Groove', href: routes.ty, image: asset('next-ty') },
-    { name: 'Seb Couture', href: routes.seb, image: asset('next-seb') },
-    { name: 'D.O.S.E', href: routes.dose, image: asset('next-dose') }
+    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-artist-dj-cobb-photo') },
+    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-artist-seb-balla-photo') },
+    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-artist-babyjake-photo') }
   ];
 
+  // Images are pre-cropped to the card aspect ratio (356x138), so they fill cleanly without focal tweaks.
   const mobileLineupNext = [
-    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-next-dj-cobb'), position: 'center 36%' },
-    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-next-seb-balla'), position: 'center 59%' },
-    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-next-babyjake'), position: 'center 50%' }
+    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-next-dj-cobb') },
+    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-next-seb-balla') },
+    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-next-babyjake') }
   ];
 
   const recaps = {
@@ -430,8 +434,12 @@
           </section>
 
           <section class="preview-panel section-border">
-            <img src="${asset('home-preview')}" alt="Event preview atmosphere">
-            <h2><span>Event</span> Preview</h2>
+            <div class="preview-panel__inner">
+              <h2><span>Event</span> Preview</h2>
+              <div class="preview-panel__media">
+                ${homePreviewMedia('home-preview', 'Event preview atmosphere', homePreviewVideo)}
+              </div>
+            </div>
           </section>
 
           <section class="next-card section-border">
@@ -462,9 +470,10 @@
           <section class="previous-events section-border">
             <h2>Previous Events</h2>
             <div class="event-tiles">
-              ${eventTile(routes.vol1, asset('home-vol1-thumb'), 'Vol. 1')}
-              ${eventTile(routes.vol2, asset('home-vol2-thumb'), 'Vol. 2')}
-              ${eventTile(routes.vol3, asset('home-vol3-thumb'), 'Vol. 3')}
+              ${eventTile(routes.vol1, asset('home-vol1-card'), 'Vol. 1')}
+              ${eventTile(routes.vol2, asset('home-vol2-card'), 'Vol. 2')}
+              ${eventTile(routes.vol3, asset('home-vol3-card'), 'Vol. 3')}
+              ${eventTile(routes.vol4, asset('home-vol4-card'), 'Vol. 4')}
             </div>
           </section>
 
@@ -493,7 +502,7 @@
         <section class="mobile-home-section mobile-home-preview">
           <div class="mobile-section-label"><span></span>Event Preview</div>
           <div class="mobile-home-video">
-            <img src="${asset('mobile-home-preview')}" alt="Event preview">
+            ${homePreviewMedia('mobile-home-preview', 'Event preview', homePreviewVideo)}
           </div>
         </section>
         <section class="mobile-home-section mobile-home-next-card">
@@ -521,10 +530,10 @@
         </section>
         <section class="mobile-home-section mobile-home-events">
           <h2>Previous Events</h2>
-          ${mobileHomeEvent(routes.vol1, asset('mobile-mcp-home-vol1'), 'Vol. 1')}
-          ${mobileHomeEvent(routes.vol2, asset('mobile-mcp-home-vol2'), 'Vol. 2')}
-          ${mobileHomeEvent(routes.vol3, asset('mobile-mcp-home-vol3'), 'Vol. 3')}
-          ${mobileHomeEvent(routes.vol4, asset('mobile-mcp-home-vol4'), 'Vol. 4')}
+          ${mobileHomeEvent(routes.vol1, asset('home-vol1-card'), 'Vol. 1')}
+          ${mobileHomeEvent(routes.vol2, asset('home-vol2-card'), 'Vol. 2')}
+          ${mobileHomeEvent(routes.vol3, asset('home-vol3-card'), 'Vol. 3')}
+          ${mobileHomeEvent(routes.vol4, asset('home-vol4-card'), 'Vol. 4')}
         </section>
         <section class="mobile-home-section mobile-home-tickets">
           <h2><span>Get</span> Tickets</h2>
@@ -561,12 +570,12 @@
             <img src="${asset('next-backdrop')}" alt="Instinct event backdrop">
             <div class="event-hero__shade"></div>
             <div class="event-hero__content">
-              <h1>May 1st</h1>
+              <h1>June 26th</h1>
               <span class="green-rule"></span>
               <div class="event-detail-card">
                 <strong>10:00pm - 2:30am</strong>
-                <span>City at Night</span>
-                <span>222 Slater St</span>
+                <span>ANNX</span>
+                <span>221 Rideau Street</span>
               </div>
             </div>
           </section>
@@ -582,8 +591,8 @@
           <section class="drinks-section">
             <h2>Feature Drinks</h2>
             <div class="drink-grid">
-              ${drinkCard('Cocktail', 'Melon Lemonade', 'A refreshing mix of sweet melon and zesty lemonade, this cocktail is light, crisp, and perfect for any summer moment.', asset('drink-melon'))}
-              ${drinkCard('Shot', 'Scooby Doo Shot', 'A quick hit of coconut, melon, and pineapple, this Scooby Doo shot is smooth, fruity, and goes down easy.', asset('drink-scooby'))}
+              ${drinkCard('Cocktail', 'Festival Fuel', 'Need that Post Festival boost? Well Vodka, curaçao, OJ, and redbull may be what you need.', asset('mobile-mcp-drink-festival-fuel'))}
+              ${drinkCard('Shot', 'Liquid Cocaine', 'Bold, sharp, and gone in a second. Not for the faint of heart.', asset('mobile-mcp-drink-liquid-cocaine'))}
             </div>
           </section>
 
@@ -634,8 +643,8 @@
 
   function mobileLineupCard(artist) {
     return `
-      <a class="mobile-lineup-card" href="${artist.href}">
-        ${mediaImage(artist.image, artist.name, '', artist.position)}
+      <a class="mobile-lineup-card" href="${artist.href}" aria-label="${artist.name}">
+        <img src="${artist.image}" alt="${artist.name}">
         <span>${artist.name}</span>
       </a>
     `;
@@ -920,6 +929,22 @@
     const classAttr = className ? ` class="${className}"` : '';
     const styleAttr = position ? ` style="--media-position: ${position}"` : '';
     return `<img${classAttr} src="${src}" alt="${alt}"${styleAttr}>`;
+  }
+
+  function homePreviewMedia(posterName, alt, video = '') {
+    const poster = asset(posterName);
+
+    if (!video) {
+      return `<img src="${poster}" alt="${alt}">`;
+    }
+
+    const type = video.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+    return `
+      <video autoplay muted loop playsinline preload="metadata" poster="${poster}" aria-label="${alt}">
+        <source src="${video}" type="${type}">
+        <img src="${poster}" alt="${alt}">
+      </video>
+    `;
   }
 
   function ticketCta(copy) {

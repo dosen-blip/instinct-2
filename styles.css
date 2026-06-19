@@ -369,26 +369,49 @@ img[style*="--media-position"] {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 80px 24px;
   isolation: isolate;
 }
 
-.preview-panel img {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
+.preview-panel__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(40px, 6vw, 96px);
+  width: min(1100px, 100%);
+}
+
+.preview-panel__media {
+  flex: none;
+  aspect-ratio: 9 / 16;
+  height: clamp(440px, 62vh, 600px);
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(155, 93, 229, 0.35);
+  background: #050108;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+
+.preview-panel img,
+.preview-panel video {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.86;
 }
 
 .preview-panel h2 {
+  flex: 0 1 auto;
   margin: 0;
   color: #fff;
-  font-size: 128px;
+  font-size: clamp(72px, 7.5vw, 124px);
   line-height: 0.95;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.preview-panel h2 span {
+  display: block;
 }
 
 .preview-panel h2 span,
@@ -523,8 +546,8 @@ img[style*="--media-position"] {
 
 .event-tiles {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
   width: min(1248px, calc(100% - 48px));
   margin: 0 auto;
 }
@@ -539,14 +562,10 @@ img[style*="--media-position"] {
 }
 
 .event-tile {
-  height: 256px;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.event-tile:nth-child(2) {
-  transform: translateY(37px);
 }
 
 .event-tile img,
@@ -571,7 +590,7 @@ img[style*="--media-position"] {
   position: relative;
   z-index: 1;
   color: #fff;
-  font-size: 72px;
+  font-size: clamp(40px, 4vw, 56px);
   font-weight: 900;
 }
 
@@ -1301,6 +1320,7 @@ img[style*="--media-position"] {
 }
 
 .preview-panel img,
+.preview-panel video,
 .tickets-strip > img,
 .event-hero > img {
   object-position: center center;
@@ -1325,6 +1345,16 @@ img[style*="--media-position"] {
   .recap-intro h1,
   .event-hero h1 {
     font-size: 88px;
+  }
+
+  .preview-panel__inner {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .preview-panel h2 {
+    flex: 0 0 auto;
+    text-align: center;
   }
 
   .about-grid,
@@ -1354,15 +1384,13 @@ img[style*="--media-position"] {
     justify-content: flex-start;
   }
 
-  .event-tiles,
   .lineup-grid,
   .drink-grid {
     grid-template-columns: 1fr;
   }
 
-  .event-tile:nth-child(2) {
-    transform: none;
-    margin-top: 0;
+  .event-tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .lineup-card {
@@ -1614,17 +1642,21 @@ img[style*="--media-position"] {
   }
 
   .mobile-home-video {
-    height: 608px;
+    aspect-ratio: 342 / 608;
+    height: auto;
     margin-top: 24px;
     border: 2px solid rgba(155, 93, 229, 0.3);
     padding: 2px;
     overflow: hidden;
   }
 
-  .mobile-home-video img {
+  .mobile-home-video img,
+  .mobile-home-video video {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
   }
 
   .mobile-home-next-card {
@@ -1981,16 +2013,27 @@ img[style*="--media-position"] {
 
   .mobile-lineup-card {
     position: relative;
-    height: 140px;
+    aspect-ratio: 356 / 138;
+    height: auto;
+    background-color: #050107;
     overflow: hidden;
-    border: 1px solid rgba(124, 58, 237, 0.3);
+    border: 2px solid var(--green);
     border-radius: 14px;
   }
 
   .mobile-lineup-card img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
+    transition: transform 260ms ease;
+  }
+
+  .mobile-lineup-card:hover img,
+  .mobile-lineup-card:active img {
+    transform: scale(1.04);
   }
 
   .mobile-lineup-card::after {
@@ -2514,7 +2557,6 @@ img[style*="--media-position"] {
     color: #fff;
   }
 
-  .mobile-home-video img,
   .mobile-home-poster img,
   .mobile-home-crew img,
   .mobile-home-event img,
