@@ -379,6 +379,7 @@
 
     app.innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
     setupLightbox();
+    setupNav();
     document.documentElement.dataset.route = route;
   }
 
@@ -390,11 +391,12 @@
     return `
       <header class="site-header">
         <nav class="site-nav" aria-label="Primary navigation">
-          <a class="site-brand ${route === 'index' ? 'is-active' : ''}" href="${routes.home}">
-            <span aria-hidden="true">IG</span>
-            <strong>Instinct Groove</strong>
+          <a class="site-brand ${route === 'index' ? 'is-active' : ''}" href="${routes.home}" aria-label="Instinct Groove — home">
+            <span class="site-brand__mark" aria-hidden="true"></span>
+            <span class="site-brand__name">Instinct Groove</span>
           </a>
-          <div class="site-nav__links">
+          <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
+          <div class="site-nav__links" id="site-menu">
             <a${linkClass('next-event')} href="${routes.next}">Next Event</a>
             <details class="site-nav-menu ${isRecap ? 'is-active' : ''}">
               <summary>Recaps</summary>
@@ -416,12 +418,33 @@
                 <a${linkClass('dose')} href="${routes.dose}">D.O.S.E</a>
               </div>
             </details>
-            <a href="${links.mobileTickets}" target="_blank" rel="noreferrer">Tickets</a>
+            <a class="is-cta" href="${links.mobileTickets}" target="_blank" rel="noreferrer">Tickets</a>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
           </div>
         </nav>
       </header>
     `;
+  }
+
+  function setupNav() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+    const toggle = header.querySelector('.site-nav__toggle');
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        const open = header.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      header.querySelectorAll('.site-nav__links a').forEach((a) => {
+        a.addEventListener('click', () => {
+          header.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
 
   function renderHome() {
