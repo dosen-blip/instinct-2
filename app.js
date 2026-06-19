@@ -1,5 +1,5 @@
 (function () {
-  const asset = (name) => `./assets/${name}.png`;
+  const asset = (name) => `./assets/${name}.webp`;
   const routes = {
     home: './index.html',
     next: './next-event.html',
