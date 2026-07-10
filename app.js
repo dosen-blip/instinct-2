@@ -3,6 +3,7 @@
   const routes = {
     home: './index.html',
     next: './next-event.html',
+    escapade: './escapade-afterparty.html',
     vol1: './vol-1.html',
     vol2: './vol-2.html',
     vol3: './vol-3.html',
@@ -16,8 +17,6 @@
   };
 
   const links = {
-    tickets: 'https://simpli.events/e/Instinctgroove',
-    mobileTickets: 'https://simpli.events/e/minimal-afterparty-instinct-annx',
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     email: 'mailto:Info@instinctgroove.net',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
@@ -29,20 +28,48 @@
   // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
   const homePreviewVideo = './assets/home-preview.mp4';
 
-  const lineupNext = [
-    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-artist-dj-cobb-photo') },
-    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-artist-seb-balla-photo') },
-    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-artist-babyjake-photo') }
-  ];
-
-  // Images are pre-cropped to the card aspect ratio (356x138), so they fill cleanly without focal tweaks.
-  const mobileLineupNext = [
-    { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-next-dj-cobb') },
-    { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-next-seb-balla') },
-    { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-next-babyjake') }
-  ];
-
   const recaps = {
+    'escapade-afterparty': {
+      title: 'Escapade Afterparty',
+      eyebrow: 'Event Recap',
+      date: 'June 26th, 2026 - ANNX',
+      intro: 'The Escapade Afterparty brought festival weekend into ANNX for one more late-night session. DJ Cobb, Seb B b2b Balla, and Baby Jake carried the room through a packed night of minimal tech and house, surrounded by the lighting, greenery, and close-quarters energy that define Instinct.',
+      layout: 'centered',
+      photoUrl: links.curtis,
+      photos: [
+        asset('escapade-photo1'),
+        asset('escapade-photo2'),
+        asset('escapade-photo3'),
+        asset('escapade-photo4'),
+        asset('escapade-photo5'),
+        asset('escapade-photo6'),
+        asset('escapade-photo7'),
+        asset('escapade-photo8')
+      ],
+      lineup: [
+        { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-artist-dj-cobb-photo') },
+        { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-artist-seb-balla-photo') },
+        { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-artist-babyjake-photo') }
+      ],
+      mobile: {
+        title: 'Escapade Afterparty',
+        date: 'June 2026 · ANNX',
+        poster: asset('escapade-photo2'),
+        tags: ['DJ Cobb', 'Seb B b2b Balla', 'Baby Jake'],
+        credit: 'Photos By: @_Curtisperry',
+        creditUrl: links.curtis,
+        photos: [
+          asset('escapade-photo1'),
+          asset('escapade-photo2'),
+          asset('escapade-photo3'),
+          asset('escapade-photo4'),
+          asset('escapade-photo5'),
+          asset('escapade-photo6'),
+          asset('escapade-photo7'),
+          asset('escapade-photo8')
+        ]
+      }
+    },
     'vol-1': {
       title: 'Vol. 1',
       eyebrow: 'Event Recap',
@@ -78,11 +105,7 @@
           asset('mobile-mcp-vol1-photo4'),
           asset('mobile-mcp-vol1-photo5'),
           asset('mobile-mcp-vol1-photo6')
-        ],
-        previousLabel: 'Home',
-        previousHref: routes.home,
-        nextLabel: 'Vol. 2',
-        nextHref: routes.vol2
+        ]
       }
     },
     'vol-2': {
@@ -118,11 +141,7 @@
           asset('mobile-mcp-vol2-photo4'),
           asset('mobile-mcp-vol2-photo5'),
           asset('mobile-mcp-vol2-photo6')
-        ],
-        previousLabel: 'Home',
-        previousHref: routes.home,
-        nextLabel: 'Vol. 3',
-        nextHref: routes.vol3
+        ]
       }
     },
     'vol-3': {
@@ -162,11 +181,7 @@
           asset('mobile-mcp-vol3-photo4'),
           asset('mobile-mcp-vol3-photo5'),
           asset('mobile-mcp-vol3-photo6')
-        ],
-        previousLabel: 'Home',
-        previousHref: routes.home,
-        nextLabel: 'Vol. 4',
-        nextHref: routes.vol4
+        ]
       }
     },
     'vol-4': {
@@ -203,14 +218,18 @@
           asset('mobile-mcp-vol4-photo4'),
           asset('mobile-mcp-vol4-photo5'),
           asset('mobile-mcp-vol4-photo6')
-        ],
-        previousLabel: 'Home',
-        previousHref: routes.home,
-        nextLabel: 'Vol. 1',
-        nextHref: routes.vol1
+        ]
       }
     }
   };
+
+  const pastEvents = [
+    { slug: 'escapade-afterparty', href: routes.escapade, title: 'Escapade Afterparty', date: 'June 26, 2026', venue: 'ANNX', image: asset('escapade-photo2') },
+    { slug: 'vol-4', href: routes.vol4, title: 'Vol. 4', date: 'April 2026', venue: 'City at Night', image: asset('home-vol4-card') },
+    { slug: 'vol-3', href: routes.vol3, title: 'Vol. 3', date: 'March 6, 2026', venue: 'ANNX', image: asset('home-vol3-card') },
+    { slug: 'vol-2', href: routes.vol2, title: 'Vol. 2', date: 'January 23, 2026', venue: 'ANNX', image: asset('home-vol2-card') },
+    { slug: 'vol-1', href: routes.vol1, title: 'Vol. 1', date: 'November 21, 2025', venue: 'ANNX', image: asset('home-vol1-card') }
+  ];
 
   const artists = {
     'ty-groove': {
@@ -399,12 +418,9 @@
           <div class="site-nav__links" id="site-menu">
             <a${linkClass('next-event')} href="${routes.next}">Next Event</a>
             <details class="site-nav-menu ${isRecap ? 'is-active' : ''}">
-              <summary>Recaps</summary>
+              <summary>Past Events</summary>
               <div>
-                <a${linkClass('vol-1')} href="${routes.vol1}">Vol. 1</a>
-                <a${linkClass('vol-2')} href="${routes.vol2}">Vol. 2</a>
-                <a${linkClass('vol-3')} href="${routes.vol3}">Vol. 3</a>
-                <a${linkClass('vol-4')} href="${routes.vol4}">Vol. 4</a>
+                ${pastEvents.map((event) => `<a${linkClass(event.slug)} href="${event.href}">${event.title}</a>`).join('')}
               </div>
             </details>
             <details class="site-nav-menu ${isArtist ? 'is-active' : ''}">
@@ -418,7 +434,7 @@
                 <a${linkClass('dose')} href="${routes.dose}">D.O.S.E</a>
               </div>
             </details>
-            <a class="is-cta" href="${links.mobileTickets}" target="_blank" rel="noreferrer">Tickets</a>
+            <span class="site-nav__status">Details Soon</span>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
           </div>
         </nav>
@@ -465,12 +481,16 @@
             </div>
           </section>
 
-          <section class="next-card section-border">
-            <a class="next-card__poster" href="${routes.next}" aria-label="Open next event">
-              <img src="${asset('home-next-poster')}" alt="Next event poster">
+          <section class="next-card next-card--teaser section-border">
+            <a class="next-teaser" href="${routes.next}" aria-label="Open August 14th event teaser">
+              <img src="${asset('next-backdrop')}" alt="">
+              <span class="next-teaser__glow" aria-hidden="true"></span>
+              <span class="next-teaser__content">
+                <span class="next-teaser__eyebrow">Next Event</span>
+                <time datetime="2026-08-14">August 14th</time>
+                <span class="next-teaser__copy">Coming soon…</span>
+              </span>
             </a>
-            <a class="split-heading" href="${routes.next}"><span>Next</span> Event</a>
-            <p>Click for more info......</p>
           </section>
 
           <section class="about-section section-border">
@@ -491,21 +511,18 @@
           </section>
 
           <section class="previous-events section-border">
-            <h2>Previous Events</h2>
+            <h2>Past Events</h2>
             <div class="event-tiles">
-              ${eventTile(routes.vol1, asset('home-vol1-card'), 'Vol. 1')}
-              ${eventTile(routes.vol2, asset('home-vol2-card'), 'Vol. 2')}
-              ${eventTile(routes.vol3, asset('home-vol3-card'), 'Vol. 3')}
-              ${eventTile(routes.vol4, asset('home-vol4-card'), 'Vol. 4')}
+              ${pastEvents.map((event) => eventTile(event)).join('')}
             </div>
           </section>
 
-          <section class="tickets-strip">
+          <section class="tickets-strip tickets-strip--soon">
             <img src="${asset('home-tickets')}" alt="">
             <div>
-              <h2><span>Get</span> Tickets</h2>
-              <p>Limited capacity - Early bird pricing available</p>
-              <a class="button button--solid" href="${links.tickets}" target="_blank" rel="noreferrer">Buy Tickets</a>
+              <h2><span>Details</span> Soon</h2>
+              <p>Venue, lineup, and tickets for August 14th will be announced soon.</p>
+              <span class="details-status">Coming soon…</span>
             </div>
           </section>
         </div>
@@ -530,10 +547,14 @@
         </section>
         <section class="mobile-home-section mobile-home-next-card">
           <h2><span>Next</span> Event</h2>
-          <a href="${routes.next}" class="mobile-home-poster">
-            <img src="${asset('mobile-mcp-home-next-poster')}" alt="Next event poster">
+          <a href="${routes.next}" class="mobile-home-poster mobile-next-teaser" aria-label="Open August 14th event teaser">
+            <img src="${asset('next-backdrop')}" alt="">
+            <span>
+              <time datetime="2026-08-14">August 14th</time>
+              <em>Coming soon…</em>
+            </span>
           </a>
-          <p>Click for more info......</p>
+          <p>Details coming soon</p>
         </section>
         <section class="mobile-home-section mobile-home-about">
           <div class="mobile-section-label"><span></span>About the Event</div>
@@ -552,35 +573,39 @@
           </div>
         </section>
         <section class="mobile-home-section mobile-home-events">
-          <h2>Previous Events</h2>
-          ${mobileHomeEvent(routes.vol1, asset('home-vol1-card'), 'Vol. 1')}
-          ${mobileHomeEvent(routes.vol2, asset('home-vol2-card'), 'Vol. 2')}
-          ${mobileHomeEvent(routes.vol3, asset('home-vol3-card'), 'Vol. 3')}
-          ${mobileHomeEvent(routes.vol4, asset('home-vol4-card'), 'Vol. 4')}
+          <h2>Past Events</h2>
+          ${pastEvents.map((event) => mobileHomeEvent(event)).join('')}
         </section>
         <section class="mobile-home-section mobile-home-tickets">
-          <h2><span>Get</span> Tickets</h2>
-          <p>Limited capacity</p>
-          <a href="${links.mobileTickets}" target="_blank" rel="noreferrer">Buy Tickets</a>
+          <h2><span>Details</span> Soon</h2>
+          <p>August 14th · Coming soon…</p>
+          <span class="mobile-home-ticket-status">Stay tuned</span>
         </section>
       </div>
     `;
   }
 
-  function mobileHomeEvent(href, image, label) {
+  function mobileHomeEvent(event) {
     return `
-      <a class="mobile-home-event" href="${href}">
-        <img src="${image}" alt="${label} event recap">
-        <span>${label}</span>
+      <a class="mobile-home-event" href="${event.href}">
+        <img src="${event.image}" alt="${event.title} event recap">
+        <span class="mobile-home-event__meta">
+          <strong>${event.title}</strong>
+          <small>${event.date} · ${event.venue}</small>
+        </span>
       </a>
     `;
   }
 
-  function eventTile(href, image, label) {
+  function eventTile(event) {
     return `
-      <a class="event-tile" href="${href}">
-        <img src="${image}" alt="${label} event recap">
-        <span>${label}</span>
+      <a class="event-tile" href="${event.href}">
+        <img src="${event.image}" alt="${event.title} event recap">
+        <span class="event-tile__meta">
+          <strong>${event.title}</strong>
+          <small>${event.date}</small>
+          <small>${event.venue}</small>
+        </span>
       </a>
     `;
   }
@@ -592,34 +617,17 @@
           <section class="event-hero section-border">
             <img src="${asset('next-backdrop')}" alt="Instinct event backdrop">
             <div class="event-hero__shade"></div>
-            <div class="event-hero__content">
-              <h1>June 26th</h1>
+            <div class="event-hero__content event-teaser">
+              <p class="event-teaser__eyebrow">Next Event</p>
+              <h1><time datetime="2026-08-14">August 14th</time></h1>
               <span class="green-rule"></span>
-              <div class="event-detail-card">
-                <strong>10:00pm - 2:30am</strong>
-                <span>ANNX</span>
-                <span>221 Rideau Street</span>
+              <p class="event-teaser__copy">Coming soon…</p>
+              <div class="event-detail-card event-detail-card--soon">
+                <strong>Details coming soon</strong>
+                <span>Venue, lineup, and tickets will be announced soon.</span>
               </div>
             </div>
           </section>
-
-          <section class="lineup-section section-border">
-            <h2>Lineup</h2>
-            <div class="lineup-grid lineup-grid--linked">
-              ${lineupNext.map((artist) => lineupCard(artist)).join('')}
-            </div>
-            <p class="lineup-note">Click to learn more about the DJs</p>
-          </section>
-
-          <section class="drinks-section">
-            <h2>Feature Drinks</h2>
-            <div class="drink-grid">
-              ${drinkCard('Cocktail', 'Festival Fuel', 'Need that Post Festival boost? Well Vodka, curaçao, OJ, and redbull may be what you need.', asset('mobile-mcp-drink-festival-fuel'))}
-              ${drinkCard('Shot', 'Liquid Cocaine', 'Bold, sharp, and gone in a second. Not for the faint of heart.', asset('mobile-mcp-drink-liquid-cocaine'))}
-            </div>
-          </section>
-
-          ${ticketCta('Limited capacity')}
         </div>
         ${renderMobileNextEvent()}
       </div>
@@ -629,59 +637,20 @@
   function renderMobileNextEvent() {
     return `
       <article class="mobile-view mobile-next-page">
-        <section class="mobile-next-hero">
-          <img src="${asset('mobile-mcp-next-hero')}" alt="Instinct event atmosphere">
+        <section class="mobile-next-hero mobile-next-hero--teaser">
+          <img src="${asset('next-backdrop')}" alt="Instinct event backdrop">
           <div class="mobile-next-glow mobile-next-glow--one"></div>
           <div class="mobile-next-glow mobile-next-glow--two"></div>
           <div class="mobile-next-hero-content">
-            <p>10:00pm – 2:30am</p>
-            <h1>June 26th</h1>
+            <p>Next Event</p>
+            <h1><time datetime="2026-08-14">August 14th</time></h1>
             <span></span>
             <div>
-              <strong>ANNX</strong>
-              <em>221 Rideau Street</em>
+              <strong>Coming soon…</strong>
+              <em>Details coming soon</em>
             </div>
           </div>
         </section>
-        <section class="mobile-next-lineup">
-          <h2>Lineup</h2>
-          <div>
-            ${mobileLineupNext.map((artist) => mobileLineupCard(artist)).join('')}
-          </div>
-          <p>Click to learn more about the DJs</p>
-        </section>
-        <section class="mobile-next-tickets">
-          <h2><span>Get</span> Tickets</h2>
-          <p>Limited capacity</p>
-          <a href="${links.mobileTickets}" target="_blank" rel="noreferrer">Buy Tickets</a>
-        </section>
-        <section class="mobile-drinks">
-          <h2>Feature Drinks</h2>
-          ${mobileDrinkCard('COCKTAIL', 'Festival Fuel', 'Need that Post Festival boost? Well Vodka, curaçao, OJ, and redbull may be what you need.', asset('mobile-mcp-drink-festival-fuel'), 'pink', 'center 45%')}
-          ${mobileDrinkCard('SHOT', 'Liquid Cocaine', 'Bold, sharp, and gone in a second. Not for the faint of heart.', asset('mobile-mcp-drink-liquid-cocaine'), 'purple', 'center 45%')}
-        </section>
-      </article>
-    `;
-  }
-
-  function mobileLineupCard(artist) {
-    return `
-      <a class="mobile-lineup-card" href="${artist.href}" aria-label="${artist.name}">
-        <img src="${artist.image}" alt="${artist.name}">
-        <span>${artist.name}</span>
-      </a>
-    `;
-  }
-
-  function mobileDrinkCard(type, title, text, image, tone, position) {
-    return `
-      <article class="mobile-drink-card mobile-drink-card--${tone}">
-        <div>
-          ${mediaImage(image, title, '', position)}
-          <span>${type}</span>
-        </div>
-        <h3>${title}</h3>
-        <p>${text}</p>
       </article>
     `;
   }
@@ -715,13 +684,14 @@
           </section>
           ${recapPager(currentSlug)}
         </article>
-        ${renderMobileRecap(recap)}
+        ${renderMobileRecap(recap, currentSlug)}
       </div>
     `;
   }
 
-  function renderMobileRecap(recap) {
+  function renderMobileRecap(recap, currentSlug) {
     const mobile = recap.mobile;
+    const { older, newer } = recapNeighbors(currentSlug);
     return `
       <article class="mobile-view mobile-recap">
         <section class="mobile-recap-poster">
@@ -747,57 +717,38 @@
         <section class="mobile-recap-actions">
           ${mobile.creditUrl ? `<a class="mobile-recap-credit" href="${mobile.creditUrl}" target="_blank" rel="noreferrer">${mobile.credit}</a>` : `<p class="mobile-recap-credit">${mobile.credit}</p>`}
           <nav aria-label="Recap navigation">
-            <a href="${mobile.previousHref}">← ${mobile.previousLabel}</a>
-            <a href="${mobile.nextHref}">${mobile.nextLabel} →</a>
+            <a href="${older ? older.href : routes.home}">← ${older ? older.title : 'All Events'}</a>
+            <a href="${newer ? newer.href : routes.home}">${newer ? newer.title : 'All Events'} →</a>
           </nav>
         </section>
       </article>
     `;
   }
 
-  function recapNav(currentSlug) {
-    const items = [
-      { label: 'Home', href: routes.home },
-      { label: 'Vol. 1', href: routes.vol1, slug: 'vol-1' },
-      { label: 'Vol. 2', href: routes.vol2, slug: 'vol-2' },
-      { label: 'Vol. 3', href: routes.vol3, slug: 'vol-3' },
-      { label: 'Vol. 4', href: routes.vol4, slug: 'vol-4' },
-      { label: 'Next Event', href: routes.next }
-    ];
-
-    return `
-      <nav class="recap-nav" aria-label="Event recap pages">
-        ${items.map((item) => `
-          <a class="${item.slug === currentSlug ? 'is-active' : ''}" href="${item.href}">${item.label}</a>
-        `).join('')}
-      </nav>
-    `;
+  function recapNeighbors(currentSlug) {
+    const index = pastEvents.findIndex((event) => event.slug === currentSlug);
+    return {
+      older: pastEvents[index + 1] || null,
+      newer: pastEvents[index - 1] || null
+    };
   }
 
   function recapPager(currentSlug) {
-    const order = [
-      { slug: 'vol-1', label: 'Vol. 1', href: routes.vol1 },
-      { slug: 'vol-2', label: 'Vol. 2', href: routes.vol2 },
-      { slug: 'vol-3', label: 'Vol. 3', href: routes.vol3 },
-      { slug: 'vol-4', label: 'Vol. 4', href: routes.vol4 }
-    ];
-    const index = order.findIndex((item) => item.slug === currentSlug);
-    const previous = order[(index + order.length - 1) % order.length];
-    const next = order[(index + 1) % order.length];
+    const { older, newer } = recapNeighbors(currentSlug);
 
     return `
       <nav class="recap-pager" aria-label="Previous and next event recaps">
-        <a href="${previous.href}">
-          <span>Previous</span>
-          ${previous.label}
+        <a href="${older ? older.href : routes.home}">
+          <span>Older</span>
+          ${older ? older.title : 'Archive Home'}
         </a>
         <a href="${routes.home}">
           <span>All Events</span>
           Home
         </a>
-        <a href="${next.href}">
-          <span>Next</span>
-          ${next.label}
+        <a href="${newer ? newer.href : routes.home}">
+          <span>Newer</span>
+          ${newer ? newer.title : 'Archive Home'}
         </a>
       </nav>
     `;
@@ -935,25 +886,6 @@
     `;
   }
 
-  function drinkCard(type, title, text, image) {
-    return `
-      <article class="drink-card">
-        <div class="drink-card__image">
-          <img src="${image}" alt="${title}">
-          <span>${type}</span>
-        </div>
-        <h3>${title}</h3>
-        <p>${text}</p>
-      </article>
-    `;
-  }
-
-  function mediaImage(src, alt, className = '', position = '') {
-    const classAttr = className ? ` class="${className}"` : '';
-    const styleAttr = position ? ` style="--media-position: ${position}"` : '';
-    return `<img${classAttr} src="${src}" alt="${alt}"${styleAttr}>`;
-  }
-
   function homePreviewMedia(posterName, alt, video = '') {
     const poster = asset(posterName);
 
@@ -967,16 +899,6 @@
         <source src="${video}" type="${type}">
         <img src="${poster}" alt="${alt}">
       </video>
-    `;
-  }
-
-  function ticketCta(copy) {
-    return `
-      <section class="ticket-cta">
-        <h2><span>Get</span> Tickets</h2>
-        <p>${copy}</p>
-        <a class="button button--solid" href="${links.tickets}" target="_blank" rel="noreferrer">Buy Tickets</a>
-      </section>
     `;
   }
 
@@ -1006,13 +928,16 @@
     const lightbox = document.getElementById('lightbox');
     const image = lightbox.querySelector('.lightbox__image');
     const close = lightbox.querySelector('.lightbox__close');
+    let trigger = null;
 
     document.querySelectorAll('[data-lightbox]').forEach((button) => {
       button.addEventListener('click', () => {
+        trigger = button;
         image.src = button.dataset.lightbox;
         image.alt = button.querySelector('img')?.alt || 'Expanded event image';
         lightbox.classList.add('is-open');
         lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('no-scroll');
         close.focus();
       });
     });
@@ -1021,6 +946,9 @@
       lightbox.classList.remove('is-open');
       lightbox.setAttribute('aria-hidden', 'true');
       image.removeAttribute('src');
+      document.body.classList.remove('no-scroll');
+      trigger?.focus();
+      trigger = null;
     };
 
     close.addEventListener('click', hide);
