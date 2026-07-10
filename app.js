@@ -434,8 +434,8 @@
                 <a${linkClass('dose')} href="${routes.dose}">D.O.S.E</a>
               </div>
             </details>
-            <span class="site-nav__status">Details Soon</span>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
+            <span class="site-nav__status">Ticket Details Soon</span>
           </div>
         </nav>
       </header>
