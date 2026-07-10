@@ -1,5 +1,29 @@
 (function () {
-  const asset = (name) => `./assets/${name}.webp`;
+  const imageManifest = window.INSTINCT_IMAGES || {};
+  const imageRecordsBySrc = new Map(Object.values(imageManifest).map((record) => [record.src, record]));
+  const mobileMedia = window.matchMedia('(max-width: 720px)');
+  let cleanupPage = () => {};
+  const asset = (name) => imageManifest[name]?.src || `./assets/${name}.webp`;
+
+  function imageRecord(src) {
+    return imageRecordsBySrc.get(src);
+  }
+
+  function imageTag(src, alt, options = {}) {
+    const record = imageRecord(src);
+    const {
+      className = '',
+      sizes = '100vw',
+      priority = false
+    } = options;
+    const classAttribute = className ? ` class="${className}"` : '';
+    const responsive = record?.candidates?.length > 1
+      ? ` srcset="${record.candidates.map((candidate) => `${candidate.src} ${candidate.width}w`).join(', ')}" sizes="${sizes}"`
+      : '';
+    const dimensions = record ? ` width="${record.width}" height="${record.height}"` : '';
+    const loading = priority ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"';
+    return `<img${classAttribute} src="${src}"${responsive}${dimensions}${loading} decoding="async" alt="${alt}">`;
+  }
   const routes = {
     home: './index.html',
     next: './next-event.html',
@@ -380,6 +404,7 @@
   }
 
   function render() {
+    cleanupPage();
     const app = document.getElementById('app');
     const route = getRoute();
     let page = '';
@@ -397,8 +422,12 @@
     }
 
     app.innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
-    setupLightbox();
-    setupNav();
+    const cleanupLightbox = setupLightbox();
+    const cleanupNav = setupNav();
+    cleanupPage = () => {
+      cleanupLightbox();
+      cleanupNav();
+    };
     document.documentElement.dataset.route = route;
   }
 
@@ -444,7 +473,7 @@
 
   function setupNav() {
     const header = document.querySelector('.site-header');
-    if (!header) return;
+    if (!header) return () => {};
     const toggle = header.querySelector('.site-nav__toggle');
     if (toggle) {
       toggle.addEventListener('click', () => {
@@ -461,14 +490,16 @@
     const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }
 
   function renderHome() {
+    if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileHome()}</div>`;
     return `
       <div class="with-mobile">
         <div class="desktop-view">
           <section class="home-hero section-border">
-            <img class="home-hero__image" src="${asset('home-hero')}" alt="Instinct Groove artwork">
+            ${imageTag(asset('home-hero'), 'Instinct Groove artwork', { className: 'home-hero__image', sizes: '100vw', priority: true })}
             <p class="home-hero__tagline">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p>
           </section>
 
@@ -483,7 +514,7 @@
 
           <section class="next-card next-card--teaser section-border">
             <a class="next-teaser" href="${routes.next}" aria-label="Open August 14th event teaser">
-              <img src="${asset('next-backdrop')}" alt="">
+              ${imageTag(asset('next-backdrop'), '', { sizes: 'min(1040px, 100vw)' })}
               <span class="next-teaser__glow" aria-hidden="true"></span>
               <span class="next-teaser__content">
                 <span class="next-teaser__eyebrow">Next Event</span>
@@ -504,7 +535,7 @@
                 <p>At the centre of it all is Stinc, the octopus: Instinct's mascot and a symbol of instinct itself, fluid, adaptable, and deeply connected.</p>
               </div>
               <figure>
-                <img src="${asset('home-team')}" alt="The Instinct Groove crew">
+                ${imageTag(asset('home-team'), 'The Instinct Groove crew', { sizes: '(max-width: 1050px) calc(100vw - 48px), 576px' })}
                 <figcaption>The Crew</figcaption>
               </figure>
             </div>
@@ -518,7 +549,7 @@
           </section>
 
           <section class="tickets-strip tickets-strip--soon">
-            <img src="${asset('home-tickets')}" alt="">
+            ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
             <div>
               <h2><span>Details</span> Soon</h2>
               <p>Venue, lineup, and tickets for August 14th will be announced soon.</p>
@@ -526,7 +557,6 @@
             </div>
           </section>
         </div>
-        ${renderMobileHome()}
       </div>
     `;
   }
@@ -535,7 +565,7 @@
     return `
       <div class="mobile-view mobile-home">
         <section class="mobile-home-hero">
-          <img src="${asset('mobile-mcp-home-hero')}" alt="Instinct Groove artwork">
+          ${imageTag(asset('mobile-mcp-home-hero'), 'Instinct Groove artwork', { sizes: '390px', priority: true })}
           <p class="mobile-home-welcome">Welcome to.....</p>
           <p class="mobile-home-tagline">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p>
         </section>
@@ -548,7 +578,7 @@
         <section class="mobile-home-section mobile-home-next-card">
           <h2><span>Next</span> Event</h2>
           <a href="${routes.next}" class="mobile-home-poster mobile-next-teaser" aria-label="Open August 14th event teaser">
-            <img src="${asset('next-backdrop')}" alt="">
+            ${imageTag(asset('next-backdrop'), '', { sizes: '342px' })}
             <span>
               <time datetime="2026-08-14">August 14th</time>
               <em>Coming soon…</em>
@@ -569,7 +599,7 @@
         <section class="mobile-home-section mobile-home-crew">
           <h2>The Crew</h2>
           <div>
-            <img src="${asset('mobile-mcp-home-crew')}" alt="The Instinct Groove crew">
+            ${imageTag(asset('mobile-mcp-home-crew'), 'The Instinct Groove crew', { sizes: '342px' })}
           </div>
         </section>
         <section class="mobile-home-section mobile-home-events">
@@ -588,7 +618,7 @@
   function mobileHomeEvent(event) {
     return `
       <a class="mobile-home-event" href="${event.href}">
-        <img src="${event.image}" alt="${event.title} event recap">
+        ${imageTag(event.image, `${event.title} event recap`, { sizes: '342px' })}
         <span class="mobile-home-event__meta">
           <strong>${event.title}</strong>
           <small>${event.date} · ${event.venue}</small>
@@ -600,7 +630,7 @@
   function eventTile(event) {
     return `
       <a class="event-tile" href="${event.href}">
-        <img src="${event.image}" alt="${event.title} event recap">
+        ${imageTag(event.image, `${event.title} event recap`, { sizes: '(max-width: 1050px) 45vw, 230px' })}
         <span class="event-tile__meta">
           <strong>${event.title}</strong>
           <small>${event.date}</small>
@@ -611,11 +641,12 @@
   }
 
   function renderNextEvent() {
+    if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileNextEvent()}</div>`;
     return `
       <div class="with-mobile">
         <div class="desktop-view">
           <section class="event-hero section-border">
-            <img src="${asset('next-backdrop')}" alt="Instinct event backdrop">
+            ${imageTag(asset('next-backdrop'), 'Instinct event backdrop', { sizes: '100vw', priority: true })}
             <div class="event-hero__shade"></div>
             <div class="event-hero__content event-teaser">
               <p class="event-teaser__eyebrow">Next Event</p>
@@ -629,7 +660,6 @@
             </div>
           </section>
         </div>
-        ${renderMobileNextEvent()}
       </div>
     `;
   }
@@ -638,7 +668,7 @@
     return `
       <article class="mobile-view mobile-next-page">
         <section class="mobile-next-hero mobile-next-hero--teaser">
-          <img src="${asset('next-backdrop')}" alt="Instinct event backdrop">
+          ${imageTag(asset('next-backdrop'), 'Instinct event backdrop', { sizes: '390px', priority: true })}
           <div class="mobile-next-glow mobile-next-glow--one"></div>
           <div class="mobile-next-glow mobile-next-glow--two"></div>
           <div class="mobile-next-hero-content">
@@ -657,9 +687,10 @@
 
   function renderRecap(recap) {
     const currentSlug = Object.keys(recaps).find((slug) => recaps[slug] === recap);
+    if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileRecap(recap, currentSlug)}</div>`;
     const photos = recap.photos.map((src, index) => `
       <button class="photo-card photo-card--${index + 1}" type="button" data-lightbox="${src}" aria-label="Open ${recap.title} photo ${index + 1}">
-        <img src="${src}" alt="${recap.title} photo ${index + 1}">
+        ${imageTag(src, `${recap.title} photo ${index + 1}`, { sizes: recapPhotoSizes(recap.layout, index) })}
       </button>
     `).join('');
 
@@ -684,9 +715,14 @@
           </section>
           ${recapPager(currentSlug)}
         </article>
-        ${renderMobileRecap(recap, currentSlug)}
       </div>
     `;
+  }
+
+  function recapPhotoSizes(layout, index) {
+    if (layout === 'centered' && index === 0) return '(max-width: 1050px) calc(100vw - 48px), 1152px';
+    if (layout === 'split') return '(max-width: 1050px) calc(100vw - 48px), 610px';
+    return '(max-width: 1050px) calc(100vw - 48px), 384px';
   }
 
   function renderMobileRecap(recap, currentSlug) {
@@ -695,7 +731,7 @@
     return `
       <article class="mobile-view mobile-recap">
         <section class="mobile-recap-poster">
-          <img src="${mobile.poster}" alt="${mobile.title} poster">
+          ${imageTag(mobile.poster, `${mobile.title} poster`, { sizes: '390px', priority: true })}
         </section>
         <section class="mobile-recap-info">
           <h1>${mobile.title}</h1>
@@ -709,7 +745,7 @@
           <div class="mobile-recap-grid">
             ${mobile.photos.map((src, index) => `
               <button type="button" data-lightbox="${src}" aria-label="Open ${mobile.title} photo ${index + 1}">
-                <img src="${src}" alt="${mobile.title} photo ${index + 1}">
+                ${imageTag(src, `${mobile.title} photo ${index + 1}`, { sizes: '342px' })}
               </button>
             `).join('')}
           </div>
@@ -755,6 +791,9 @@
   }
 
   function renderArtist(artist) {
+    if (mobileMedia.matches && artist.mobile) {
+      return `<div class="with-mobile">${renderMobileArtist(artist)}</div>`;
+    }
     const desktop = `
       <article class="desktop-view artist-page">
         <section class="artist-hero">
@@ -777,7 +816,7 @@
         </section>
 
         <figure class="artist-band artist-band--top">
-          <img src="${artist.band}" alt="${artist.name} event atmosphere">
+          ${imageTag(artist.band, `${artist.name} event atmosphere`, { sizes: '100vw' })}
         </figure>
 
         <section class="qa-block qa-block--left">
@@ -786,7 +825,7 @@
 
         <section class="artist-feature">
           <button type="button" data-lightbox="${artist.portrait}">
-            <img src="${artist.portrait}" alt="${artist.name}">
+            ${imageTag(artist.portrait, artist.name, { sizes: '1024px' })}
           </button>
         </section>
 
@@ -795,7 +834,7 @@
         </section>
 
         <figure class="artist-band artist-band--lower">
-          <img src="${artist.lower}" alt="${artist.name} event crowd">
+          ${imageTag(artist.lower, `${artist.name} event crowd`, { sizes: '100vw' })}
         </figure>
 
         <section class="qa-block qa-block--left">
@@ -811,7 +850,6 @@
     return `
       <div class="with-mobile">
         ${desktop}
-        ${renderMobileArtist(artist)}
       </div>
     `;
   }
@@ -821,7 +859,7 @@
     return `
       <article class="mobile-view mobile-artist" style="--artist-accent: ${mobile.accent}">
         <section class="mobile-artist-hero">
-          <img src="${mobile.hero}" alt="${artist.name}">
+          ${imageTag(mobile.hero, artist.name, { sizes: '390px', priority: true })}
           <div class="mobile-artist-gradient"></div>
           <div class="mobile-artist-glow mobile-artist-glow--one"></div>
           <div class="mobile-artist-glow mobile-artist-glow--two"></div>
@@ -845,7 +883,7 @@
         <section class="mobile-artist-qa">
           ${mobileArtistQa(artist.qas[0], 'left')}
           <button type="button" class="mobile-artist-photo" data-lightbox="${mobile.feature}" aria-label="Open ${artist.name} photo">
-            <img src="${mobile.feature}" alt="${artist.name}">
+            ${imageTag(mobile.feature, artist.name, { sizes: '342px' })}
           </button>
           ${mobileArtistQa(artist.qas[1], 'right')}
           ${mobileArtistQa(artist.qas[2], 'left')}
@@ -880,7 +918,7 @@
     const href = artist.href ? ` href="${artist.href}"` : '';
     return `
       <${tag} class="lineup-card"${href}>
-        <img src="${artist.image}" alt="${artist.name}">
+        ${imageTag(artist.image, artist.name, { sizes: '(max-width: 720px) 342px, 400px' })}
         <span>${artist.name}</span>
       </${tag}>
     `;
@@ -890,14 +928,14 @@
     const poster = asset(posterName);
 
     if (!video) {
-      return `<img src="${poster}" alt="${alt}">`;
+      return imageTag(poster, alt, { sizes: '342px' });
     }
 
     const type = video.endsWith('.webm') ? 'video/webm' : 'video/mp4';
     return `
       <video autoplay muted loop playsinline preload="metadata" poster="${poster}" aria-label="${alt}">
         <source src="${video}" type="${type}">
-        <img src="${poster}" alt="${alt}">
+        ${imageTag(poster, alt, { sizes: '342px' })}
       </video>
     `;
   }
@@ -955,10 +993,16 @@
     lightbox.addEventListener('click', (event) => {
       if (event.target === lightbox) hide();
     });
-    window.addEventListener('keydown', (event) => {
+    const onKeydown = (event) => {
       if (event.key === 'Escape' && lightbox.classList.contains('is-open')) hide();
-    });
+    };
+    window.addEventListener('keydown', onKeydown);
+    return () => {
+      hide();
+      window.removeEventListener('keydown', onKeydown);
+    };
   }
 
+  mobileMedia.addEventListener('change', render);
   render();
 }());

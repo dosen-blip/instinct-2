@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-mkdir -p assets
+SOURCE_DIR="${SOURCE_DIR:-source-images}"
+mkdir -p "$SOURCE_DIR"
 
 download() {
   local name="$1"
   local url="$2"
-  local out="assets/${name}.png"
+  local out="$SOURCE_DIR/${name}.webp"
+  local temporary
+  temporary="$(mktemp)"
+  trap 'rm -f "$temporary"' RETURN
 
   if [[ -s "$out" ]]; then
     printf 'skip %s\n' "$out"
@@ -14,7 +18,10 @@ download() {
   fi
 
   printf 'download %s\n' "$out"
-  curl -L --fail --retry 2 --retry-delay 1 -o "$out" "$url"
+  curl -L --fail --retry 2 --retry-delay 1 -o "$temporary" "$url"
+  cwebp -quiet -lossless -m 6 -metadata all "$temporary" -o "$out"
+  rm -f "$temporary"
+  trap - RETURN
 }
 
 download mobile-mcp-home-logo "https://www.figma.com/api/mcp/asset/94db1115-8ac5-41eb-95e2-a51827472e67"

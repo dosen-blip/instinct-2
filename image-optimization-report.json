@@ -1,0 +1,2682 @@
+[
+  {
+    "name": "dose-band",
+    "originalBytes": 438550,
+    "optimizedBytes": 103014,
+    "original": {
+      "width": 683,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 683,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "dose-band-480.webp",
+        "quality": 85,
+        "psnr": 43.98
+      },
+      {
+        "file": "dose-band.webp",
+        "quality": 85,
+        "psnr": 44.48
+      }
+    ]
+  },
+  {
+    "name": "dose-lower",
+    "originalBytes": 1128842,
+    "optimizedBytes": 224602,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "dose-lower-480.webp",
+        "quality": 85,
+        "psnr": 44.55
+      },
+      {
+        "file": "dose-lower-960.webp",
+        "quality": 85,
+        "psnr": 45.95
+      },
+      {
+        "file": "dose-lower.webp",
+        "quality": 85,
+        "psnr": 46.81
+      }
+    ]
+  },
+  {
+    "name": "dose-portrait",
+    "originalBytes": 522068,
+    "optimizedBytes": 199182,
+    "original": {
+      "width": 1180,
+      "height": 1474
+    },
+    "fallback": {
+      "width": 1180,
+      "height": 1474
+    },
+    "qualityChecks": [
+      {
+        "file": "dose-portrait-480.webp",
+        "quality": 85,
+        "psnr": 44.16
+      },
+      {
+        "file": "dose-portrait-960.webp",
+        "quality": 85,
+        "psnr": 45.7
+      },
+      {
+        "file": "dose-portrait.webp",
+        "quality": 85,
+        "psnr": 47
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo1",
+    "originalBytes": 2004182,
+    "optimizedBytes": 458464,
+    "original": {
+      "width": 2000,
+      "height": 1601
+    },
+    "fallback": {
+      "width": 2000,
+      "height": 1601
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo1-480.webp",
+        "quality": 85,
+        "psnr": 42.92
+      },
+      {
+        "file": "escapade-photo1-960.webp",
+        "quality": 85,
+        "psnr": 44.05
+      },
+      {
+        "file": "escapade-photo1-1440.webp",
+        "quality": 85,
+        "psnr": 44.39
+      },
+      {
+        "file": "escapade-photo1.webp",
+        "quality": 85,
+        "psnr": 42.61
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo2",
+    "originalBytes": 2560166,
+    "optimizedBytes": 894420,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo2-480.webp",
+        "quality": 85,
+        "psnr": 42.17
+      },
+      {
+        "file": "escapade-photo2-960.webp",
+        "quality": 85,
+        "psnr": 42.99
+      },
+      {
+        "file": "escapade-photo2-1440.webp",
+        "quality": 85,
+        "psnr": 43.61
+      },
+      {
+        "file": "escapade-photo2.webp",
+        "quality": 85,
+        "psnr": 42.6
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo3",
+    "originalBytes": 2232922,
+    "optimizedBytes": 552450,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo3-480.webp",
+        "quality": 85,
+        "psnr": 43.56
+      },
+      {
+        "file": "escapade-photo3-960.webp",
+        "quality": 85,
+        "psnr": 44.5
+      },
+      {
+        "file": "escapade-photo3-1440.webp",
+        "quality": 85,
+        "psnr": 45
+      },
+      {
+        "file": "escapade-photo3.webp",
+        "quality": 85,
+        "psnr": 43.8
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo4",
+    "originalBytes": 2130910,
+    "optimizedBytes": 474444,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo4-480.webp",
+        "quality": 85,
+        "psnr": 43.43
+      },
+      {
+        "file": "escapade-photo4-960.webp",
+        "quality": 85,
+        "psnr": 44.72
+      },
+      {
+        "file": "escapade-photo4-1440.webp",
+        "quality": 85,
+        "psnr": 45.06
+      },
+      {
+        "file": "escapade-photo4.webp",
+        "quality": 85,
+        "psnr": 43.56
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo5",
+    "originalBytes": 2038376,
+    "optimizedBytes": 375206,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo5-480.webp",
+        "quality": 85,
+        "psnr": 43.87
+      },
+      {
+        "file": "escapade-photo5-960.webp",
+        "quality": 85,
+        "psnr": 45.35
+      },
+      {
+        "file": "escapade-photo5-1440.webp",
+        "quality": 85,
+        "psnr": 45.61
+      },
+      {
+        "file": "escapade-photo5.webp",
+        "quality": 85,
+        "psnr": 43.83
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo6",
+    "originalBytes": 2232876,
+    "optimizedBytes": 344936,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo6-480.webp",
+        "quality": 85,
+        "psnr": 44.08
+      },
+      {
+        "file": "escapade-photo6-960.webp",
+        "quality": 85,
+        "psnr": 45.41
+      },
+      {
+        "file": "escapade-photo6-1440.webp",
+        "quality": 85,
+        "psnr": 45.55
+      },
+      {
+        "file": "escapade-photo6.webp",
+        "quality": 85,
+        "psnr": 43.7
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo7",
+    "originalBytes": 2240814,
+    "optimizedBytes": 572772,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo7-480.webp",
+        "quality": 85,
+        "psnr": 42.91
+      },
+      {
+        "file": "escapade-photo7-960.webp",
+        "quality": 85,
+        "psnr": 43.95
+      },
+      {
+        "file": "escapade-photo7-1440.webp",
+        "quality": 85,
+        "psnr": 44.38
+      },
+      {
+        "file": "escapade-photo7.webp",
+        "quality": 85,
+        "psnr": 42.86
+      }
+    ]
+  },
+  {
+    "name": "escapade-photo8",
+    "originalBytes": 2160464,
+    "optimizedBytes": 564936,
+    "original": {
+      "width": 1600,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1600,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "escapade-photo8-480.webp",
+        "quality": 85,
+        "psnr": 42.88
+      },
+      {
+        "file": "escapade-photo8-960.webp",
+        "quality": 85,
+        "psnr": 44
+      },
+      {
+        "file": "escapade-photo8-1440.webp",
+        "quality": 85,
+        "psnr": 44.19
+      },
+      {
+        "file": "escapade-photo8.webp",
+        "quality": 85,
+        "psnr": 42.19
+      }
+    ]
+  },
+  {
+    "name": "home-hero",
+    "originalBytes": 108008,
+    "optimizedBytes": 64780,
+    "original": {
+      "width": 1206,
+      "height": 1078
+    },
+    "fallback": {
+      "width": 1206,
+      "height": 1078
+    },
+    "qualityChecks": [
+      {
+        "file": "home-hero-480.webp",
+        "quality": 90,
+        "psnr": 52.41
+      },
+      {
+        "file": "home-hero-960.webp",
+        "quality": 90,
+        "psnr": 53.81
+      },
+      {
+        "file": "home-hero.webp",
+        "quality": 90,
+        "psnr": 54.36
+      }
+    ]
+  },
+  {
+    "name": "home-preview",
+    "originalBytes": 427900,
+    "optimizedBytes": 79972,
+    "original": {
+      "width": 683,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 683,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "home-preview-480.webp",
+        "quality": 85,
+        "psnr": 44.79
+      },
+      {
+        "file": "home-preview.webp",
+        "quality": 85,
+        "psnr": 45.03
+      }
+    ]
+  },
+  {
+    "name": "home-team",
+    "originalBytes": 1472974,
+    "optimizedBytes": 361152,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "home-team-480.webp",
+        "quality": 85,
+        "psnr": 43.13
+      },
+      {
+        "file": "home-team-960.webp",
+        "quality": 85,
+        "psnr": 44.16
+      },
+      {
+        "file": "home-team.webp",
+        "quality": 85,
+        "psnr": 44.93
+      }
+    ]
+  },
+  {
+    "name": "home-tickets",
+    "originalBytes": 369956,
+    "optimizedBytes": 51902,
+    "original": {
+      "width": 683,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 683,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "home-tickets-480.webp",
+        "quality": 90,
+        "psnr": 49.13
+      },
+      {
+        "file": "home-tickets.webp",
+        "quality": 90,
+        "psnr": 49.77
+      }
+    ]
+  },
+  {
+    "name": "home-vol1-card",
+    "originalBytes": 335026,
+    "optimizedBytes": 141864,
+    "original": {
+      "width": 547,
+      "height": 820
+    },
+    "fallback": {
+      "width": 547,
+      "height": 820
+    },
+    "qualityChecks": [
+      {
+        "file": "home-vol1-card-480.webp",
+        "quality": 90,
+        "psnr": 45.66
+      },
+      {
+        "file": "home-vol1-card.webp",
+        "quality": 90,
+        "psnr": 45.75
+      }
+    ]
+  },
+  {
+    "name": "home-vol2-card",
+    "originalBytes": 363524,
+    "optimizedBytes": 163134,
+    "original": {
+      "width": 547,
+      "height": 820
+    },
+    "fallback": {
+      "width": 547,
+      "height": 820
+    },
+    "qualityChecks": [
+      {
+        "file": "home-vol2-card-480.webp",
+        "quality": 90,
+        "psnr": 44.89
+      },
+      {
+        "file": "home-vol2-card.webp",
+        "quality": 90,
+        "psnr": 44.75
+      }
+    ]
+  },
+  {
+    "name": "home-vol3-card",
+    "originalBytes": 342250,
+    "optimizedBytes": 66260,
+    "original": {
+      "width": 543,
+      "height": 820
+    },
+    "fallback": {
+      "width": 543,
+      "height": 820
+    },
+    "qualityChecks": [
+      {
+        "file": "home-vol3-card-480.webp",
+        "quality": 90,
+        "psnr": 47.54
+      },
+      {
+        "file": "home-vol3-card.webp",
+        "quality": 90,
+        "psnr": 46.91
+      }
+    ]
+  },
+  {
+    "name": "home-vol4-card",
+    "originalBytes": 380606,
+    "optimizedBytes": 112486,
+    "original": {
+      "width": 656,
+      "height": 820
+    },
+    "fallback": {
+      "width": 656,
+      "height": 820
+    },
+    "qualityChecks": [
+      {
+        "file": "home-vol4-card-480.webp",
+        "quality": 90,
+        "psnr": 45.44
+      },
+      {
+        "file": "home-vol4-card.webp",
+        "quality": 90,
+        "psnr": 44.52
+      }
+    ]
+  },
+  {
+    "name": "mobile-home-preview",
+    "originalBytes": 74016,
+    "optimizedBytes": 13016,
+    "original": {
+      "width": 342,
+      "height": 609
+    },
+    "fallback": {
+      "width": 342,
+      "height": 609
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-home-preview.webp",
+        "quality": 85,
+        "psnr": 45.79
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-artist-babyjake-photo",
+    "originalBytes": 242894,
+    "optimizedBytes": 60836,
+    "original": {
+      "width": 640,
+      "height": 960
+    },
+    "fallback": {
+      "width": 640,
+      "height": 960
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-artist-babyjake-photo-480.webp",
+        "quality": 85,
+        "psnr": 45.56
+      },
+      {
+        "file": "mobile-mcp-artist-babyjake-photo.webp",
+        "quality": 85,
+        "psnr": 46.87
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-artist-dj-cobb-photo",
+    "originalBytes": 804386,
+    "optimizedBytes": 251420,
+    "original": {
+      "width": 1320,
+      "height": 1760
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1760
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-artist-dj-cobb-photo-480.webp",
+        "quality": 85,
+        "psnr": 44.16
+      },
+      {
+        "file": "mobile-mcp-artist-dj-cobb-photo-960.webp",
+        "quality": 85,
+        "psnr": 45.54
+      },
+      {
+        "file": "mobile-mcp-artist-dj-cobb-photo.webp",
+        "quality": 85,
+        "psnr": 46.85
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-artist-seb-balla-hero",
+    "originalBytes": 593176,
+    "optimizedBytes": 94768,
+    "original": {
+      "width": 820,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 820,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-artist-seb-balla-hero-480.webp",
+        "quality": 90,
+        "psnr": 47.37
+      },
+      {
+        "file": "mobile-mcp-artist-seb-balla-hero.webp",
+        "quality": 90,
+        "psnr": 47.08
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-artist-seb-balla-photo",
+    "originalBytes": 189976,
+    "optimizedBytes": 27356,
+    "original": {
+      "width": 794,
+      "height": 680
+    },
+    "fallback": {
+      "width": 794,
+      "height": 680
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-artist-seb-balla-photo-480.webp",
+        "quality": 85,
+        "psnr": 46.82
+      },
+      {
+        "file": "mobile-mcp-artist-seb-balla-photo.webp",
+        "quality": 85,
+        "psnr": 47.65
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-home-hero",
+    "originalBytes": 71064,
+    "optimizedBytes": 33256,
+    "original": {
+      "width": 716,
+      "height": 1084
+    },
+    "fallback": {
+      "width": 716,
+      "height": 1084
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-home-hero-480.webp",
+        "quality": 90,
+        "psnr": 53.65
+      },
+      {
+        "file": "mobile-mcp-home-hero.webp",
+        "quality": 90,
+        "psnr": 54.52
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-photo1",
+    "originalBytes": 5877468,
+    "optimizedBytes": 272162,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-photo1-480.webp",
+        "quality": 85,
+        "psnr": 44.11
+      },
+      {
+        "file": "mobile-mcp-vol1-photo1-960.webp",
+        "quality": 85,
+        "psnr": 45.06
+      },
+      {
+        "file": "mobile-mcp-vol1-photo1.webp",
+        "quality": 85,
+        "psnr": 45.08
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-photo3",
+    "originalBytes": 1001566,
+    "optimizedBytes": 214106,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-photo3-480.webp",
+        "quality": 85,
+        "psnr": 44.84
+      },
+      {
+        "file": "mobile-mcp-vol1-photo3-960.webp",
+        "quality": 85,
+        "psnr": 46.28
+      },
+      {
+        "file": "mobile-mcp-vol1-photo3.webp",
+        "quality": 85,
+        "psnr": 46.95
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-photo4",
+    "originalBytes": 5981126,
+    "optimizedBytes": 185200,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-photo4-480.webp",
+        "quality": 85,
+        "psnr": 45.08
+      },
+      {
+        "file": "mobile-mcp-vol1-photo4-960.webp",
+        "quality": 85,
+        "psnr": 45.71
+      },
+      {
+        "file": "mobile-mcp-vol1-photo4.webp",
+        "quality": 85,
+        "psnr": 45.09
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-photo5",
+    "originalBytes": 5806002,
+    "optimizedBytes": 227006,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-photo5-480.webp",
+        "quality": 85,
+        "psnr": 44.76
+      },
+      {
+        "file": "mobile-mcp-vol1-photo5-960.webp",
+        "quality": 85,
+        "psnr": 45.97
+      },
+      {
+        "file": "mobile-mcp-vol1-photo5.webp",
+        "quality": 85,
+        "psnr": 45.85
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-photo6",
+    "originalBytes": 6104500,
+    "optimizedBytes": 339214,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-photo6-480.webp",
+        "quality": 85,
+        "psnr": 43.1
+      },
+      {
+        "file": "mobile-mcp-vol1-photo6-960.webp",
+        "quality": 85,
+        "psnr": 44.71
+      },
+      {
+        "file": "mobile-mcp-vol1-photo6.webp",
+        "quality": 85,
+        "psnr": 45.05
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol1-poster",
+    "originalBytes": 1904354,
+    "optimizedBytes": 424636,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol1-poster-480.webp",
+        "quality": 90,
+        "psnr": 47.17
+      },
+      {
+        "file": "mobile-mcp-vol1-poster-960.webp",
+        "quality": 90,
+        "psnr": 47.57
+      },
+      {
+        "file": "mobile-mcp-vol1-poster-1440.webp",
+        "quality": 90,
+        "psnr": 48.08
+      },
+      {
+        "file": "mobile-mcp-vol1-poster.webp",
+        "quality": 90,
+        "psnr": 48.37
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo1",
+    "originalBytes": 203878,
+    "optimizedBytes": 41370,
+    "original": {
+      "width": 640,
+      "height": 480
+    },
+    "fallback": {
+      "width": 640,
+      "height": 480
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo1-480.webp",
+        "quality": 85,
+        "psnr": 44.18
+      },
+      {
+        "file": "mobile-mcp-vol2-photo1.webp",
+        "quality": 85,
+        "psnr": 44.26
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo2",
+    "originalBytes": 195452,
+    "optimizedBytes": 25358,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo2.webp",
+        "quality": 85,
+        "psnr": 44.64
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo3",
+    "originalBytes": 172684,
+    "optimizedBytes": 17290,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo3.webp",
+        "quality": 85,
+        "psnr": 45.89
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo4",
+    "originalBytes": 190396,
+    "optimizedBytes": 20448,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo4.webp",
+        "quality": 85,
+        "psnr": 44.96
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo5",
+    "originalBytes": 192838,
+    "optimizedBytes": 32762,
+    "original": {
+      "width": 640,
+      "height": 480
+    },
+    "fallback": {
+      "width": 640,
+      "height": 480
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo5-480.webp",
+        "quality": 85,
+        "psnr": 44.75
+      },
+      {
+        "file": "mobile-mcp-vol2-photo5.webp",
+        "quality": 85,
+        "psnr": 44.91
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-photo6",
+    "originalBytes": 196604,
+    "optimizedBytes": 23726,
+    "original": {
+      "width": 640,
+      "height": 480
+    },
+    "fallback": {
+      "width": 640,
+      "height": 480
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-photo6-480.webp",
+        "quality": 85,
+        "psnr": 45.74
+      },
+      {
+        "file": "mobile-mcp-vol2-photo6.webp",
+        "quality": 85,
+        "psnr": 45.86
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol2-poster",
+    "originalBytes": 2983456,
+    "optimizedBytes": 1237874,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol2-poster-480.webp",
+        "quality": 90,
+        "psnr": 44.87
+      },
+      {
+        "file": "mobile-mcp-vol2-poster-960.webp",
+        "quality": 90,
+        "psnr": 44.48
+      },
+      {
+        "file": "mobile-mcp-vol2-poster-1440.webp",
+        "quality": 90,
+        "psnr": 44.73
+      },
+      {
+        "file": "mobile-mcp-vol2-poster.webp",
+        "quality": 90,
+        "psnr": 44.97
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol3-photo1",
+    "originalBytes": 8086576,
+    "optimizedBytes": 459814,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol3-photo1-480.webp",
+        "quality": 85,
+        "psnr": 42.52
+      },
+      {
+        "file": "mobile-mcp-vol3-photo1-960.webp",
+        "quality": 85,
+        "psnr": 43.14
+      },
+      {
+        "file": "mobile-mcp-vol3-photo1-1440.webp",
+        "quality": 85,
+        "psnr": 43.48
+      },
+      {
+        "file": "mobile-mcp-vol3-photo1.webp",
+        "quality": 85,
+        "psnr": 43.47
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol3-photo2",
+    "originalBytes": 835738,
+    "optimizedBytes": 266126,
+    "original": {
+      "width": 1013,
+      "height": 1520
+    },
+    "fallback": {
+      "width": 1013,
+      "height": 1520
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol3-photo2-480.webp",
+        "quality": 85,
+        "psnr": 43.4
+      },
+      {
+        "file": "mobile-mcp-vol3-photo2-960.webp",
+        "quality": 85,
+        "psnr": 45.21
+      },
+      {
+        "file": "mobile-mcp-vol3-photo2.webp",
+        "quality": 85,
+        "psnr": 45.19
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol3-photo5",
+    "originalBytes": 859032,
+    "optimizedBytes": 124444,
+    "original": {
+      "width": 1320,
+      "height": 1979
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1979
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol3-photo5-480.webp",
+        "quality": 85,
+        "psnr": 46.85
+      },
+      {
+        "file": "mobile-mcp-vol3-photo5-960.webp",
+        "quality": 85,
+        "psnr": 47.89
+      },
+      {
+        "file": "mobile-mcp-vol3-photo5.webp",
+        "quality": 85,
+        "psnr": 48.38
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol3-photo6",
+    "originalBytes": 7561404,
+    "optimizedBytes": 408164,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol3-photo6-480.webp",
+        "quality": 85,
+        "psnr": 42.88
+      },
+      {
+        "file": "mobile-mcp-vol3-photo6-960.webp",
+        "quality": 85,
+        "psnr": 43.49
+      },
+      {
+        "file": "mobile-mcp-vol3-photo6-1440.webp",
+        "quality": 85,
+        "psnr": 43.77
+      },
+      {
+        "file": "mobile-mcp-vol3-photo6.webp",
+        "quality": 85,
+        "psnr": 43.88
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol3-poster",
+    "originalBytes": 2047190,
+    "optimizedBytes": 512450,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol3-poster-480.webp",
+        "quality": 90,
+        "psnr": 46.53
+      },
+      {
+        "file": "mobile-mcp-vol3-poster-960.webp",
+        "quality": 90,
+        "psnr": 47.2
+      },
+      {
+        "file": "mobile-mcp-vol3-poster-1440.webp",
+        "quality": 90,
+        "psnr": 47.61
+      },
+      {
+        "file": "mobile-mcp-vol3-poster.webp",
+        "quality": 90,
+        "psnr": 47.77
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo1",
+    "originalBytes": 8980720,
+    "optimizedBytes": 1029284,
+    "original": {
+      "width": 4096,
+      "height": 2731
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1366
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo1-480.webp",
+        "quality": 87,
+        "psnr": 40.72
+      },
+      {
+        "file": "mobile-mcp-vol4-photo1-960.webp",
+        "quality": 85,
+        "psnr": 40.18
+      },
+      {
+        "file": "mobile-mcp-vol4-photo1-1440.webp",
+        "quality": 85,
+        "psnr": 40.79
+      },
+      {
+        "file": "mobile-mcp-vol4-photo1.webp",
+        "quality": 85,
+        "psnr": 40.92
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo2",
+    "originalBytes": 7077994,
+    "optimizedBytes": 283556,
+    "original": {
+      "width": 4032,
+      "height": 4032
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo2-480.webp",
+        "quality": 85,
+        "psnr": 45.93
+      },
+      {
+        "file": "mobile-mcp-vol4-photo2-960.webp",
+        "quality": 85,
+        "psnr": 46.35
+      },
+      {
+        "file": "mobile-mcp-vol4-photo2-1440.webp",
+        "quality": 85,
+        "psnr": 45.87
+      },
+      {
+        "file": "mobile-mcp-vol4-photo2.webp",
+        "quality": 85,
+        "psnr": 45.05
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo3",
+    "originalBytes": 8105516,
+    "optimizedBytes": 459340,
+    "original": {
+      "width": 4032,
+      "height": 4032
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo3-480.webp",
+        "quality": 85,
+        "psnr": 44.37
+      },
+      {
+        "file": "mobile-mcp-vol4-photo3-960.webp",
+        "quality": 85,
+        "psnr": 44.87
+      },
+      {
+        "file": "mobile-mcp-vol4-photo3-1440.webp",
+        "quality": 85,
+        "psnr": 44.43
+      },
+      {
+        "file": "mobile-mcp-vol4-photo3.webp",
+        "quality": 85,
+        "psnr": 44.03
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo4",
+    "originalBytes": 7121132,
+    "optimizedBytes": 540400,
+    "original": {
+      "width": 4096,
+      "height": 2731
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1366
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo4-480.webp",
+        "quality": 85,
+        "psnr": 42.18
+      },
+      {
+        "file": "mobile-mcp-vol4-photo4-960.webp",
+        "quality": 85,
+        "psnr": 42.8
+      },
+      {
+        "file": "mobile-mcp-vol4-photo4-1440.webp",
+        "quality": 85,
+        "psnr": 43.04
+      },
+      {
+        "file": "mobile-mcp-vol4-photo4.webp",
+        "quality": 85,
+        "psnr": 42.57
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo5",
+    "originalBytes": 8702982,
+    "optimizedBytes": 659334,
+    "original": {
+      "width": 3277,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1639,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo5-480.webp",
+        "quality": 85,
+        "psnr": 42.41
+      },
+      {
+        "file": "mobile-mcp-vol4-photo5-960.webp",
+        "quality": 85,
+        "psnr": 43.12
+      },
+      {
+        "file": "mobile-mcp-vol4-photo5-1440.webp",
+        "quality": 85,
+        "psnr": 42.78
+      },
+      {
+        "file": "mobile-mcp-vol4-photo5.webp",
+        "quality": 85,
+        "psnr": 42.46
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-photo6",
+    "originalBytes": 3192626,
+    "optimizedBytes": 682888,
+    "original": {
+      "width": 2127,
+      "height": 2659
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-photo6-480.webp",
+        "quality": 85,
+        "psnr": 43.51
+      },
+      {
+        "file": "mobile-mcp-vol4-photo6-960.webp",
+        "quality": 85,
+        "psnr": 42.49
+      },
+      {
+        "file": "mobile-mcp-vol4-photo6-1440.webp",
+        "quality": 85,
+        "psnr": 42.3
+      },
+      {
+        "file": "mobile-mcp-vol4-photo6.webp",
+        "quality": 85,
+        "psnr": 42.41
+      }
+    ]
+  },
+  {
+    "name": "mobile-mcp-vol4-poster",
+    "originalBytes": 2922422,
+    "optimizedBytes": 1188904,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "mobile-mcp-vol4-poster-480.webp",
+        "quality": 90,
+        "psnr": 45.04
+      },
+      {
+        "file": "mobile-mcp-vol4-poster-960.webp",
+        "quality": 90,
+        "psnr": 44.78
+      },
+      {
+        "file": "mobile-mcp-vol4-poster-1440.webp",
+        "quality": 90,
+        "psnr": 44.56
+      },
+      {
+        "file": "mobile-mcp-vol4-poster.webp",
+        "quality": 90,
+        "psnr": 45.3
+      }
+    ]
+  },
+  {
+    "name": "next-backdrop",
+    "originalBytes": 52444,
+    "optimizedBytes": 126680,
+    "original": {
+      "width": 550,
+      "height": 580
+    },
+    "fallback": {
+      "width": 550,
+      "height": 580
+    },
+    "qualityChecks": [
+      {
+        "file": "next-backdrop-480.webp",
+        "quality": 90,
+        "psnr": 50.08
+      },
+      {
+        "file": "next-backdrop.webp",
+        "quality": 90,
+        "psnr": 50.29
+      }
+    ]
+  },
+  {
+    "name": "next-dose",
+    "originalBytes": 712214,
+    "optimizedBytes": 197788,
+    "original": {
+      "width": 1320,
+      "height": 1658
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1658
+    },
+    "qualityChecks": [
+      {
+        "file": "next-dose-480.webp",
+        "quality": 85,
+        "psnr": 44.29
+      },
+      {
+        "file": "next-dose-960.webp",
+        "quality": 85,
+        "psnr": 45.9
+      },
+      {
+        "file": "next-dose.webp",
+        "quality": 85,
+        "psnr": 46.61
+      }
+    ]
+  },
+  {
+    "name": "next-seb",
+    "originalBytes": 694168,
+    "optimizedBytes": 262778,
+    "original": {
+      "width": 1206,
+      "height": 1508
+    },
+    "fallback": {
+      "width": 1206,
+      "height": 1508
+    },
+    "qualityChecks": [
+      {
+        "file": "next-seb-480.webp",
+        "quality": 85,
+        "psnr": 43.31
+      },
+      {
+        "file": "next-seb-960.webp",
+        "quality": 85,
+        "psnr": 44.84
+      },
+      {
+        "file": "next-seb.webp",
+        "quality": 85,
+        "psnr": 46.23
+      }
+    ]
+  },
+  {
+    "name": "next-ty",
+    "originalBytes": 414504,
+    "optimizedBytes": 103124,
+    "original": {
+      "width": 843,
+      "height": 1124
+    },
+    "fallback": {
+      "width": 843,
+      "height": 1124
+    },
+    "qualityChecks": [
+      {
+        "file": "next-ty-480.webp",
+        "quality": 85,
+        "psnr": 44.24
+      },
+      {
+        "file": "next-ty.webp",
+        "quality": 85,
+        "psnr": 45.78
+      }
+    ]
+  },
+  {
+    "name": "seb-band",
+    "originalBytes": 5487444,
+    "optimizedBytes": 232014,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "seb-band-480.webp",
+        "quality": 85,
+        "psnr": 43.67
+      },
+      {
+        "file": "seb-band-960.webp",
+        "quality": 85,
+        "psnr": 45.38
+      },
+      {
+        "file": "seb-band-1440.webp",
+        "quality": 85,
+        "psnr": 46.31
+      },
+      {
+        "file": "seb-band.webp",
+        "quality": 85,
+        "psnr": 46.66
+      }
+    ]
+  },
+  {
+    "name": "seb-lower",
+    "originalBytes": 1360478,
+    "optimizedBytes": 445142,
+    "original": {
+      "width": 2048,
+      "height": 1365
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1365
+    },
+    "qualityChecks": [
+      {
+        "file": "seb-lower-480.webp",
+        "quality": 85,
+        "psnr": 42.81
+      },
+      {
+        "file": "seb-lower-960.webp",
+        "quality": 85,
+        "psnr": 43.7
+      },
+      {
+        "file": "seb-lower-1440.webp",
+        "quality": 85,
+        "psnr": 44.5
+      },
+      {
+        "file": "seb-lower.webp",
+        "quality": 85,
+        "psnr": 45.2
+      }
+    ]
+  },
+  {
+    "name": "seb-portrait",
+    "originalBytes": 696374,
+    "optimizedBytes": 259164,
+    "original": {
+      "width": 1206,
+      "height": 1508
+    },
+    "fallback": {
+      "width": 1206,
+      "height": 1508
+    },
+    "qualityChecks": [
+      {
+        "file": "seb-portrait-480.webp",
+        "quality": 85,
+        "psnr": 43.33
+      },
+      {
+        "file": "seb-portrait-960.webp",
+        "quality": 85,
+        "psnr": 44.91
+      },
+      {
+        "file": "seb-portrait.webp",
+        "quality": 85,
+        "psnr": 46.21
+      }
+    ]
+  },
+  {
+    "name": "ty-band",
+    "originalBytes": 7881194,
+    "optimizedBytes": 702448,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "ty-band-480.webp",
+        "quality": 85,
+        "psnr": 41.51
+      },
+      {
+        "file": "ty-band-960.webp",
+        "quality": 85,
+        "psnr": 41.96
+      },
+      {
+        "file": "ty-band-1440.webp",
+        "quality": 85,
+        "psnr": 42.67
+      },
+      {
+        "file": "ty-band.webp",
+        "quality": 85,
+        "psnr": 43.02
+      }
+    ]
+  },
+  {
+    "name": "ty-lower",
+    "originalBytes": 6825966,
+    "optimizedBytes": 437736,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "ty-lower-480.webp",
+        "quality": 85,
+        "psnr": 42.23
+      },
+      {
+        "file": "ty-lower-960.webp",
+        "quality": 85,
+        "psnr": 43.36
+      },
+      {
+        "file": "ty-lower-1440.webp",
+        "quality": 85,
+        "psnr": 44.08
+      },
+      {
+        "file": "ty-lower.webp",
+        "quality": 85,
+        "psnr": 44.53
+      }
+    ]
+  },
+  {
+    "name": "vol1-lineup-danford",
+    "originalBytes": 1187086,
+    "optimizedBytes": 246598,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-lineup-danford-480.webp",
+        "quality": 85,
+        "psnr": 44.51
+      },
+      {
+        "file": "vol1-lineup-danford-960.webp",
+        "quality": 85,
+        "psnr": 45.89
+      },
+      {
+        "file": "vol1-lineup-danford.webp",
+        "quality": 85,
+        "psnr": 46.51
+      }
+    ]
+  },
+  {
+    "name": "vol1-lineup-viq",
+    "originalBytes": 1105758,
+    "optimizedBytes": 249274,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-lineup-viq-480.webp",
+        "quality": 85,
+        "psnr": 44.2
+      },
+      {
+        "file": "vol1-lineup-viq-960.webp",
+        "quality": 85,
+        "psnr": 45.57
+      },
+      {
+        "file": "vol1-lineup-viq.webp",
+        "quality": 85,
+        "psnr": 46.16
+      }
+    ]
+  },
+  {
+    "name": "vol1-lineup-zaq",
+    "originalBytes": 5723732,
+    "optimizedBytes": 263452,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-lineup-zaq-480.webp",
+        "quality": 85,
+        "psnr": 44.17
+      },
+      {
+        "file": "vol1-lineup-zaq-960.webp",
+        "quality": 85,
+        "psnr": 45.03
+      },
+      {
+        "file": "vol1-lineup-zaq.webp",
+        "quality": 85,
+        "psnr": 44.96
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo1",
+    "originalBytes": 1319538,
+    "optimizedBytes": 147258,
+    "original": {
+      "width": 1320,
+      "height": 2868
+    },
+    "fallback": {
+      "width": 943,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo1-480.webp",
+        "quality": 85,
+        "psnr": 45.01
+      },
+      {
+        "file": "vol1-photo1.webp",
+        "quality": 85,
+        "psnr": 46.48
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo2",
+    "originalBytes": 1158210,
+    "optimizedBytes": 206352,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo2-480.webp",
+        "quality": 85,
+        "psnr": 45
+      },
+      {
+        "file": "vol1-photo2-960.webp",
+        "quality": 85,
+        "psnr": 45.95
+      },
+      {
+        "file": "vol1-photo2.webp",
+        "quality": 85,
+        "psnr": 46.27
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo3",
+    "originalBytes": 1020344,
+    "optimizedBytes": 195436,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo3-480.webp",
+        "quality": 85,
+        "psnr": 45.18
+      },
+      {
+        "file": "vol1-photo3-960.webp",
+        "quality": 85,
+        "psnr": 46.51
+      },
+      {
+        "file": "vol1-photo3.webp",
+        "quality": 85,
+        "psnr": 47.06
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo4",
+    "originalBytes": 5652736,
+    "optimizedBytes": 367542,
+    "original": {
+      "width": 4096,
+      "height": 2731
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1366
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo4-480.webp",
+        "quality": 85,
+        "psnr": 42.96
+      },
+      {
+        "file": "vol1-photo4-960.webp",
+        "quality": 85,
+        "psnr": 43.84
+      },
+      {
+        "file": "vol1-photo4-1440.webp",
+        "quality": 85,
+        "psnr": 44.5
+      },
+      {
+        "file": "vol1-photo4.webp",
+        "quality": 85,
+        "psnr": 44.51
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo5",
+    "originalBytes": 5798068,
+    "optimizedBytes": 332592,
+    "original": {
+      "width": 2731,
+      "height": 4096
+    },
+    "fallback": {
+      "width": 1366,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo5-480.webp",
+        "quality": 85,
+        "psnr": 44.32
+      },
+      {
+        "file": "vol1-photo5-960.webp",
+        "quality": 85,
+        "psnr": 44.69
+      },
+      {
+        "file": "vol1-photo5.webp",
+        "quality": 85,
+        "psnr": 44.55
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo6",
+    "originalBytes": 1053480,
+    "optimizedBytes": 218018,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo6-480.webp",
+        "quality": 85,
+        "psnr": 44.82
+      },
+      {
+        "file": "vol1-photo6-960.webp",
+        "quality": 85,
+        "psnr": 46.24
+      },
+      {
+        "file": "vol1-photo6.webp",
+        "quality": 85,
+        "psnr": 46.97
+      }
+    ]
+  },
+  {
+    "name": "vol1-photo7",
+    "originalBytes": 1311304,
+    "optimizedBytes": 329406,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol1-photo7-480.webp",
+        "quality": 85,
+        "psnr": 43.37
+      },
+      {
+        "file": "vol1-photo7-960.webp",
+        "quality": 85,
+        "psnr": 45.11
+      },
+      {
+        "file": "vol1-photo7.webp",
+        "quality": 85,
+        "psnr": 45.96
+      }
+    ]
+  },
+  {
+    "name": "vol2-lineup-benvi",
+    "originalBytes": 4410790,
+    "optimizedBytes": 341312,
+    "original": {
+      "width": 1989,
+      "height": 4079
+    },
+    "fallback": {
+      "width": 999,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-lineup-benvi-480.webp",
+        "quality": 85,
+        "psnr": 43.43
+      },
+      {
+        "file": "vol2-lineup-benvi-960.webp",
+        "quality": 85,
+        "psnr": 44.67
+      },
+      {
+        "file": "vol2-lineup-benvi.webp",
+        "quality": 85,
+        "psnr": 44.7
+      }
+    ]
+  },
+  {
+    "name": "vol2-lineup-chefnier",
+    "originalBytes": 551766,
+    "optimizedBytes": 148678,
+    "original": {
+      "width": 1024,
+      "height": 915
+    },
+    "fallback": {
+      "width": 1024,
+      "height": 915
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-lineup-chefnier-480.webp",
+        "quality": 85,
+        "psnr": 43.05
+      },
+      {
+        "file": "vol2-lineup-chefnier-960.webp",
+        "quality": 85,
+        "psnr": 44.53
+      },
+      {
+        "file": "vol2-lineup-chefnier.webp",
+        "quality": 85,
+        "psnr": 44.16
+      }
+    ]
+  },
+  {
+    "name": "vol2-lineup-macd",
+    "originalBytes": 1221062,
+    "optimizedBytes": 142128,
+    "original": {
+      "width": 1320,
+      "height": 2868
+    },
+    "fallback": {
+      "width": 943,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-lineup-macd-480.webp",
+        "quality": 85,
+        "psnr": 45.32
+      },
+      {
+        "file": "vol2-lineup-macd.webp",
+        "quality": 85,
+        "psnr": 46.84
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo1",
+    "originalBytes": 221716,
+    "optimizedBytes": 36876,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo1.webp",
+        "quality": 85,
+        "psnr": 43.15
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo2",
+    "originalBytes": 2685196,
+    "optimizedBytes": 336730,
+    "original": {
+      "width": 3024,
+      "height": 4032
+    },
+    "fallback": {
+      "width": 1536,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo2-480.webp",
+        "quality": 85,
+        "psnr": 44.87
+      },
+      {
+        "file": "vol2-photo2-960.webp",
+        "quality": 85,
+        "psnr": 46.45
+      },
+      {
+        "file": "vol2-photo2-1440.webp",
+        "quality": 85,
+        "psnr": 47.52
+      },
+      {
+        "file": "vol2-photo2.webp",
+        "quality": 85,
+        "psnr": 47.7
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo3",
+    "originalBytes": 198452,
+    "optimizedBytes": 23998,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo3.webp",
+        "quality": 85,
+        "psnr": 44.61
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo4",
+    "originalBytes": 2682994,
+    "optimizedBytes": 308886,
+    "original": {
+      "width": 3024,
+      "height": 4032
+    },
+    "fallback": {
+      "width": 1536,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo4-480.webp",
+        "quality": 85,
+        "psnr": 45.13
+      },
+      {
+        "file": "vol2-photo4-960.webp",
+        "quality": 85,
+        "psnr": 46.95
+      },
+      {
+        "file": "vol2-photo4-1440.webp",
+        "quality": 85,
+        "psnr": 47.89
+      },
+      {
+        "file": "vol2-photo4.webp",
+        "quality": 85,
+        "psnr": 48.21
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo5",
+    "originalBytes": 173160,
+    "optimizedBytes": 13474,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo5.webp",
+        "quality": 85,
+        "psnr": 46.46
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo6",
+    "originalBytes": 206672,
+    "optimizedBytes": 45866,
+    "original": {
+      "width": 640,
+      "height": 480
+    },
+    "fallback": {
+      "width": 640,
+      "height": 480
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo6-480.webp",
+        "quality": 85,
+        "psnr": 43.88
+      },
+      {
+        "file": "vol2-photo6.webp",
+        "quality": 85,
+        "psnr": 44.14
+      }
+    ]
+  },
+  {
+    "name": "vol2-photo7",
+    "originalBytes": 188074,
+    "optimizedBytes": 16214,
+    "original": {
+      "width": 480,
+      "height": 640
+    },
+    "fallback": {
+      "width": 480,
+      "height": 640
+    },
+    "qualityChecks": [
+      {
+        "file": "vol2-photo7.webp",
+        "quality": 85,
+        "psnr": 45.79
+      }
+    ]
+  },
+  {
+    "name": "vol3-lineup-50nic",
+    "originalBytes": 213680,
+    "optimizedBytes": 46984,
+    "original": {
+      "width": 644,
+      "height": 970
+    },
+    "fallback": {
+      "width": 644,
+      "height": 970
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-lineup-50nic-480.webp",
+        "quality": 85,
+        "psnr": 46.18
+      },
+      {
+        "file": "vol3-lineup-50nic.webp",
+        "quality": 85,
+        "psnr": 47.71
+      }
+    ]
+  },
+  {
+    "name": "vol3-lineup-babyjake",
+    "originalBytes": 1123634,
+    "optimizedBytes": 226674,
+    "original": {
+      "width": 1440,
+      "height": 1528
+    },
+    "fallback": {
+      "width": 1440,
+      "height": 1528
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-lineup-babyjake-480.webp",
+        "quality": 85,
+        "psnr": 43.84
+      },
+      {
+        "file": "vol3-lineup-babyjake-960.webp",
+        "quality": 85,
+        "psnr": 44.47
+      },
+      {
+        "file": "vol3-lineup-babyjake.webp",
+        "quality": 85,
+        "psnr": 44.63
+      }
+    ]
+  },
+  {
+    "name": "vol3-lineup-comfort",
+    "originalBytes": 1722240,
+    "optimizedBytes": 604134,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-lineup-comfort-480.webp",
+        "quality": 85,
+        "psnr": 42.33
+      },
+      {
+        "file": "vol3-lineup-comfort-960.webp",
+        "quality": 85,
+        "psnr": 42.33
+      },
+      {
+        "file": "vol3-lineup-comfort.webp",
+        "quality": 85,
+        "psnr": 43.28
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo1",
+    "originalBytes": 7363680,
+    "optimizedBytes": 412432,
+    "original": {
+      "width": 4096,
+      "height": 2713
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1357
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo1-480.webp",
+        "quality": 85,
+        "psnr": 42.98
+      },
+      {
+        "file": "vol3-photo1-960.webp",
+        "quality": 85,
+        "psnr": 43.61
+      },
+      {
+        "file": "vol3-photo1-1440.webp",
+        "quality": 85,
+        "psnr": 43.97
+      },
+      {
+        "file": "vol3-photo1.webp",
+        "quality": 85,
+        "psnr": 43.98
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo2",
+    "originalBytes": 1554394,
+    "optimizedBytes": 465100,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo2-480.webp",
+        "quality": 85,
+        "psnr": 42.4
+      },
+      {
+        "file": "vol3-photo2-960.webp",
+        "quality": 85,
+        "psnr": 43.56
+      },
+      {
+        "file": "vol3-photo2.webp",
+        "quality": 85,
+        "psnr": 44.49
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo3",
+    "originalBytes": 1289622,
+    "optimizedBytes": 262064,
+    "original": {
+      "width": 1320,
+      "height": 1980
+    },
+    "fallback": {
+      "width": 1320,
+      "height": 1980
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo3-480.webp",
+        "quality": 85,
+        "psnr": 43.95
+      },
+      {
+        "file": "vol3-photo3-960.webp",
+        "quality": 85,
+        "psnr": 45.62
+      },
+      {
+        "file": "vol3-photo3.webp",
+        "quality": 85,
+        "psnr": 46.23
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo4",
+    "originalBytes": 2521206,
+    "optimizedBytes": 356108,
+    "original": {
+      "width": 1621,
+      "height": 2448
+    },
+    "fallback": {
+      "width": 1356,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo4-480.webp",
+        "quality": 85,
+        "psnr": 42.91
+      },
+      {
+        "file": "vol3-photo4-960.webp",
+        "quality": 85,
+        "psnr": 43.86
+      },
+      {
+        "file": "vol3-photo4.webp",
+        "quality": 85,
+        "psnr": 44.57
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo5",
+    "originalBytes": 5002632,
+    "optimizedBytes": 280638,
+    "original": {
+      "width": 3696,
+      "height": 2448
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1356
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo5-480.webp",
+        "quality": 85,
+        "psnr": 43.58
+      },
+      {
+        "file": "vol3-photo5-960.webp",
+        "quality": 85,
+        "psnr": 44.01
+      },
+      {
+        "file": "vol3-photo5-1440.webp",
+        "quality": 85,
+        "psnr": 44.2
+      },
+      {
+        "file": "vol3-photo5.webp",
+        "quality": 85,
+        "psnr": 44.61
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo6",
+    "originalBytes": 4904300,
+    "optimizedBytes": 476194,
+    "original": {
+      "width": 2162,
+      "height": 3264
+    },
+    "fallback": {
+      "width": 1357,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo6-480.webp",
+        "quality": 85,
+        "psnr": 42.79
+      },
+      {
+        "file": "vol3-photo6-960.webp",
+        "quality": 85,
+        "psnr": 42.83
+      },
+      {
+        "file": "vol3-photo6.webp",
+        "quality": 85,
+        "psnr": 42.85
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo7",
+    "originalBytes": 480626,
+    "optimizedBytes": 67330,
+    "original": {
+      "width": 679,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 679,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo7-480.webp",
+        "quality": 85,
+        "psnr": 44.8
+      },
+      {
+        "file": "vol3-photo7.webp",
+        "quality": 85,
+        "psnr": 44.73
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo8",
+    "originalBytes": 223658,
+    "optimizedBytes": 23946,
+    "original": {
+      "width": 679,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 679,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo8-480.webp",
+        "quality": 85,
+        "psnr": 49
+      },
+      {
+        "file": "vol3-photo8.webp",
+        "quality": 85,
+        "psnr": 49.76
+      }
+    ]
+  },
+  {
+    "name": "vol3-photo9",
+    "originalBytes": 487810,
+    "optimizedBytes": 34518,
+    "original": {
+      "width": 679,
+      "height": 1024
+    },
+    "fallback": {
+      "width": 679,
+      "height": 1024
+    },
+    "qualityChecks": [
+      {
+        "file": "vol3-photo9-480.webp",
+        "quality": 85,
+        "psnr": 46.93
+      },
+      {
+        "file": "vol3-photo9.webp",
+        "quality": 85,
+        "psnr": 46.78
+      }
+    ]
+  }
+]
