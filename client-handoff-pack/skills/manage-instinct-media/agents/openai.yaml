@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Instinct Media"
+  short_description: "Prepare website photos and videos safely"
+  default_prompt: "Use $manage-instinct-media to add or replace these website images safely."

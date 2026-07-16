@@ -1,0 +1,4 @@
+interface:
+  display_name: "Help Describe a Site Change"
+  short_description: "Turn uncertainty into a clear website request"
+  default_prompt: "Use $help-describe-instinct-change to help me explain what I want changed on the website."

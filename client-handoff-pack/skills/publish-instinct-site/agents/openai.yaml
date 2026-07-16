@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Instinct Site"
+  short_description: "Commit, publish, and verify live updates"
+  default_prompt: "Use $publish-instinct-site to publish my approved website changes and confirm they are live."

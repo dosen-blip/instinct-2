@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Instinct Site"
+  short_description: "Turn plain English into accurate site edits"
+  default_prompt: "Use $manage-instinct-site to make this website change from my plain-English description."
