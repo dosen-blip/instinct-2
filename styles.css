@@ -1133,6 +1133,10 @@ img[style*="--media-position"] {
   line-height: 1.65;
 }
 
+.next-event-page__bio + .next-event-page__bio {
+  margin-top: 14px;
+}
+
 .next-event-page__tickets {
   display: inline-flex;
   margin: 32px 0 0;
@@ -2464,6 +2468,10 @@ img[style*="--media-position"] {
       #000;
   }
 
+  .mobile-next-event + .mobile-next-event {
+    border-top: 1px solid var(--line);
+  }
+
   .mobile-next-event__eyebrow {
     margin: 0 0 18px;
     color: var(--home-green);
@@ -2527,6 +2535,10 @@ img[style*="--media-position"] {
     color: rgba(255, 255, 255, 0.82);
     font-size: 16px;
     line-height: 1.65;
+  }
+
+  .mobile-next-event__bio + .mobile-next-event__bio {
+    margin-top: 14px;
   }
 
   .mobile-next-event__tickets {

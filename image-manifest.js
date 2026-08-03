@@ -2137,5 +2137,27 @@ window.INSTINCT_IMAGES = {
         "height": 1474
       }
     ]
+  },
+  "vol6-block-ap-poster": {
+    "src": "./assets/vol6-block-ap-poster.webp",
+    "width": 1180,
+    "height": 1474,
+    "candidates": [
+      {
+        "src": "./assets/vol6-block-ap-poster-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/vol6-block-ap-poster-960.webp",
+        "width": 960,
+        "height": 1199
+      },
+      {
+        "src": "./assets/vol6-block-ap-poster.webp",
+        "width": 1180,
+        "height": 1474
+      }
+    ]
   }
 };

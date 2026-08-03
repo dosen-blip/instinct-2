@@ -2708,5 +2708,35 @@
         "psnr": 46.78
       }
     ]
+  },
+  {
+    "name": "vol6-block-ap-poster",
+    "originalBytes": 319820,
+    "optimizedBytes": 694476,
+    "original": {
+      "width": 1180,
+      "height": 1474
+    },
+    "fallback": {
+      "width": 1180,
+      "height": 1474
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-block-ap-poster-480.webp",
+        "quality": 90,
+        "psnr": 44.38
+      },
+      {
+        "file": "vol6-block-ap-poster-960.webp",
+        "quality": 90,
+        "psnr": 44.94
+      },
+      {
+        "file": "vol6-block-ap-poster.webp",
+        "quality": 90,
+        "psnr": 46.09
+      }
+    ]
   }
 ]
