@@ -43,6 +43,7 @@
   const links = {
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     email: 'mailto:Info@instinctgroove.net',
+    cityAtNight: 'https://www.cityatnight.ca/',
     blockPartyTickets: 'https://simpli.events/e/a2999c',
     blockAfterPartyTickets: 'https://simpli.events/e/40fff6',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
@@ -590,8 +591,11 @@
             ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
             <div>
               <h2><span>Event</span> Details</h2>
-              <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
-              <span class="details-status">Tickets &amp; info via City at Night</span>
+              <div class="tickets-strip__details">
+                <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
+                <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
+              </div>
+              <a class="details-status" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
             </div>
           </section>
         </div>
@@ -648,8 +652,11 @@
         </section>
         <section class="mobile-home-section mobile-home-tickets">
           <h2><span>Event</span> Details</h2>
-          <p>${nextEvent.date} · Snider Park · 7 PM–11 PM</p>
-          <span class="mobile-home-ticket-status">Tickets via City at Night</span>
+          <div class="mobile-home-ticket-details">
+            <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
+            <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
+          </div>
+          <a class="mobile-home-ticket-status" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
         </section>
       </div>
     `;
@@ -703,7 +710,7 @@
           <p class="next-event-page__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
           <span class="green-rule"></span>
           ${event.bio.map((paragraph) => `<p class="next-event-page__bio">${paragraph}</p>`).join('')}
-          <p class="next-event-page__tickets">Tickets &amp; info via City at Night</p>
+          <a class="next-event-page__tickets" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
         </div>
       </section>
     `;
@@ -729,7 +736,7 @@
           <p class="mobile-next-event__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
           <span></span>
           ${event.bio.map((paragraph) => `<p class="mobile-next-event__bio">${paragraph}</p>`).join('')}
-          <p class="mobile-next-event__tickets">Tickets &amp; info via City at Night</p>
+          <a class="mobile-next-event__tickets" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
         </div>
       </section>
     `;
