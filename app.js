@@ -49,6 +49,16 @@
     curtis: 'https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
   };
 
+  const nextEvent = {
+    title: 'Instinct x Block Party',
+    date: 'August 14th',
+    datetime: '2026-08-14',
+    venue: 'Snider Park · 140 Bank St',
+    hours: '7 PM–11 PM · 19+',
+    bio: 'Instinct x Block Party brings the minimal tech sound you love to an outdoor setting, featuring Dosen, Tone A, Comfort, and G3lio on sax—along with the same energy and greenery that make Instinct, Instinct.',
+    poster: asset('block-party-poster')
+  };
+
   // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
   const homePreviewVideo = './assets/home-preview.mp4';
 
@@ -464,7 +474,7 @@
               </div>
             </details>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
-            <span class="site-nav__status">Ticket Details Soon</span>
+            <span class="site-nav__status">Aug 14 · Snider Park</span>
           </div>
         </nav>
       </header>
@@ -512,16 +522,13 @@
             </div>
           </section>
 
-          <section class="next-card next-card--teaser section-border">
-            <a class="next-teaser" href="${routes.next}" aria-label="Open August 14th event teaser">
-              ${imageTag(asset('next-backdrop'), '', { sizes: 'min(1040px, 100vw)' })}
-              <span class="next-teaser__glow" aria-hidden="true"></span>
-              <span class="next-teaser__content">
-                <span class="next-teaser__eyebrow">Next Event</span>
-                <time datetime="2026-08-14">August 14th</time>
-                <span class="next-teaser__copy">Coming soon…</span>
-              </span>
+          <section class="next-card next-card--poster section-border">
+            <p class="next-card__eyebrow">Next Event</p>
+            <a class="next-card__poster" href="${routes.next}" aria-label="Open ${nextEvent.title} event details">
+              ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date}`, { sizes: 'min(544px, 70vw)' })}
             </a>
+            <h2>${nextEvent.title}</h2>
+            <p><time datetime="${nextEvent.datetime}">${nextEvent.date}</time> · Snider Park</p>
           </section>
 
           <section class="about-section section-border">
@@ -551,9 +558,9 @@
           <section class="tickets-strip tickets-strip--soon">
             ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
             <div>
-              <h2><span>Details</span> Soon</h2>
-              <p>Venue, lineup, and tickets for August 14th will be announced soon.</p>
-              <span class="details-status">Coming soon…</span>
+              <h2><span>Event</span> Details</h2>
+              <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
+              <span class="details-status">Tickets &amp; info via City at Night</span>
             </div>
           </section>
         </div>
@@ -577,14 +584,10 @@
         </section>
         <section class="mobile-home-section mobile-home-next-card">
           <h2><span>Next</span> Event</h2>
-          <a href="${routes.next}" class="mobile-home-poster mobile-next-teaser" aria-label="Open August 14th event teaser">
-            ${imageTag(asset('next-backdrop'), '', { sizes: '342px' })}
-            <span>
-              <time datetime="2026-08-14">August 14th</time>
-              <em>Coming soon…</em>
-            </span>
+          <a href="${routes.next}" class="mobile-home-poster" aria-label="Open ${nextEvent.title} event details">
+            ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date}`, { sizes: '342px' })}
           </a>
-          <p>Details coming soon</p>
+          <p>${nextEvent.title} · <time datetime="${nextEvent.datetime}">${nextEvent.date}</time></p>
         </section>
         <section class="mobile-home-section mobile-home-about">
           <div class="mobile-section-label"><span></span>About the Event</div>
@@ -607,9 +610,9 @@
           ${pastEvents.map((event) => mobileHomeEvent(event)).join('')}
         </section>
         <section class="mobile-home-section mobile-home-tickets">
-          <h2><span>Details</span> Soon</h2>
-          <p>August 14th · Coming soon…</p>
-          <span class="mobile-home-ticket-status">Stay tuned</span>
+          <h2><span>Event</span> Details</h2>
+          <p>${nextEvent.date} · Snider Park · 7 PM–11 PM</p>
+          <span class="mobile-home-ticket-status">Tickets via City at Night</span>
         </section>
       </div>
     `;
@@ -645,18 +648,17 @@
     return `
       <div class="with-mobile">
         <div class="desktop-view">
-          <section class="event-hero section-border">
-            ${imageTag(asset('next-backdrop'), 'Instinct event backdrop', { sizes: '100vw', priority: true })}
-            <div class="event-hero__shade"></div>
-            <div class="event-hero__content event-teaser">
+          <section class="next-event-page section-border">
+            <figure class="next-event-page__poster">
+              ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date} at Snider Park`, { sizes: '(max-width: 1050px) 46vw, 560px', priority: true })}
+            </figure>
+            <div class="next-event-page__content">
               <p class="event-teaser__eyebrow">Next Event</p>
-              <h1><time datetime="2026-08-14">August 14th</time></h1>
+              <h1>${nextEvent.title}</h1>
+              <p class="next-event-page__meta"><time datetime="${nextEvent.datetime}">${nextEvent.date}</time><br>${nextEvent.venue}<br>${nextEvent.hours}</p>
               <span class="green-rule"></span>
-              <p class="event-teaser__copy">Coming soon…</p>
-              <div class="event-detail-card event-detail-card--soon">
-                <strong>Details coming soon</strong>
-                <span>Venue, lineup, and tickets will be announced soon.</span>
-              </div>
+              <p class="next-event-page__bio">${nextEvent.bio}</p>
+              <p class="next-event-page__tickets">Tickets &amp; info via City at Night</p>
             </div>
           </section>
         </div>
@@ -667,18 +669,17 @@
   function renderMobileNextEvent() {
     return `
       <article class="mobile-view mobile-next-page">
-        <section class="mobile-next-hero mobile-next-hero--teaser">
-          ${imageTag(asset('next-backdrop'), 'Instinct event backdrop', { sizes: '390px', priority: true })}
-          <div class="mobile-next-glow mobile-next-glow--one"></div>
-          <div class="mobile-next-glow mobile-next-glow--two"></div>
-          <div class="mobile-next-hero-content">
-            <p>Next Event</p>
-            <h1><time datetime="2026-08-14">August 14th</time></h1>
+        <section class="mobile-next-event">
+          <p class="mobile-next-event__eyebrow">Next Event</p>
+          <figure>
+            ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date} at Snider Park`, { sizes: '342px', priority: true })}
+          </figure>
+          <div class="mobile-next-event__content">
+            <h1>${nextEvent.title}</h1>
+            <p class="mobile-next-event__meta"><time datetime="${nextEvent.datetime}">${nextEvent.date}</time><br>${nextEvent.venue}<br>${nextEvent.hours}</p>
             <span></span>
-            <div>
-              <strong>Coming soon…</strong>
-              <em>Details coming soon</em>
-            </div>
+            <p class="mobile-next-event__bio">${nextEvent.bio}</p>
+            <p class="mobile-next-event__tickets">Tickets &amp; info via City at Night</p>
           </div>
         </section>
       </article>

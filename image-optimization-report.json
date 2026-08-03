@@ -1,5 +1,35 @@
 [
   {
+    "name": "block-party-poster",
+    "originalBytes": 193126,
+    "optimizedBytes": 271576,
+    "original": {
+      "width": 1180,
+      "height": 1474
+    },
+    "fallback": {
+      "width": 1180,
+      "height": 1474
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-poster-480.webp",
+        "quality": 90,
+        "psnr": 47.24
+      },
+      {
+        "file": "block-party-poster-960.webp",
+        "quality": 90,
+        "psnr": 48.68
+      },
+      {
+        "file": "block-party-poster.webp",
+        "quality": 90,
+        "psnr": 49.41
+      }
+    ]
+  },
+  {
     "name": "dose-band",
     "originalBytes": 438550,
     "optimizedBytes": 103014,
