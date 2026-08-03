@@ -334,6 +334,24 @@ img[style*="--media-position"] {
   white-space: nowrap;
 }
 
+.site-nav-tickets > summary {
+  border: 1px solid var(--accent-line);
+  border-radius: 999px;
+  padding: 7px 11px;
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.site-nav-tickets > summary::before {
+  display: none;
+}
+
+.site-nav-tickets > div {
+  min-width: 290px;
+}
+
 .site-nav-menu {
   position: relative;
 }
@@ -2041,6 +2059,17 @@ img[style*="--media-position"] {
     justify-content: center;
     margin: 14px 0 0;
     padding: 10px 12px;
+  }
+
+  .site-nav-tickets > summary {
+    width: 100%;
+    justify-content: space-between;
+    margin: 14px 0 0;
+    padding: 12px 14px;
+  }
+
+  .site-nav-tickets > div {
+    min-width: 0;
   }
 
   .site-nav__links a::before,

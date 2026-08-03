@@ -43,6 +43,8 @@
   const links = {
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     email: 'mailto:Info@instinctgroove.net',
+    blockPartyTickets: 'https://simpli.events/e/a2999c',
+    blockAfterPartyTickets: 'https://simpli.events/e/40fff6',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
     vol3Photos: 'https://drive.google.com/drive/folders/1IrkD4W7mA4Zn4aVnKx7xN2WxENsm5GLd?usp=sharing',
     mystic: 'https://www.instagram.com/mysticdoesmedia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
@@ -491,7 +493,13 @@
               </div>
             </details>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
-            <span class="site-nav__status">Aug 14 · Snider Park</span>
+            <details class="site-nav-menu site-nav-tickets">
+              <summary>August 14th Tickets</summary>
+              <div>
+                <a href="${links.blockPartyTickets}" target="_blank" rel="noreferrer">Instinct x Block Party</a>
+                <a href="${links.blockAfterPartyTickets}" target="_blank" rel="noreferrer">Instinct Vol. 6 Block AP Tickets</a>
+              </div>
+            </details>
           </div>
         </nav>
       </header>
