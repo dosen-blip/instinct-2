@@ -649,6 +649,21 @@ img[style*="--media-position"] {
   min-height: auto;
 }
 
+.next-card__events,
+.next-card__event {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+
+.next-card__events {
+  gap: 108px;
+}
+
+.next-card__event {
+  gap: 20px;
+}
+
 .next-card--poster::before {
   inset: 30% auto auto 50%;
   background: rgba(229, 241, 9, 0.08);
@@ -2224,6 +2239,15 @@ img[style*="--media-position"] {
   .mobile-home-next-card h2 span,
   .mobile-home-tickets h2 span {
     color: var(--home-green);
+  }
+
+  .mobile-home-next-events {
+    display: grid;
+    gap: 64px;
+  }
+
+  .mobile-home-next-event {
+    min-width: 0;
   }
 
   .mobile-home-poster {

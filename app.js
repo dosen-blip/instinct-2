@@ -549,11 +549,17 @@
 
           <section class="next-card next-card--poster section-border">
             <p class="next-card__eyebrow">Next Event</p>
-            <a class="next-card__poster" href="${routes.next}" aria-label="Open ${nextEvent.title} event details">
-              ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date}`, { sizes: 'min(544px, 70vw)' })}
-            </a>
-            <h2>${nextEvent.title}</h2>
-            <p><time datetime="${nextEvent.datetime}">${nextEvent.date}</time> · Snider Park</p>
+            <div class="next-card__events">
+              ${nextEvents.map((event) => `
+                <article class="next-card__event">
+                  <a class="next-card__poster" href="${routes.next}" aria-label="Open ${event.title} event details">
+                    ${imageTag(event.poster, `${event.title} poster for ${event.date}`, { sizes: 'min(544px, 70vw)' })}
+                  </a>
+                  <h2>${event.title}</h2>
+                  <p><time datetime="${event.datetime}">${event.date}</time> · ${event.venue.split(' · ')[0]}</p>
+                </article>
+              `).join('')}
+            </div>
           </section>
 
           <section class="about-section section-border">
@@ -609,10 +615,16 @@
         </section>
         <section class="mobile-home-section mobile-home-next-card">
           <h2><span>Next</span> Event</h2>
-          <a href="${routes.next}" class="mobile-home-poster" aria-label="Open ${nextEvent.title} event details">
-            ${imageTag(nextEvent.poster, `${nextEvent.title} poster for ${nextEvent.date}`, { sizes: '342px' })}
-          </a>
-          <p>${nextEvent.title} · <time datetime="${nextEvent.datetime}">${nextEvent.date}</time></p>
+          <div class="mobile-home-next-events">
+            ${nextEvents.map((event) => `
+              <article class="mobile-home-next-event">
+                <a href="${routes.next}" class="mobile-home-poster" aria-label="Open ${event.title} event details">
+                  ${imageTag(event.poster, `${event.title} poster for ${event.date}`, { sizes: '342px' })}
+                </a>
+                <p>${event.title} · <time datetime="${event.datetime}">${event.date}</time></p>
+              </article>
+            `).join('')}
+          </div>
         </section>
         <section class="mobile-home-section mobile-home-about">
           <div class="mobile-section-label"><span></span>About the Event</div>
