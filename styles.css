@@ -808,6 +808,9 @@ img[style*="--media-position"] {
 
 .about-grid figure img {
   width: 100%;
+  height: clamp(520px, 42vw, 640px);
+  object-fit: cover;
+  object-position: center 44%;
   border: 2px solid var(--green);
   border-radius: 10px;
   box-shadow: 0 0 0 24px rgba(155, 93, 229, 0.08);
