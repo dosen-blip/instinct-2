@@ -1005,6 +1005,12 @@ img[style*="--media-position"] {
   margin: 0;
 }
 
+.tickets-strip__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .details-status {
   min-height: 48px;
   display: inline-flex;
@@ -2985,6 +2991,11 @@ img[style*="--media-position"] {
     display: grid;
     gap: 8px;
     margin: 8px 0 24px;
+  }
+
+  .mobile-home-ticket-links {
+    display: grid;
+    gap: 12px;
   }
 
   .mobile-home-tickets a,

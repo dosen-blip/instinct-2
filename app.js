@@ -50,7 +50,6 @@
   const links = {
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     email: 'mailto:Info@instinctgroove.net',
-    cityAtNight: 'https://www.cityatnight.ca/',
     blockPartyTickets: 'https://simpli.events/e/a2999c',
     blockAfterPartyTickets: 'https://simpli.events/e/40fff6',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
@@ -66,6 +65,8 @@
     datetime: '2026-08-14',
     venue: 'Snider Park · 140 Bank St',
     hours: '7 PM–11 PM · 19+',
+    ticketUrl: links.blockPartyTickets,
+    ticketLabel: 'Block Party Tickets',
     bio: ['Instinct x Block Party brings the minimal tech sound you love to an outdoor setting, featuring Dosen, Tone A, Comfort, and G3lio on sax—along with the same energy and greenery that make Instinct, Instinct.'],
     poster: asset('block-party-poster')
   };
@@ -77,6 +78,8 @@
     datetime: '2026-08-14',
     venue: 'City At Night · 222 Slater St',
     hours: '10 PM–2:30 AM · 19+',
+    ticketUrl: links.blockAfterPartyTickets,
+    ticketLabel: 'Afterparty Tickets',
     bio: [
       'Instinct Vol. 6 continues the block party inside City At Night, featuring OOJ, Niko Couture B2B Balla, and Artur.Exists.',
       'More dancing, more greenery, and deeper cuts all night long.'
@@ -730,7 +733,9 @@
                 <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
                 <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
               </div>
-              <a class="details-status" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
+              <div class="tickets-strip__links">
+                ${nextEvents.map((event) => `<a class="details-status" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>`).join('')}
+              </div>
             </div>
           </section>
         </div>
@@ -791,7 +796,9 @@
             <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
             <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
           </div>
-          <a class="mobile-home-ticket-status" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
+          <div class="mobile-home-ticket-links">
+            ${nextEvents.map((event) => `<a class="mobile-home-ticket-status" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>`).join('')}
+          </div>
         </section>
       </div>
     `;
@@ -846,7 +853,7 @@
           <p class="next-event-page__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
           <span class="green-rule"></span>
           ${event.bio.map((paragraph) => `<p class="next-event-page__bio">${paragraph}</p>`).join('')}
-          <a class="next-event-page__tickets" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
+          <a class="next-event-page__tickets" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>
         </div>
       </section>
     `;
@@ -898,7 +905,7 @@
           <p class="mobile-next-event__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
           <span></span>
           ${event.bio.map((paragraph) => `<p class="mobile-next-event__bio">${paragraph}</p>`).join('')}
-          <a class="mobile-next-event__tickets" href="${links.cityAtNight}" target="_blank" rel="noreferrer">Tickets &amp; info via City at Night</a>
+          <a class="mobile-next-event__tickets" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>
         </div>
       </section>
     `;
