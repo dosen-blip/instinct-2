@@ -41,7 +41,10 @@
     dosen: './dosen.html',
     toneA: './tone-a.html',
     comfort: './comfort.html',
-    g3lio: './g3lio.html'
+    g3lio: './g3lio.html',
+    ooj: './ooj.html',
+    nikoBalla: './niko-couture-b2b-balla.html',
+    arturExists: './artur-exists.html'
   };
 
   const links = {
@@ -306,7 +309,10 @@
   const currentArtistNav = [
     { slug: 'dosen', label: 'DOSEN', href: routes.dosen },
     { slug: 'tone-a', label: 'TONE A', href: routes.toneA },
-    { slug: 'comfort', label: 'COMFORT + G3LIO', href: routes.comfort }
+    { slug: 'comfort', label: 'COMFORT + G3LIO', href: routes.comfort, wide: true },
+    { slug: 'ooj', label: 'OOJ', href: routes.ooj },
+    { slug: 'niko-couture-b2b-balla', label: 'NIKO COUTURE B2B BALLA', href: routes.nikoBalla, wide: true },
+    { slug: 'artur-exists', label: 'ARTUR.EXISTS', href: routes.arturExists }
   ];
 
   const artists = {
@@ -368,6 +374,55 @@
           alt: 'G3LIO playing saxophone on stage'
         }
       ],
+      accent: '#a855f7'
+    },
+    ooj: {
+      currentEvent: true,
+      slug: 'ooj',
+      name: 'OOJ',
+      setTime: '10:00 PM–11:00 PM',
+      location: 'City At Night',
+      bio: [
+        'Orange Octopus Jim (OOJ) is an Ottawa-based DJ and producer known for feel-good dance floors that blend house, techno and sparkle to build moments that feel playful.',
+        'Inspired by everything from late-night club culture to beach sunsets and underwater daydreams, his sets balance groove with discovery.'
+      ],
+      instagram: 'https://www.instagram.com/ooj_matthew/',
+      portrait: asset('block-party-artist-ooj'),
+      alt: 'Orange Octopus Jim logo glowing white against an orange background',
+      accent: '#ff5a24'
+    },
+    'niko-couture-b2b-balla': {
+      currentEvent: true,
+      slug: 'niko-couture-b2b-balla',
+      name: 'NIKO COUTURE B2B BALLA',
+      setTime: '11:00 PM–1:00 AM',
+      location: 'City At Night',
+      bio: [
+        'Ottawa selectors BALLA and Niko Couture link up for a set of deep, minimal house driven by groovy, rolling rhythms. Friends for years, Niko was one of the first people to put BALLA behind the decks. This marks their first public set together, carrying that history into the room.',
+        'They’re playing the slow burn: melodic, hypnotic deep house from the opening record, with warm basslines and jacking percussion setting the pace. The energy builds track by track, taking the room on a journey as the night unfolds.'
+      ],
+      socials: [
+        { label: 'NIKO COUTURE Instagram', href: 'https://www.instagram.com/niko.couturee/' },
+        { label: 'BALLA Instagram', href: 'https://www.instagram.com/gab.balladelli/' }
+      ],
+      portrait: asset('block-party-artist-niko-balla'),
+      alt: 'Niko Couture and BALLA standing together in an elevator',
+      accent: '#f2c56b'
+    },
+    'artur-exists': {
+      currentEvent: true,
+      slug: 'artur-exists',
+      name: 'ARTUR.EXISTS',
+      setTime: '1:00 AM–2:30 AM',
+      location: 'City At Night',
+      bio: [
+        "It is my first my summer in Montreal and I'll bring some good vibes to Ottawa where my journey began. City At Night is the place where my first big events happened and it's always be like a home to me :)",
+        "Montreal showed me how any genre can be funky and energetic, this time we will go back to 2000's and bring you best energy at the end of the night with the mixes of Benny Benassi, Madonna and even Britney Spears following with funky tech house music.",
+        'Be there or be square!!'
+      ],
+      instagram: 'https://www.instagram.com/artur.exists/',
+      portrait: asset('block-party-artist-artur-exists'),
+      alt: 'ARTUR.EXISTS performing behind DJ decks in black and white',
       accent: '#a855f7'
     },
     'ty-groove': {
@@ -1022,6 +1077,10 @@
 
   function renderCurrentArtist(artist) {
     const members = artist.members || [artist];
+    const socials = artist.socials || members.map((member) => ({
+      label: members.length > 1 ? `${member.name} Instagram` : 'Instagram',
+      href: member.instagram
+    }));
     return `
       <article class="current-artist-page" style="--current-artist-accent: ${artist.accent}">
         <section class="current-artist-hero">
@@ -1036,7 +1095,7 @@
             <p class="current-artist-eyebrow">August 14 Artist</p>
             <h1>${artist.name}</h1>
             <div class="current-artist-socials">
-              ${members.map((member) => `<a class="current-artist-instagram" href="${member.instagram}" target="_blank" rel="noreferrer">${members.length > 1 ? `${member.name} Instagram` : 'Instagram'}</a>`).join('')}
+              ${socials.map((social) => `<a class="current-artist-instagram" href="${social.href}" target="_blank" rel="noreferrer">${social.label}</a>`).join('')}
             </div>
           </div>
         </section>
@@ -1060,7 +1119,10 @@
         </section>
 
         <nav class="current-artist-tabs" aria-label="Artist navigation">
-          ${currentArtistNav.map((item) => `<a${item.slug === artist.slug ? ' class="is-active" aria-current="page"' : ''} href="${item.href}">${item.label}</a>`).join('')}
+          ${currentArtistNav.map((item) => {
+            const classes = [item.slug === artist.slug ? 'is-active' : '', item.wide ? 'is-wide' : ''].filter(Boolean).join(' ');
+            return `<a${classes ? ` class="${classes}"` : ''}${item.slug === artist.slug ? ' aria-current="page"' : ''} href="${item.href}">${item.label}</a>`;
+          }).join('')}
         </nav>
       </article>
     `;

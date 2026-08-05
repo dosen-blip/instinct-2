@@ -1,5 +1,35 @@
 [
   {
+    "name": "block-party-artist-artur-exists",
+    "originalBytes": 295469,
+    "optimizedBytes": 267542,
+    "original": {
+      "width": 1080,
+      "height": 1616
+    },
+    "fallback": {
+      "width": 1080,
+      "height": 1616
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-artur-exists-480.webp",
+        "quality": 85,
+        "psnr": 44.75
+      },
+      {
+        "file": "block-party-artist-artur-exists-960.webp",
+        "quality": 85,
+        "psnr": 44.25
+      },
+      {
+        "file": "block-party-artist-artur-exists.webp",
+        "quality": 85,
+        "psnr": 44.22
+      }
+    ]
+  },
+  {
     "name": "block-party-artist-comfort",
     "originalBytes": 606655,
     "optimizedBytes": 630014,
@@ -81,6 +111,71 @@
         "file": "block-party-artist-g3lio.webp",
         "quality": 85,
         "psnr": 46.8
+      }
+    ]
+  },
+  {
+    "name": "block-party-artist-niko-balla",
+    "originalBytes": 10909006,
+    "optimizedBytes": 644152,
+    "original": {
+      "width": 3024,
+      "height": 4032
+    },
+    "fallback": {
+      "width": 1536,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-niko-balla-480.webp",
+        "quality": 85,
+        "psnr": 43.12
+      },
+      {
+        "file": "block-party-artist-niko-balla-960.webp",
+        "quality": 85,
+        "psnr": 43.11
+      },
+      {
+        "file": "block-party-artist-niko-balla-1440.webp",
+        "quality": 85,
+        "psnr": 43.28
+      },
+      {
+        "file": "block-party-artist-niko-balla.webp",
+        "quality": 85,
+        "psnr": 43.28
+      }
+    ]
+  },
+  {
+    "name": "block-party-artist-ooj",
+    "originalBytes": 797917,
+    "optimizedBytes": 127812,
+    "original": {
+      "width": 1440,
+      "height": 960
+    },
+    "fallback": {
+      "width": 1440,
+      "height": 960
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-ooj-480.webp",
+        "quality": 85,
+        "psnr": 44.12
+      },
+      {
+        "file": "block-party-artist-ooj-960.webp",
+        "quality": 85,
+        "psnr": 45.74
+      },
+      {
+        "file": "block-party-artist-ooj.webp",
+        "quality": 85,
+        "psnr": 47.1
       }
     ]
   },

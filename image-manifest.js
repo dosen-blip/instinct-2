@@ -2281,5 +2281,76 @@ window.INSTINCT_IMAGES = {
         "height": 938
       }
     ]
+  },
+  "block-party-artist-ooj": {
+    "src": "./assets/block-party-artist-ooj.webp",
+    "width": 1440,
+    "height": 960,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-ooj-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/block-party-artist-ooj-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/block-party-artist-ooj.webp",
+        "width": 1440,
+        "height": 960
+      }
+    ]
+  },
+  "block-party-artist-niko-balla": {
+    "src": "./assets/block-party-artist-niko-balla.webp",
+    "width": 1536,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-niko-balla-480.webp",
+        "width": 480,
+        "height": 640
+      },
+      {
+        "src": "./assets/block-party-artist-niko-balla-960.webp",
+        "width": 960,
+        "height": 1280
+      },
+      {
+        "src": "./assets/block-party-artist-niko-balla-1440.webp",
+        "width": 1440,
+        "height": 1920
+      },
+      {
+        "src": "./assets/block-party-artist-niko-balla.webp",
+        "width": 1536,
+        "height": 2048
+      }
+    ]
+  },
+  "block-party-artist-artur-exists": {
+    "src": "./assets/block-party-artist-artur-exists.webp",
+    "width": 1080,
+    "height": 1616,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-artur-exists-480.webp",
+        "width": 480,
+        "height": 718
+      },
+      {
+        "src": "./assets/block-party-artist-artur-exists-960.webp",
+        "width": 960,
+        "height": 1436
+      },
+      {
+        "src": "./assets/block-party-artist-artur-exists.webp",
+        "width": 1080,
+        "height": 1616
+      }
+    ]
   }
 };

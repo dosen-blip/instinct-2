@@ -1725,6 +1725,19 @@ img[style*="--media-position"] {
   font-size: clamp(58px, 5.8vw, 84px);
 }
 
+[data-route="niko-couture-b2b-balla"] .current-artist-intro h1 {
+  font-size: clamp(52px, 5.2vw, 76px);
+}
+
+[data-route="artur-exists"] .current-artist-intro h1 {
+  font-size: clamp(46px, 4vw, 58px);
+}
+
+[data-route="ooj"] .current-artist-portrait img {
+  object-fit: contain;
+  background: #cb2108;
+}
+
 .current-artist-instagram {
   display: inline-flex;
   min-height: 48px;
@@ -2537,6 +2550,15 @@ img[style*="--media-position"] {
     font-size: 44px;
   }
 
+  [data-route="niko-couture-b2b-balla"] .current-artist-intro h1 {
+    font-size: 36px;
+    line-height: 0.98;
+  }
+
+  [data-route="artur-exists"] .current-artist-intro h1 {
+    font-size: 34px;
+  }
+
   .current-artist-eyebrow,
   .current-artist-billing {
     font-size: 10px;
@@ -2594,7 +2616,7 @@ img[style*="--media-position"] {
     padding-left: 10px;
   }
 
-  .current-artist-tabs a:last-child {
+  .current-artist-tabs a.is-wide {
     grid-column: 1 / -1;
   }
 
