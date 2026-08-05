@@ -306,8 +306,7 @@
   const currentArtistNav = [
     { slug: 'dosen', label: 'DOSEN', href: routes.dosen },
     { slug: 'tone-a', label: 'TONE A', href: routes.toneA },
-    { slug: 'comfort', label: 'COMFORT', href: routes.comfort },
-    { slug: 'g3lio', label: 'G3LIO', href: routes.g3lio }
+    { slug: 'comfort', label: 'COMFORT + G3LIO', href: routes.comfort }
   ];
 
   const artists = {
@@ -345,34 +344,31 @@
     comfort: {
       currentEvent: true,
       slug: 'comfort',
-      name: 'COMFORT',
-      billing: 'COMFORT + G3LIO',
-      performanceNote: 'Performing together with G3LIO.',
+      name: 'COMFORT + G3LIO',
+      performanceNote: 'COMFORT and G3LIO perform together.',
       setTime: '9:40 PM–11:00 PM',
       location: 'Snider’s Park',
-      bio: [
-        'Comfort has been part of Ottawa’s electronic scene since 2017, shaping the culture as the founder of FMG Collective, Intersection and Solstice, while curating the official afterparties for Escapade Music Festival. His sound blends high-energy house with melodic, trance-leaning elements, delivering hypnotic sets that keep the dancefloor moving and fully locked in.'
+      members: [
+        {
+          name: 'COMFORT',
+          bio: [
+            'Comfort has been part of Ottawa’s electronic scene since 2017, shaping the culture as the founder of FMG Collective, Intersection and Solstice, while curating the official afterparties for Escapade Music Festival. His sound blends high-energy house with melodic, trance-leaning elements, delivering hypnotic sets that keep the dancefloor moving and fully locked in.'
+          ],
+          instagram: 'https://www.instagram.com/comfort.adam_/',
+          portrait: asset('block-party-artist-comfort'),
+          alt: 'COMFORT performing behind DJ equipment'
+        },
+        {
+          name: 'G3LIO',
+          bio: [
+            'Angelo Leo is an Ottawa-based musician and entertainment consultant known for a dynamic sound blending jazz, soul, and contemporary influences. They have collaborated with artists worldwide, contributing to records that have collectively surpassed 10 million streams.'
+          ],
+          instagram: 'https://www.instagram.com/g3lio/',
+          portrait: asset('block-party-artist-g3lio'),
+          alt: 'G3LIO playing saxophone on stage'
+        }
       ],
-      instagram: 'https://www.instagram.com/comfort.adam_/',
-      portrait: asset('block-party-artist-comfort'),
-      alt: 'COMFORT performing behind DJ equipment',
       accent: '#a855f7'
-    },
-    g3lio: {
-      currentEvent: true,
-      slug: 'g3lio',
-      name: 'G3LIO',
-      billing: 'COMFORT + G3LIO',
-      performanceNote: 'Performing together with COMFORT.',
-      setTime: '9:40 PM–11:00 PM',
-      location: 'Snider’s Park',
-      bio: [
-        'Angelo Leo is an Ottawa-based musician and entertainment consultant known for a dynamic sound blending jazz, soul, and contemporary influences. They have collaborated with artists worldwide, contributing to records that have collectively surpassed 10 million streams.'
-      ],
-      instagram: 'https://www.instagram.com/g3lio/',
-      portrait: asset('block-party-artist-g3lio'),
-      alt: 'G3LIO playing saxophone on stage',
-      accent: '#32e07a'
     },
     'ty-groove': {
       name: 'Ty Groove',
@@ -533,6 +529,8 @@
       page = renderNextEvent();
     } else if (recaps[route]) {
       page = renderRecap(recaps[route]);
+    } else if (route === 'g3lio') {
+      page = renderArtist(artists.comfort);
     } else if (artists[route]) {
       page = renderArtist(artists[route]);
     } else {
@@ -1023,27 +1021,38 @@
   }
 
   function renderCurrentArtist(artist) {
+    const members = artist.members || [artist];
     return `
       <article class="current-artist-page" style="--current-artist-accent: ${artist.accent}">
         <section class="current-artist-hero">
-          <figure class="current-artist-portrait">
-            ${imageTag(artist.portrait, artist.alt, { sizes: '(max-width: 720px) 390px, 620px', priority: true })}
-          </figure>
+          <div class="current-artist-portraits ${members.length > 1 ? 'is-pair' : ''}">
+            ${members.map((member) => `
+              <figure class="current-artist-portrait">
+                ${imageTag(member.portrait, member.alt, { sizes: members.length > 1 ? '(max-width: 720px) 158px, 300px' : '(max-width: 720px) 390px, 620px', priority: true })}
+              </figure>
+            `).join('')}
+          </div>
           <div class="current-artist-intro">
             <p class="current-artist-eyebrow">August 14 Artist</p>
-            ${artist.billing ? `<p class="current-artist-billing">${artist.billing}</p>` : ''}
             <h1>${artist.name}</h1>
-            <a class="current-artist-instagram" href="${artist.instagram}" target="_blank" rel="noreferrer">Instagram</a>
+            <div class="current-artist-socials">
+              ${members.map((member) => `<a class="current-artist-instagram" href="${member.instagram}" target="_blank" rel="noreferrer">${members.length > 1 ? `${member.name} Instagram` : 'Instagram'}</a>`).join('')}
+            </div>
           </div>
         </section>
 
         <section class="current-artist-details">
           <div class="current-artist-bio">
             <div class="section-kicker"><span></span>Bio</div>
-            ${artist.bio.map((paragraph) => `<p>${paragraph}</p>`).join('')}
+            ${members.map((member) => `
+              <section class="current-artist-member">
+                ${members.length > 1 ? `<h2>${member.name}</h2>` : ''}
+                ${member.bio.map((paragraph) => `<p>${paragraph}</p>`).join('')}
+              </section>
+            `).join('')}
           </div>
           <aside class="current-artist-set">
-            <span>DJ Set</span>
+            <span>Set</span>
             <strong>${artist.setTime}</strong>
             <p>${artist.location}</p>
             ${artist.performanceNote ? `<small>${artist.performanceNote}</small>` : ''}
