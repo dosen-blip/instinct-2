@@ -61,6 +61,7 @@ body {
 .recap-intro h1,
 .event-hero h1,
 .artist-hero h1,
+.current-artist-intro h1,
 .previous-events h2,
 .lineup-section h2,
 .recap-lineup h2,
@@ -1649,6 +1650,216 @@ img[style*="--media-position"] {
   letter-spacing: 2px;
 }
 
+.current-artist-page {
+  --current-artist-accent: var(--accent);
+  background:
+    radial-gradient(circle at 16% 18rem, color-mix(in srgb, var(--current-artist-accent) 14%, transparent), transparent 28rem),
+    radial-gradient(circle at 86% 46rem, rgba(155, 93, 229, 0.14), transparent 30rem),
+    #000;
+}
+
+.current-artist-hero {
+  display: grid;
+  grid-template-columns: minmax(360px, 560px) minmax(380px, 1fr);
+  gap: clamp(56px, 8vw, 120px);
+  align-items: center;
+  min-height: 900px;
+  padding: 96px max(48px, calc((100vw - 1240px) / 2));
+}
+
+.current-artist-portrait {
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--current-artist-accent) 62%, transparent);
+  box-shadow: 0 34px 100px rgba(0, 0, 0, 0.8), 0 0 44px color-mix(in srgb, var(--current-artist-accent) 12%, transparent);
+}
+
+.current-artist-portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.current-artist-intro {
+  min-width: 0;
+}
+
+.current-artist-eyebrow,
+.current-artist-billing {
+  margin: 0 0 18px;
+  color: var(--current-artist-accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.current-artist-billing {
+  margin-bottom: 14px;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.12em;
+}
+
+.current-artist-intro h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(76px, 9vw, 144px);
+  line-height: 0.88;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.current-artist-instagram {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 36px;
+  border: 1px solid color-mix(in srgb, var(--current-artist-accent) 62%, transparent);
+  border-radius: 999px;
+  padding: 12px 22px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.current-artist-instagram:hover,
+.current-artist-instagram:focus-visible {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--current-artist-accent) 14%, transparent);
+}
+
+.current-artist-instagram:focus-visible,
+.current-artist-tabs a:focus-visible {
+  outline: 2px solid var(--current-artist-accent);
+  outline-offset: 4px;
+}
+
+.current-artist-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: clamp(48px, 7vw, 96px);
+  align-items: start;
+  width: min(1120px, calc(100% - 48px));
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+  padding: 96px 0 112px;
+}
+
+.current-artist-bio .section-kicker {
+  color: var(--current-artist-accent);
+}
+
+.current-artist-bio p {
+  margin: 24px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 19px;
+  line-height: 1.7;
+}
+
+.current-artist-set {
+  display: grid;
+  gap: 14px;
+  border: 1px solid color-mix(in srgb, var(--current-artist-accent) 42%, transparent);
+  padding: 34px;
+  background: color-mix(in srgb, var(--current-artist-accent) 7%, transparent);
+  text-align: center;
+}
+
+.current-artist-set span,
+.current-artist-set small {
+  color: var(--current-artist-accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.current-artist-set strong {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.current-artist-set p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.current-artist-set small {
+  border-top: 1px solid var(--line);
+  margin-top: 8px;
+  padding-top: 18px;
+}
+
+.current-artist-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 48px 24px 72px;
+}
+
+.current-artist-tabs a {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 10px 18px;
+  color: rgba(255, 255, 255, 0.68);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.current-artist-tabs a:hover,
+.current-artist-tabs a.is-active {
+  border-color: var(--current-artist-accent);
+  color: #fff;
+  background: color-mix(in srgb, var(--current-artist-accent) 12%, transparent);
+}
+
+@media (max-width: 1050px) {
+  .current-artist-hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 72px 48px 88px;
+  }
+
+  .current-artist-portrait {
+    width: min(560px, 100%);
+    margin: 0 auto;
+  }
+
+  .current-artist-intro {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .current-artist-details {
+    grid-template-columns: 1fr;
+  }
+
+  .current-artist-set {
+    width: min(520px, 100%);
+    margin: 0 auto;
+  }
+}
+
 .artist-page {
   background:
     radial-gradient(circle at 10% 4rem, rgba(153, 0, 255, 0.16), transparent 22rem),
@@ -2248,6 +2459,89 @@ img[style*="--media-position"] {
     overflow: hidden;
     background: #000;
     color: #fff;
+  }
+
+  .current-artist-page {
+    width: min(390px, 100%);
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .current-artist-hero {
+    gap: 38px;
+    padding: 34px 24px 56px;
+  }
+
+  .current-artist-portrait {
+    width: 100%;
+  }
+
+  .current-artist-intro h1 {
+    font-size: clamp(52px, 17vw, 68px);
+    line-height: 0.92;
+  }
+
+  [data-route="comfort"] .current-artist-intro h1 {
+    font-size: 52px;
+  }
+
+  .current-artist-eyebrow,
+  .current-artist-billing {
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .current-artist-instagram {
+    width: min(280px, 100%);
+    margin-top: 28px;
+  }
+
+  .current-artist-details {
+    width: auto;
+    gap: 40px;
+    margin: 0 24px;
+    padding: 56px 0 64px;
+  }
+
+  .current-artist-bio p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .current-artist-set {
+    width: 100%;
+    padding: 28px 20px;
+  }
+
+  .current-artist-set strong {
+    font-size: 28px;
+  }
+
+  .current-artist-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 32px 24px 56px;
+  }
+
+  .current-artist-tabs a {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  [data-route="dosen"] .current-artist-portrait img {
+    object-position: center 45%;
+  }
+
+  [data-route="tone-a"] .current-artist-portrait img {
+    object-position: center 35%;
+  }
+
+  [data-route="comfort"] .current-artist-portrait img {
+    object-position: center 42%;
+  }
+
+  [data-route="g3lio"] .current-artist-portrait img {
+    object-position: center 38%;
   }
 
   .mobile-home {

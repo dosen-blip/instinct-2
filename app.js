@@ -37,7 +37,11 @@
     babyjake: './babyjake.html',
     ty: './ty-groove.html',
     seb: './seb-couture.html',
-    dose: './dose.html'
+    dose: './dose.html',
+    dosen: './dosen.html',
+    toneA: './tone-a.html',
+    comfort: './comfort.html',
+    g3lio: './g3lio.html'
   };
 
   const links = {
@@ -299,7 +303,77 @@
     { slug: 'vol-1', href: routes.vol1, title: 'Vol. 1', date: 'November 21, 2025', venue: 'ANNX', image: asset('home-vol1-card') }
   ];
 
+  const currentArtistNav = [
+    { slug: 'dosen', label: 'DOSEN', href: routes.dosen },
+    { slug: 'tone-a', label: 'TONE A', href: routes.toneA },
+    { slug: 'comfort', label: 'COMFORT', href: routes.comfort },
+    { slug: 'g3lio', label: 'G3LIO', href: routes.g3lio }
+  ];
+
   const artists = {
+    dosen: {
+      currentEvent: true,
+      slug: 'dosen',
+      name: 'DOSEN',
+      setTime: '7:00 PM–8:20 PM',
+      location: 'Snider’s Park',
+      bio: [
+        "DOSEN is an Ottawa-based DJ whose sound is rooted in minimal, gritty tech house with shades of trance, house, and techno. Since making his debut at EXOSPHERE 002, he has become a rising presence in Ottawa's underground, playing OFF GRID and Frequency Shift events and opening the official Escapade afterparty for Odd Mob B2B Walker & Royce. His sets move between deep grooves and high-energy moments, built to draw people in and keep the room moving."
+      ],
+      instagram: 'https://www.instagram.com/matia_dosen/',
+      portrait: asset('block-party-artist-dosen'),
+      alt: 'DOSEN seated in a blue-lit outdoor lounge',
+      accent: '#32e07a'
+    },
+    'tone-a': {
+      currentEvent: true,
+      slug: 'tone-a',
+      name: 'TONE A',
+      setTime: '8:20 PM–9:40 PM',
+      location: 'Snider’s Park',
+      bio: [
+        'A seasoned selector in Ottawa’s underground dance music scene, with close to 15 years of experience rocking dance floors and curating unforgettable nights. As co-founder of White Rabbit Events, he’s been a driving force behind community-focused events that blend immersive vibes with cutting-edge sound.',
+        'He’s held respected residencies at venues like Sotto, BPM After Hours, Waverly, Buddha Bar (Thursdays), the Floorplay Group, and currently holds down Saturday nights at City at Night, one of Ottawa’s premier clubs. His presence has also been felt at major events and venues including Multiple Escapades & Afters, Circus Afterhours, Newspeak, Wiggle Room, DNA, FMG, and Mercury Lounge, solidifying his rep as a trusted selector and dedicated promoter.',
+        'With a deep musical background and an instinct for reading rooms, Tone A’s sets are known to shake foundations and elevate crowds. He’s shared the stage with international heavyweights like Claptone, Roger Sanchez, Victor Calderone, Matador, Carlo Lio, Mark Knight, Weiss, Eli & Fur, Max Chapman, Harvey McKay, Walker & Royce, Miss Melera, The Cube Guys, Nathan Barato, John Acquaviva, and more.',
+        'Fueled by a lifelong passion for dance music, Tone A continues to be a cornerstone of Ottawa nightlife curating vibes, building community, and delivering sets you won’t soon forget.'
+      ],
+      instagram: 'https://www.instagram.com/toneasound/',
+      portrait: asset('block-party-artist-tone-a'),
+      alt: 'TONE A smiling in a gold hood and baseball cap',
+      accent: '#e5f109'
+    },
+    comfort: {
+      currentEvent: true,
+      slug: 'comfort',
+      name: 'COMFORT',
+      billing: 'COMFORT + G3LIO',
+      performanceNote: 'Performing together with G3LIO.',
+      setTime: '9:40 PM–11:00 PM',
+      location: 'Snider’s Park',
+      bio: [
+        'Comfort has been part of Ottawa’s electronic scene since 2017, shaping the culture as the founder of FMG Collective, Intersection and Solstice, while curating the official afterparties for Escapade Music Festival. His sound blends high-energy house with melodic, trance-leaning elements, delivering hypnotic sets that keep the dancefloor moving and fully locked in.'
+      ],
+      instagram: 'https://www.instagram.com/comfort.adam_/',
+      portrait: asset('block-party-artist-comfort'),
+      alt: 'COMFORT performing behind DJ equipment',
+      accent: '#a855f7'
+    },
+    g3lio: {
+      currentEvent: true,
+      slug: 'g3lio',
+      name: 'G3LIO',
+      billing: 'COMFORT + G3LIO',
+      performanceNote: 'Performing together with COMFORT.',
+      setTime: '9:40 PM–11:00 PM',
+      location: 'Snider’s Park',
+      bio: [
+        'Angelo Leo is an Ottawa-based musician and entertainment consultant known for a dynamic sound blending jazz, soul, and contemporary influences. They have collaborated with artists worldwide, contributing to records that have collectively surpassed 10 million streams.'
+      ],
+      instagram: 'https://www.instagram.com/g3lio/',
+      portrait: asset('block-party-artist-g3lio'),
+      alt: 'G3LIO playing saxophone on stage',
+      accent: '#32e07a'
+    },
     'ty-groove': {
       name: 'Ty Groove',
       setTime: '10PM - 11:30pm',
@@ -499,12 +573,7 @@
             <details class="site-nav-menu ${isArtist ? 'is-active' : ''}">
               <summary>Artists</summary>
               <div>
-                <a${linkClass('dj-cobb')} href="${routes.djCobb}">DJ Cobb</a>
-                <a${linkClass('seb-b-balla')} href="${routes.sebBalla}">Seb B/Balla</a>
-                <a${linkClass('babyjake')} href="${routes.babyjake}">BabyJake</a>
-                <a${linkClass('ty-groove')} href="${routes.ty}">Ty Groove</a>
-                <a${linkClass('seb-couture')} href="${routes.seb}">Seb Couture</a>
-                <a${linkClass('dose')} href="${routes.dose}">D.O.S.E</a>
+                ${currentArtistNav.map((artist) => `<a${linkClass(artist.slug)} href="${artist.href}">${artist.label}</a>`).join('')}
               </div>
             </details>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
@@ -889,6 +958,7 @@
   }
 
   function renderArtist(artist) {
+    if (artist.currentEvent) return renderCurrentArtist(artist);
     if (mobileMedia.matches && artist.mobile) {
       return `<div class="with-mobile">${renderMobileArtist(artist)}</div>`;
     }
@@ -949,6 +1019,41 @@
       <div class="with-mobile">
         ${desktop}
       </div>
+    `;
+  }
+
+  function renderCurrentArtist(artist) {
+    return `
+      <article class="current-artist-page" style="--current-artist-accent: ${artist.accent}">
+        <section class="current-artist-hero">
+          <figure class="current-artist-portrait">
+            ${imageTag(artist.portrait, artist.alt, { sizes: '(max-width: 720px) 390px, 620px', priority: true })}
+          </figure>
+          <div class="current-artist-intro">
+            <p class="current-artist-eyebrow">August 14 Artist</p>
+            ${artist.billing ? `<p class="current-artist-billing">${artist.billing}</p>` : ''}
+            <h1>${artist.name}</h1>
+            <a class="current-artist-instagram" href="${artist.instagram}" target="_blank" rel="noreferrer">Instagram</a>
+          </div>
+        </section>
+
+        <section class="current-artist-details">
+          <div class="current-artist-bio">
+            <div class="section-kicker"><span></span>Bio</div>
+            ${artist.bio.map((paragraph) => `<p>${paragraph}</p>`).join('')}
+          </div>
+          <aside class="current-artist-set">
+            <span>DJ Set</span>
+            <strong>${artist.setTime}</strong>
+            <p>${artist.location}</p>
+            ${artist.performanceNote ? `<small>${artist.performanceNote}</small>` : ''}
+          </aside>
+        </section>
+
+        <nav class="current-artist-tabs" aria-label="Artist navigation">
+          ${currentArtistNav.map((item) => `<a${item.slug === artist.slug ? ' class="is-active" aria-current="page"' : ''} href="${item.href}">${item.label}</a>`).join('')}
+        </nav>
+      </article>
     `;
   }
 

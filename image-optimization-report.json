@@ -1,5 +1,115 @@
 [
   {
+    "name": "block-party-artist-comfort",
+    "originalBytes": 606655,
+    "optimizedBytes": 630014,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-comfort-480.webp",
+        "quality": 85,
+        "psnr": 42.21
+      },
+      {
+        "file": "block-party-artist-comfort-960.webp",
+        "quality": 85,
+        "psnr": 42.18
+      },
+      {
+        "file": "block-party-artist-comfort.webp",
+        "quality": 85,
+        "psnr": 43.31
+      }
+    ]
+  },
+  {
+    "name": "block-party-artist-dosen",
+    "originalBytes": 184594,
+    "optimizedBytes": 132776,
+    "original": {
+      "width": 1206,
+      "height": 1336
+    },
+    "fallback": {
+      "width": 1206,
+      "height": 1336
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-dosen-480.webp",
+        "quality": 85,
+        "psnr": 45.08
+      },
+      {
+        "file": "block-party-artist-dosen-960.webp",
+        "quality": 85,
+        "psnr": 46.76
+      },
+      {
+        "file": "block-party-artist-dosen.webp",
+        "quality": 85,
+        "psnr": 48.38
+      }
+    ]
+  },
+  {
+    "name": "block-party-artist-g3lio",
+    "originalBytes": 111297,
+    "optimizedBytes": 71210,
+    "original": {
+      "width": 750,
+      "height": 938
+    },
+    "fallback": {
+      "width": 750,
+      "height": 938
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-g3lio-480.webp",
+        "quality": 85,
+        "psnr": 45.08
+      },
+      {
+        "file": "block-party-artist-g3lio.webp",
+        "quality": 85,
+        "psnr": 46.8
+      }
+    ]
+  },
+  {
+    "name": "block-party-artist-tone-a",
+    "originalBytes": 131082,
+    "optimizedBytes": 160326,
+    "original": {
+      "width": 960,
+      "height": 953
+    },
+    "fallback": {
+      "width": 960,
+      "height": 953
+    },
+    "qualityChecks": [
+      {
+        "file": "block-party-artist-tone-a-480.webp",
+        "quality": 85,
+        "psnr": 42.48
+      },
+      {
+        "file": "block-party-artist-tone-a.webp",
+        "quality": 85,
+        "psnr": 44.07
+      }
+    ]
+  },
+  {
     "name": "block-party-poster",
     "originalBytes": 193126,
     "optimizedBytes": 271576,

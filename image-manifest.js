@@ -2203,5 +2203,83 @@ window.INSTINCT_IMAGES = {
         "height": 1920
       }
     ]
+  },
+  "block-party-artist-dosen": {
+    "src": "./assets/block-party-artist-dosen.webp",
+    "width": 1206,
+    "height": 1336,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-dosen-480.webp",
+        "width": 480,
+        "height": 532
+      },
+      {
+        "src": "./assets/block-party-artist-dosen-960.webp",
+        "width": 960,
+        "height": 1063
+      },
+      {
+        "src": "./assets/block-party-artist-dosen.webp",
+        "width": 1206,
+        "height": 1336
+      }
+    ]
+  },
+  "block-party-artist-tone-a": {
+    "src": "./assets/block-party-artist-tone-a.webp",
+    "width": 960,
+    "height": 953,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-tone-a-480.webp",
+        "width": 480,
+        "height": 477
+      },
+      {
+        "src": "./assets/block-party-artist-tone-a.webp",
+        "width": 960,
+        "height": 953
+      }
+    ]
+  },
+  "block-party-artist-comfort": {
+    "src": "./assets/block-party-artist-comfort.webp",
+    "width": 1365,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-comfort-480.webp",
+        "width": 480,
+        "height": 720
+      },
+      {
+        "src": "./assets/block-party-artist-comfort-960.webp",
+        "width": 960,
+        "height": 1440
+      },
+      {
+        "src": "./assets/block-party-artist-comfort.webp",
+        "width": 1365,
+        "height": 2048
+      }
+    ]
+  },
+  "block-party-artist-g3lio": {
+    "src": "./assets/block-party-artist-g3lio.webp",
+    "width": 750,
+    "height": 938,
+    "candidates": [
+      {
+        "src": "./assets/block-party-artist-g3lio-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/block-party-artist-g3lio.webp",
+        "width": 750,
+        "height": 938
+      }
+    ]
   }
 };
