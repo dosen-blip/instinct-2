@@ -351,7 +351,6 @@
       currentEvent: true,
       slug: 'comfort',
       name: 'COMFORT + G3LIO',
-      performanceNote: 'COMFORT and G3LIO perform together.',
       setTime: '9:40 PM–11:00 PM',
       location: 'Snider’s Park',
       members: [

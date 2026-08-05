@@ -1733,11 +1733,6 @@ img[style*="--media-position"] {
   font-size: clamp(46px, 4vw, 58px);
 }
 
-[data-route="ooj"] .current-artist-portrait img {
-  object-fit: contain;
-  background: #cb2108;
-}
-
 .current-artist-instagram {
   display: inline-flex;
   min-height: 48px;
