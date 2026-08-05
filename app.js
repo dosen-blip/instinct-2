@@ -324,7 +324,7 @@
       slug: 'dosen',
       name: 'DOSEN',
       setTime: '7:00 PM–8:20 PM',
-      location: 'Snider’s Park',
+      location: 'Snider Park',
       bio: [
         "DOSEN is an Ottawa-based DJ whose sound is rooted in minimal, gritty tech house with shades of trance, house, and techno. Since making his debut at EXOSPHERE 002, he has become a rising presence in Ottawa's underground, playing OFF GRID and Frequency Shift events and opening the official Escapade afterparty for Odd Mob B2B Walker & Royce. His sets move between deep grooves and high-energy moments, built to draw people in and keep the room moving."
       ],
@@ -338,7 +338,7 @@
       slug: 'tone-a',
       name: 'TONE A',
       setTime: '8:20 PM–9:40 PM',
-      location: 'Snider’s Park',
+      location: 'Snider Park',
       bio: [
         'A seasoned selector in Ottawa’s underground dance music scene, with close to 15 years of experience rocking dance floors and curating unforgettable nights. As co-founder of White Rabbit Events, he’s been a driving force behind community-focused events that blend immersive vibes with cutting-edge sound.',
         'He’s held respected residencies at venues like Sotto, BPM After Hours, Waverly, Buddha Bar (Thursdays), the Floorplay Group, and currently holds down Saturday nights at City at Night, one of Ottawa’s premier clubs. His presence has also been felt at major events and venues including Multiple Escapades & Afters, Circus Afterhours, Newspeak, Wiggle Room, DNA, FMG, and Mercury Lounge, solidifying his rep as a trusted selector and dedicated promoter.',
@@ -355,7 +355,7 @@
       slug: 'comfort',
       name: 'COMFORT + G3LIO',
       setTime: '9:40 PM–11:00 PM',
-      location: 'Snider’s Park',
+      location: 'Snider Park',
       members: [
         {
           name: 'COMFORT',
