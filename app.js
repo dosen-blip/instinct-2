@@ -79,6 +79,20 @@
 
   const nextEvents = [nextEvent, afterPartyEvent];
 
+  const featuredDrinks = [
+    {
+      name: 'Sex on the Beach',
+      image: asset('featured-drink-sex-on-the-beach'),
+      alt: 'Featured Sex on the Beach cocktail with orange and cherry garnish'
+    },
+    {
+      name: 'Peach, Please',
+      image: asset('featured-drink-peach-please'),
+      alt: 'Featured Peach, Please shot',
+      note: 'Served exclusively at the after party inside City At Night.'
+    }
+  ];
+
   // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
   const homePreviewVideo = './assets/home-preview.mp4';
 
@@ -693,6 +707,7 @@
       <div class="with-mobile">
         <div class="desktop-view">
           ${nextEvents.map((event, index) => renderDesktopNextEvent(event, index)).join('')}
+          ${renderFeaturedDrinks('desktop')}
         </div>
       </div>
     `;
@@ -720,7 +735,33 @@
     return `
       <article class="mobile-view mobile-next-page">
         ${nextEvents.map((event, index) => renderMobileNextEventCard(event, index)).join('')}
+        ${renderFeaturedDrinks('mobile')}
       </article>
+    `;
+  }
+
+  function renderFeaturedDrinks(view) {
+    const isMobile = view === 'mobile';
+    const sizes = isMobile ? '342px' : '(max-width: 1050px) 70vw, 520px';
+    return `
+      <section class="featured-drinks featured-drinks--${view} section-border" aria-labelledby="featured-drinks-${view}">
+        <div class="featured-drinks__heading">
+          <p>At the bar</p>
+          <h2 id="featured-drinks-${view}">Featured Drink</h2>
+        </div>
+        <div class="featured-drinks__grid">
+          ${featuredDrinks.map((drink) => `
+            <article class="featured-drink-card">
+              <figure>
+                ${imageTag(drink.image, drink.alt, { sizes })}
+              </figure>
+              <h3>${drink.name}</h3>
+              ${drink.note ? `<p>${drink.note}</p>` : ''}
+            </article>
+          `).join('')}
+        </div>
+        <p class="featured-drinks__notice">Alcohol service is 19+. Please enjoy responsibly.</p>
+      </section>
     `;
   }
 

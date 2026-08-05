@@ -395,6 +395,66 @@
     ]
   },
   {
+    "name": "featured-drink-peach-please",
+    "originalBytes": 190606,
+    "optimizedBytes": 312294,
+    "original": {
+      "width": 1080,
+      "height": 1920
+    },
+    "fallback": {
+      "width": 1080,
+      "height": 1920
+    },
+    "qualityChecks": [
+      {
+        "file": "featured-drink-peach-please-480.webp",
+        "quality": 90,
+        "psnr": 48.17
+      },
+      {
+        "file": "featured-drink-peach-please-960.webp",
+        "quality": 90,
+        "psnr": 49.22
+      },
+      {
+        "file": "featured-drink-peach-please.webp",
+        "quality": 90,
+        "psnr": 49.67
+      }
+    ]
+  },
+  {
+    "name": "featured-drink-sex-on-the-beach",
+    "originalBytes": 185734,
+    "optimizedBytes": 296932,
+    "original": {
+      "width": 1080,
+      "height": 1920
+    },
+    "fallback": {
+      "width": 1080,
+      "height": 1920
+    },
+    "qualityChecks": [
+      {
+        "file": "featured-drink-sex-on-the-beach-480.webp",
+        "quality": 90,
+        "psnr": 48.25
+      },
+      {
+        "file": "featured-drink-sex-on-the-beach-960.webp",
+        "quality": 90,
+        "psnr": 49.31
+      },
+      {
+        "file": "featured-drink-sex-on-the-beach.webp",
+        "quality": 90,
+        "psnr": 49.83
+      }
+    ]
+  },
+  {
     "name": "home-hero",
     "originalBytes": 108008,
     "optimizedBytes": 64780,

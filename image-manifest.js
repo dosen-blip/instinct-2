@@ -2159,5 +2159,49 @@ window.INSTINCT_IMAGES = {
         "height": 1474
       }
     ]
+  },
+  "featured-drink-sex-on-the-beach": {
+    "src": "./assets/featured-drink-sex-on-the-beach.webp",
+    "width": 1080,
+    "height": 1920,
+    "candidates": [
+      {
+        "src": "./assets/featured-drink-sex-on-the-beach-480.webp",
+        "width": 480,
+        "height": 853
+      },
+      {
+        "src": "./assets/featured-drink-sex-on-the-beach-960.webp",
+        "width": 960,
+        "height": 1707
+      },
+      {
+        "src": "./assets/featured-drink-sex-on-the-beach.webp",
+        "width": 1080,
+        "height": 1920
+      }
+    ]
+  },
+  "featured-drink-peach-please": {
+    "src": "./assets/featured-drink-peach-please.webp",
+    "width": 1080,
+    "height": 1920,
+    "candidates": [
+      {
+        "src": "./assets/featured-drink-peach-please-480.webp",
+        "width": 480,
+        "height": 853
+      },
+      {
+        "src": "./assets/featured-drink-peach-please-960.webp",
+        "width": 960,
+        "height": 1707
+      },
+      {
+        "src": "./assets/featured-drink-peach-please.webp",
+        "width": 1080,
+        "height": 1920
+      }
+    ]
   }
 };
