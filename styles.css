@@ -2591,6 +2591,7 @@ img[style*="--media-position"] {
   .current-artist-socials {
     display: grid;
     justify-content: stretch;
+    justify-items: center;
     margin-top: 28px;
   }
 
