@@ -2538,6 +2538,12 @@ img[style*="--media-position"] {
     padding: 34px 24px 56px;
   }
 
+  .current-artist-intro {
+    width: 100%;
+    justify-self: stretch;
+    text-align: center;
+  }
+
   .current-artist-portrait {
     width: 100%;
   }
@@ -2613,12 +2619,18 @@ img[style*="--media-position"] {
   }
 
   .current-artist-tabs a {
+    width: 100%;
+    min-width: 0;
+    min-height: 56px;
     padding-right: 10px;
     padding-left: 10px;
+    line-height: 1.35;
+    text-align: center;
+    white-space: normal;
   }
 
   .current-artist-tabs a.is-wide {
-    grid-column: 1 / -1;
+    grid-column: auto;
   }
 
   [data-route="dosen"] .current-artist-portrait img {
