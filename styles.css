@@ -11,6 +11,7 @@
 @font-face { font-family: 'Space Grotesk'; src: url('./assets/fonts/space-grotesk-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
 @font-face { font-family: 'Space Mono'; src: url('./assets/fonts/space-mono-400.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Space Mono'; src: url('./assets/fonts/space-mono-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Ethnocentric'; src: url('./assets/fonts/ethnocentric-regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 
 :root {
   --bg: #000;
@@ -1725,6 +1726,16 @@ img[style*="--media-position"] {
   line-height: 0.88;
   text-transform: uppercase;
   text-wrap: balance;
+}
+
+[data-route="dosen"] .current-artist-intro h1 {
+  font-family: 'Ethnocentric', var(--font-display);
+  font-weight: 400;
+}
+
+[data-route="dosen"] .current-artist-socials {
+  display: grid;
+  justify-items: center;
 }
 
 [data-route="comfort"] .current-artist-intro h1 {

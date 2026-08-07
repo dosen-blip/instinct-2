@@ -329,6 +329,7 @@
         "DOSEN is an Ottawa-based DJ whose sound is rooted in minimal, gritty tech house with shades of trance, house, and techno. Since making his debut at EXOSPHERE 002, he has become a rising presence in Ottawa's underground, playing OFF GRID and Frequency Shift events and opening the official Escapade afterparty for Odd Mob B2B Walker & Royce. His sets move between deep grooves and high-energy moments, built to draw people in and keep the room moving."
       ],
       instagram: 'https://www.instagram.com/matia_dosen/',
+      site: 'https://dosen.ca',
       portrait: asset('block-party-artist-dosen'),
       alt: 'DOSEN seated in a blue-lit outdoor lounge',
       accent: '#32e07a'
@@ -1083,10 +1084,13 @@
 
   function renderCurrentArtist(artist) {
     const members = artist.members || [artist];
-    const socials = artist.socials || members.map((member) => ({
-      label: members.length > 1 ? `${member.name} Instagram` : 'Instagram',
-      href: member.instagram
-    }));
+    const socials = artist.socials || members.flatMap((member) => [
+      {
+        label: members.length > 1 ? `${member.name} Instagram` : 'Instagram',
+        href: member.instagram
+      },
+      ...(member.site ? [{ label: 'Site', href: member.site }] : [])
+    ]);
     return `
       <article class="current-artist-page" style="--current-artist-accent: ${artist.accent}">
         <section class="current-artist-hero">
