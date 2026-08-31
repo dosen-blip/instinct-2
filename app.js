@@ -53,6 +53,7 @@
 
   const links = {
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
+    sept11Tickets: 'https://simpli.events/e/48f1ed',
     email: 'mailto:Info@instinctgroove.net',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
     vol3Photos: 'https://drive.google.com/drive/folders/1IrkD4W7mA4Zn4aVnKx7xN2WxENsm5GLd?usp=sharing',
@@ -688,6 +689,7 @@
                 ${currentArtistNav.map((artist) => `<a${linkClass(artist.slug)} href="${artist.href}">${artist.label}</a>`).join('')}
               </div>
             </details>
+            <a class="is-cta" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Sept. 11 Tickets</a>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
           </div>
         </nav>
