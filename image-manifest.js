@@ -2486,5 +2486,76 @@ window.INSTINCT_IMAGES = {
         "height": 960
       }
     ]
+  },
+  "artist-ott-krishhh": {
+    "src": "./assets/artist-ott-krishhh.webp",
+    "width": 1365,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/artist-ott-krishhh-480.webp",
+        "width": 480,
+        "height": 720
+      },
+      {
+        "src": "./assets/artist-ott-krishhh-960.webp",
+        "width": 960,
+        "height": 1440
+      },
+      {
+        "src": "./assets/artist-ott-krishhh.webp",
+        "width": 1365,
+        "height": 2048
+      }
+    ]
+  },
+  "artist-caploch": {
+    "src": "./assets/artist-caploch.webp",
+    "width": 1536,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/artist-caploch-480.webp",
+        "width": 480,
+        "height": 640
+      },
+      {
+        "src": "./assets/artist-caploch-960.webp",
+        "width": 960,
+        "height": 1280
+      },
+      {
+        "src": "./assets/artist-caploch-1440.webp",
+        "width": 1440,
+        "height": 1920
+      },
+      {
+        "src": "./assets/artist-caploch.webp",
+        "width": 1536,
+        "height": 2048
+      }
+    ]
+  },
+  "artist-zak-mtl": {
+    "src": "./assets/artist-zak-mtl.webp",
+    "width": 1365,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/artist-zak-mtl-480.webp",
+        "width": 480,
+        "height": 720
+      },
+      {
+        "src": "./assets/artist-zak-mtl-960.webp",
+        "width": 960,
+        "height": 1440
+      },
+      {
+        "src": "./assets/artist-zak-mtl.webp",
+        "width": 1365,
+        "height": 2048
+      }
+    ]
   }
 };

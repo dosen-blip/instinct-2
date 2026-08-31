@@ -45,7 +45,10 @@
     g3lio: './g3lio.html',
     ooj: './ooj.html',
     nikoBalla: './niko-couture-b2b-balla.html',
-    arturExists: './artur-exists.html'
+    arturExists: './artur-exists.html',
+    ottKrishhh: './ott-krishhh.html',
+    caploch: './caploch.html',
+    zakMtl: './zak-mtl.html'
   };
 
   const links = {
@@ -307,15 +310,71 @@
   ];
 
   const currentArtistNav = [
-    { slug: 'dosen', label: 'DOSEN', href: routes.dosen },
-    { slug: 'tone-a', label: 'TONE A', href: routes.toneA },
-    { slug: 'comfort', label: 'COMFORT + G3LIO', href: routes.comfort, wide: true },
-    { slug: 'ooj', label: 'OOJ', href: routes.ooj },
-    { slug: 'niko-couture-b2b-balla', label: 'NIKO COUTURE B2B BALLA', href: routes.nikoBalla, wide: true },
-    { slug: 'artur-exists', label: 'ARTUR.EXISTS', href: routes.arturExists }
+    { slug: 'ott-krishhh', label: 'OTT.KRISHHH', href: routes.ottKrishhh },
+    { slug: 'caploch', label: 'CAPLOCH', href: routes.caploch },
+    { slug: 'zak-mtl', label: 'ZAK (MTL)', href: routes.zakMtl }
   ];
 
   const artists = {
+    'ott-krishhh': {
+      currentEvent: true,
+      slug: 'ott-krishhh',
+      name: 'OTT.KRISHHH',
+      bio: [
+        'OTT.KRISHHH is an Ottawa-based DJ whose sound sits between minimal and rugged Tech House, blending deep grooves, rolling basslines, and high-energy club moments. With a taste for darker, dirtier sounds around 130 BPM, his sets move between stripped-back minimal grooves and punchy, dance-floor-driven Tech House. After making his Toronto debut, OTT.KRISHHH continued his run with his White Rabbit debut at City At Night, followed by his Montreal debut at Montreal Music Week during ÎleSoniq en ville. His sets are built around infectious grooves, rising energy, and keeping the dance floor locked in.'
+      ],
+      socials: [
+        { label: 'Instagram', href: 'https://www.instagram.com/ott.krishhh/' },
+        { label: 'Set', href: 'https://www.youtube.com/watch?v=BTYSGlqz0UY' }
+      ],
+      portrait: asset('artist-ott-krishhh'),
+      alt: 'OTT.KRISHHH performing behind DJ decks in black and white',
+      qas: [
+        { question: 'Worst song request you’ve ever gotten?', answer: 'Spinning Afro House on a cruise and someone really looked me dead in the eyes like, “Can you play a wedding song?” Babe… this is a cruise party, not your cousin’s reception.' },
+        { question: 'Gridwrks or City at Night?', answer: 'Gridwrks is cute, but I gotta keep it OG. City At Night forever.' },
+        { question: 'What’s your DJ superpower?', answer: 'Making people say “I don’t know this song, but I NEED to Shazam it” only for them to never find the exact edit.' }
+      ],
+      accent: '#32e07a'
+    },
+    caploch: {
+      currentEvent: true,
+      slug: 'caploch',
+      name: 'CAPLOCH',
+      bio: [
+        'Caploch is an electronic music producer and DJ blending house, progressive, melodic techno, and UK-inspired sounds. Inspired by the mystery of Loch Ness and the digital world, Caploch’s identity brings together deep, atmospheric soundscapes with energetic club production. Based in Ottawa, Caploch has been producing music since 2019 and performing as a DJ across private events and nightlife settings. Alongside original releases, Caploch shares DJ mixes, radio-style sets, and behind-the-scenes content through the Captain’s Orders series, building a world around the music that is equal parts electronic, aquatic, and futuristic.'
+      ],
+      socials: [
+        { label: 'SoundCloud', href: 'https://soundcloud.com/caploch' },
+        { label: 'Instagram', href: 'https://www.instagram.com/caplochmusic/' }
+      ],
+      portrait: asset('artist-caploch'),
+      alt: 'CAPLOCH performing beneath blue stage lights',
+      qas: [
+        { question: 'Would you rather DJ without seeing BPM or Key of a track?', answer: 'Definitely Key, these ears work for years.' },
+        { question: 'Furthest you’ve played music from home?', answer: 'Colorado Springs!' },
+        { question: 'Ibiza or Miami?', answer: 'Ibizazazaza' }
+      ],
+      accent: '#4f7dff'
+    },
+    'zak-mtl': {
+      currentEvent: true,
+      slug: 'zak-mtl',
+      name: 'ZAK (MTL)',
+      bio: [
+        'Known for his disco-inspired selections and his deep and contiguous grooves, ZAK has carved out a place of choice in the Montreal music scene thanks to his ability to get the dance floors pumping from beginning to end.'
+      ],
+      socials: [
+        { label: 'Instagram', href: 'https://www.instagram.com/zakkk_ch/' }
+      ],
+      portrait: asset('artist-zak-mtl'),
+      alt: 'ZAK performing behind DJ decks in a crowded club',
+      qas: [
+        { question: 'What’s your biggest pet peeve as a DJ?', answer: 'My biggest pet peeve by far is definitely when someone tries touching the decks as a joke while I’m playing.' },
+        { question: 'Ibiza or Miami?', answer: 'Easily Ibiza and by a mile!' },
+        { question: 'What would be your dream festival to attend?', answer: 'Would be a close one between EDC and Creamfields. Two very different vibes and crowds but I think Creamfields would take it.' }
+      ],
+      accent: '#a855f7'
+    },
     dosen: {
       currentEvent: true,
       slug: 'dosen',
@@ -1018,6 +1077,7 @@
 
   function renderCurrentArtist(artist) {
     const members = artist.members || [artist];
+    const hasSetDetails = Boolean(artist.setTime || artist.location || artist.performanceNote);
     const socials = artist.socials || members.flatMap((member) => [
       {
         label: members.length > 1 ? `${member.name} Instagram` : 'Instagram',
@@ -1044,7 +1104,7 @@
           </div>
         </section>
 
-        <section class="current-artist-details">
+        <section class="current-artist-details ${hasSetDetails ? '' : 'current-artist-details--bio-only'}">
           <div class="current-artist-bio">
             <div class="section-kicker"><span></span>Bio</div>
             ${members.map((member) => `
@@ -1054,13 +1114,31 @@
               </section>
             `).join('')}
           </div>
-          <aside class="current-artist-set">
-            <span>Set</span>
-            <strong>${artist.setTime}</strong>
-            <p>${artist.location}</p>
-            ${artist.performanceNote ? `<small>${artist.performanceNote}</small>` : ''}
-          </aside>
+          ${hasSetDetails ? `
+            <aside class="current-artist-set">
+              <span>Set</span>
+              ${artist.setTime ? `<strong>${artist.setTime}</strong>` : ''}
+              ${artist.location ? `<p>${artist.location}</p>` : ''}
+              ${artist.performanceNote ? `<small>${artist.performanceNote}</small>` : ''}
+            </aside>
+          ` : ''}
         </section>
+
+        ${artist.qas ? `
+          <section class="current-artist-qa" aria-labelledby="current-artist-qa-title">
+            <div class="section-kicker section-kicker--center"><span></span>Quick Questions<span></span></div>
+            <h2 id="current-artist-qa-title">Q+A</h2>
+            <div class="current-artist-qa__grid">
+              ${artist.qas.map((item, index) => `
+                <article class="current-artist-qa__card">
+                  <span>0${index + 1}</span>
+                  <h3>${item.question}</h3>
+                  <p>${item.answer}</p>
+                </article>
+              `).join('')}
+            </div>
+          </section>
+        ` : ''}
 
         <nav class="current-artist-tabs" aria-label="Artist navigation">
           ${currentArtistNav.map((item) => {

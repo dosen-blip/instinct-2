@@ -1750,6 +1750,14 @@ img[style*="--media-position"] {
   font-size: clamp(46px, 4vw, 58px);
 }
 
+[data-route="ott-krishhh"] .current-artist-intro h1 {
+  font-size: clamp(52px, 5vw, 72px);
+}
+
+[data-route="caploch"] .current-artist-intro h1 {
+  font-size: clamp(72px, 7vw, 104px);
+}
+
 .current-artist-instagram {
   display: inline-flex;
   min-height: 48px;
@@ -1799,6 +1807,11 @@ img[style*="--media-position"] {
   margin: 0 auto;
   border-top: 1px solid var(--line);
   padding: 96px 0 112px;
+}
+
+.current-artist-details--bio-only {
+  grid-template-columns: minmax(0, 880px);
+  justify-content: center;
 }
 
 .current-artist-bio .section-kicker {
@@ -1868,6 +1881,60 @@ img[style*="--media-position"] {
   border-top: 1px solid var(--line);
   margin-top: 8px;
   padding-top: 18px;
+}
+
+.current-artist-qa {
+  border-top: 1px solid var(--line);
+  padding: 96px 24px 112px;
+}
+
+.current-artist-qa .section-kicker {
+  color: var(--current-artist-accent);
+}
+
+.current-artist-qa > h2 {
+  margin: 20px 0 48px;
+  color: #fff;
+  font-size: clamp(64px, 8vw, 112px);
+  line-height: 0.9;
+  text-align: center;
+}
+
+.current-artist-qa__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.current-artist-qa__card {
+  min-height: 330px;
+  border: 1px solid color-mix(in srgb, var(--current-artist-accent) 42%, transparent);
+  padding: 30px;
+  background: color-mix(in srgb, var(--current-artist-accent) 6%, transparent);
+}
+
+.current-artist-qa__card > span {
+  color: var(--current-artist-accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+.current-artist-qa__card h3 {
+  margin: 40px 0 20px;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.current-artist-qa__card p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
 .current-artist-tabs {
@@ -2577,6 +2644,10 @@ img[style*="--media-position"] {
     font-size: 34px;
   }
 
+  [data-route="ott-krishhh"] .current-artist-intro h1 {
+    font-size: 42px;
+  }
+
   .current-artist-eyebrow,
   .current-artist-billing {
     font-size: 10px;
@@ -2624,9 +2695,33 @@ img[style*="--media-position"] {
     font-size: 28px;
   }
 
+  .current-artist-qa {
+    padding: 56px 24px 64px;
+  }
+
+  .current-artist-qa > h2 {
+    margin: 16px 0 32px;
+    font-size: 64px;
+  }
+
+  .current-artist-qa__grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .current-artist-qa__card {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .current-artist-qa__card h3 {
+    margin-top: 26px;
+    font-size: 24px;
+  }
+
   .current-artist-tabs {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     padding: 32px 24px 56px;
   }
 

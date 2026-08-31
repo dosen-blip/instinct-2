@@ -1,5 +1,100 @@
 [
   {
+    "name": "artist-caploch",
+    "originalBytes": 7316402,
+    "optimizedBytes": 403070,
+    "original": {
+      "width": 1728,
+      "height": 2304
+    },
+    "fallback": {
+      "width": 1536,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "artist-caploch-480.webp",
+        "quality": 85,
+        "psnr": 44.37
+      },
+      {
+        "file": "artist-caploch-960.webp",
+        "quality": 85,
+        "psnr": 44.17
+      },
+      {
+        "file": "artist-caploch-1440.webp",
+        "quality": 85,
+        "psnr": 43.54
+      },
+      {
+        "file": "artist-caploch.webp",
+        "quality": 85,
+        "psnr": 43.54
+      }
+    ]
+  },
+  {
+    "name": "artist-ott-krishhh",
+    "originalBytes": 10220016,
+    "optimizedBytes": 597050,
+    "original": {
+      "width": 2480,
+      "height": 3720
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "artist-ott-krishhh-480.webp",
+        "quality": 85,
+        "psnr": 42.98
+      },
+      {
+        "file": "artist-ott-krishhh-960.webp",
+        "quality": 85,
+        "psnr": 42.11
+      },
+      {
+        "file": "artist-ott-krishhh.webp",
+        "quality": 85,
+        "psnr": 42.04
+      }
+    ]
+  },
+  {
+    "name": "artist-zak-mtl",
+    "originalBytes": 1902903,
+    "optimizedBytes": 285702,
+    "original": {
+      "width": 1365,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1365,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "artist-zak-mtl-480.webp",
+        "quality": 85,
+        "psnr": 44.7
+      },
+      {
+        "file": "artist-zak-mtl-960.webp",
+        "quality": 85,
+        "psnr": 46.2
+      },
+      {
+        "file": "artist-zak-mtl.webp",
+        "quality": 85,
+        "psnr": 47.28
+      }
+    ]
+  },
+  {
     "name": "block-party-artist-artur-exists",
     "originalBytes": 295469,
     "optimizedBytes": 267542,
