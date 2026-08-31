@@ -973,8 +973,8 @@
         <section class="mobile-recap-actions">
           ${mobile.credit ? (mobile.creditUrl ? `<a class="mobile-recap-credit" href="${mobile.creditUrl}" target="_blank" rel="noreferrer">${mobile.credit}</a>` : `<p class="mobile-recap-credit">${mobile.credit}</p>`) : ''}
           <nav aria-label="Recap navigation">
-            <a href="${older ? older.href : routes.home}">← ${older ? older.title : 'All Events'}</a>
-            <a href="${newer ? newer.href : routes.home}">${newer ? newer.title : 'All Events'} →</a>
+            ${older ? `<a class="mobile-recap-previous" href="${older.href}">← ${older.title}</a>` : '<span class="mobile-recap-nav-spacer" aria-hidden="true"></span>'}
+            ${newer ? `<a class="mobile-recap-next" href="${newer.href}">${newer.title} →</a>` : '<span class="mobile-recap-nav-spacer" aria-hidden="true"></span>'}
           </nav>
         </section>
       </article>
@@ -994,18 +994,22 @@
 
     return `
       <nav class="recap-pager" aria-label="Previous and next event recaps">
-        <a href="${older ? older.href : routes.home}">
-          <span>Older</span>
-          ${older ? older.title : 'Archive Home'}
-        </a>
+        ${older ? `
+          <a href="${older.href}">
+            <span>Older</span>
+            ${older.title}
+          </a>
+        ` : '<span class="recap-pager__spacer" aria-hidden="true"></span>'}
         <a href="${routes.home}">
           <span>All Events</span>
           Home
         </a>
-        <a href="${newer ? newer.href : routes.home}">
-          <span>Newer</span>
-          ${newer ? newer.title : 'Archive Home'}
-        </a>
+        ${newer ? `
+          <a href="${newer.href}">
+            <span>Newer</span>
+            ${newer.title}
+          </a>
+        ` : '<span class="recap-pager__spacer" aria-hidden="true"></span>'}
       </nav>
     `;
   }

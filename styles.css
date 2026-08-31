@@ -3749,7 +3749,7 @@ img[style*="--media-position"] {
     letter-spacing: 1.5px;
   }
 
-  .mobile-recap-actions nav a:last-child {
+  .mobile-recap-actions nav .mobile-recap-next {
     background: var(--recap-purple);
     color: #000;
   }
