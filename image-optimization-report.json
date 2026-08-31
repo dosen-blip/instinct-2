@@ -3003,5 +3003,195 @@
         "psnr": 46.09
       }
     ]
+  },
+  {
+    "name": "vol6-photo1",
+    "originalBytes": 952301,
+    "optimizedBytes": 94820,
+    "original": {
+      "width": 800,
+      "height": 1000
+    },
+    "fallback": {
+      "width": 800,
+      "height": 1000
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo1-480.webp",
+        "quality": 85,
+        "psnr": 44.13
+      },
+      {
+        "file": "vol6-photo1.webp",
+        "quality": 85,
+        "psnr": 45.56
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo2",
+    "originalBytes": 916326,
+    "optimizedBytes": 113660,
+    "original": {
+      "width": 800,
+      "height": 1000
+    },
+    "fallback": {
+      "width": 800,
+      "height": 1000
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo2-480.webp",
+        "quality": 85,
+        "psnr": 43.6
+      },
+      {
+        "file": "vol6-photo2.webp",
+        "quality": 85,
+        "psnr": 45.13
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo3",
+    "originalBytes": 1388613,
+    "optimizedBytes": 182146,
+    "original": {
+      "width": 1280,
+      "height": 853
+    },
+    "fallback": {
+      "width": 1280,
+      "height": 853
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo3-480.webp",
+        "quality": 85,
+        "psnr": 42.62
+      },
+      {
+        "file": "vol6-photo3-960.webp",
+        "quality": 85,
+        "psnr": 44.31
+      },
+      {
+        "file": "vol6-photo3.webp",
+        "quality": 85,
+        "psnr": 45.32
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo4",
+    "originalBytes": 1139820,
+    "optimizedBytes": 109196,
+    "original": {
+      "width": 800,
+      "height": 1000
+    },
+    "fallback": {
+      "width": 800,
+      "height": 1000
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo4-480.webp",
+        "quality": 85,
+        "psnr": 43.54
+      },
+      {
+        "file": "vol6-photo4.webp",
+        "quality": 85,
+        "psnr": 45.01
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo5",
+    "originalBytes": 864569,
+    "optimizedBytes": 122886,
+    "original": {
+      "width": 1280,
+      "height": 853
+    },
+    "fallback": {
+      "width": 1280,
+      "height": 853
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo5-480.webp",
+        "quality": 85,
+        "psnr": 44.34
+      },
+      {
+        "file": "vol6-photo5-960.webp",
+        "quality": 85,
+        "psnr": 45.73
+      },
+      {
+        "file": "vol6-photo5.webp",
+        "quality": 85,
+        "psnr": 46.69
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo6",
+    "originalBytes": 1317505,
+    "optimizedBytes": 165048,
+    "original": {
+      "width": 1280,
+      "height": 853
+    },
+    "fallback": {
+      "width": 1280,
+      "height": 853
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo6-480.webp",
+        "quality": 85,
+        "psnr": 42.89
+      },
+      {
+        "file": "vol6-photo6-960.webp",
+        "quality": 85,
+        "psnr": 44.44
+      },
+      {
+        "file": "vol6-photo6.webp",
+        "quality": 85,
+        "psnr": 45.32
+      }
+    ]
+  },
+  {
+    "name": "vol6-photo7",
+    "originalBytes": 830597,
+    "optimizedBytes": 104034,
+    "original": {
+      "width": 640,
+      "height": 960
+    },
+    "fallback": {
+      "width": 640,
+      "height": 960
+    },
+    "qualityChecks": [
+      {
+        "file": "vol6-photo7-480.webp",
+        "quality": 85,
+        "psnr": 43.48
+      },
+      {
+        "file": "vol6-photo7.webp",
+        "quality": 85,
+        "psnr": 44.72
+      }
+    ]
   }
 ]

@@ -32,6 +32,7 @@
     vol2: './vol-2.html',
     vol3: './vol-3.html',
     vol4: './vol-4.html',
+    vol6: './vol-6.html',
     djCobb: './dj-cobb.html',
     sebBalla: './seb-b-balla.html',
     babyjake: './babyjake.html',
@@ -50,63 +51,58 @@
   const links = {
     instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     email: 'mailto:Info@instinctgroove.net',
-    blockPartyTickets: 'https://simpli.events/e/a2999c',
-    blockAfterPartyTickets: 'https://simpli.events/e/40fff6',
     vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
     vol3Photos: 'https://drive.google.com/drive/folders/1IrkD4W7mA4Zn4aVnKx7xN2WxENsm5GLd?usp=sharing',
     mystic: 'https://www.instagram.com/mysticdoesmedia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
     curtis: 'https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
   };
 
-  const nextEvent = {
-    eyebrow: 'Next Event',
-    title: 'Instinct x Block Party',
-    date: 'August 14th',
-    datetime: '2026-08-14',
-    venue: 'Snider Park · 140 Bank St',
-    hours: '7 PM–11 PM · 19+',
-    ticketUrl: links.blockPartyTickets,
-    ticketLabel: 'Block Party Tickets',
-    bio: ['Instinct x Block Party brings the minimal tech sound you love to an outdoor setting, featuring Dosen, Tone A, Comfort, and G3lio on sax—along with the same energy and greenery that make Instinct, Instinct.'],
-    poster: asset('block-party-poster')
-  };
-
-  const afterPartyEvent = {
-    eyebrow: 'After Party',
-    title: 'Instinct Vol. 6 Block AP',
-    date: 'August 14th',
-    datetime: '2026-08-14',
-    venue: 'City At Night · 222 Slater St',
-    hours: '10 PM–2:30 AM · 19+',
-    ticketUrl: links.blockAfterPartyTickets,
-    ticketLabel: 'Afterparty Tickets',
-    bio: [
-      'Instinct Vol. 6 continues the block party inside City At Night, featuring OOJ, Niko Couture B2B Balla, and Artur.Exists.',
-      'More dancing, more greenery, and deeper cuts all night long.'
-    ],
-    poster: asset('vol6-block-ap-poster')
-  };
-
-  const nextEvents = [nextEvent, afterPartyEvent];
-
-  const featuredDrinks = [
-    {
-      name: 'Sex on the Beach',
-      image: asset('featured-drink-sex-on-the-beach'),
-      alt: 'Featured Sex on the Beach cocktail with orange and cherry garnish'
-    },
-    {
-      name: 'Peach, Please',
-      image: asset('featured-drink-peach-please'),
-      alt: 'Featured Peach, Please shot',
-      note: 'Served exclusively at the after party inside City At Night.'
-    }
-  ];
-
   // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
   const homePreviewVideo = './assets/home-preview.mp4';
 
   const recaps = {
+    'vol-6': {
+      title: 'Vol. 6',
+      eyebrow: 'Event Recap',
+      date: 'August 14th, 2026 - Snider Park + City At Night',
+      intro: 'Vol. 6 took Instinct beyond the club and into the streets with our first block party, bringing the sound outdoors alongside a live sax performance from G3LIO. As the sun went down, the energy carried straight into the afterparty, where a constant flow of high-energy sets kept the dance floor moving all night long. Another step forward for Instinct, and another chapter in the sound and community we’re building.',
+      layout: 'centered',
+      photos: [
+        asset('vol6-photo1'),
+        asset('vol6-photo2'),
+        asset('vol6-photo3'),
+        asset('vol6-photo4'),
+        asset('vol6-photo5'),
+        asset('vol6-photo6'),
+        asset('vol6-photo7')
+      ],
+      lineup: [
+        { name: 'Dosen', href: routes.dosen, image: asset('block-party-artist-dosen') },
+        { name: 'Tone A', href: routes.toneA, image: asset('block-party-artist-tone-a') },
+        { name: 'Comfort', href: routes.comfort, image: asset('block-party-artist-comfort') },
+        { name: 'G3LIO', href: routes.g3lio, image: asset('block-party-artist-g3lio') },
+        { name: 'OOJ', href: routes.ooj, image: asset('block-party-artist-ooj') },
+        { name: 'Niko Couture B2B Balla', href: routes.nikoBalla, image: asset('block-party-artist-niko-balla') },
+        { name: 'Artur.Exists', href: routes.arturExists, image: asset('block-party-artist-artur-exists') }
+      ],
+      mobile: {
+        title: 'Vol.6',
+        date: 'August 2026 · Snider Park + City At Night',
+        poster: asset('vol6-photo1'),
+        tags: ['Dosen', 'Tone A', 'Comfort', 'G3LIO', 'OOJ', 'Niko Couture B2B Balla', 'Artur.Exists'],
+        showIntro: true,
+        credit: '',
+        photos: [
+          asset('vol6-photo1'),
+          asset('vol6-photo2'),
+          asset('vol6-photo3'),
+          asset('vol6-photo4'),
+          asset('vol6-photo5'),
+          asset('vol6-photo6'),
+          asset('vol6-photo7')
+        ]
+      }
+    },
     'escapade-afterparty': {
       title: 'Escapade Afterparty',
       eyebrow: 'Event Recap',
@@ -302,6 +298,7 @@
   };
 
   const pastEvents = [
+    { slug: 'vol-6', href: routes.vol6, title: 'Vol. 6 Block Party + AP', date: 'August 14, 2026', venue: 'Snider Park + City At Night', image: asset('vol6-photo1') },
     { slug: 'escapade-afterparty', href: routes.escapade, title: 'Escapade Afterparty', date: 'June 26, 2026', venue: 'ANNX', image: asset('escapade-photo2') },
     { slug: 'vol-4', href: routes.vol4, title: 'Vol. 4', date: 'April 2026', venue: 'City at Night', image: asset('home-vol4-card') },
     { slug: 'vol-3', href: routes.vol3, title: 'Vol. 3', date: 'March 6, 2026', venue: 'ANNX', image: asset('home-vol3-card') },
@@ -633,13 +630,6 @@
               </div>
             </details>
             <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
-            <details class="site-nav-menu site-nav-tickets">
-              <summary>August 14th Tickets</summary>
-              <div>
-                <a href="${links.blockPartyTickets}" target="_blank" rel="noreferrer">Instinct x Block Party</a>
-                <a href="${links.blockAfterPartyTickets}" target="_blank" rel="noreferrer">Instinct Vol. 6 Block AP Tickets</a>
-              </div>
-            </details>
           </div>
         </nav>
       </header>
@@ -690,15 +680,13 @@
           <section class="next-card next-card--poster section-border">
             <p class="next-card__eyebrow">Next Event</p>
             <div class="next-card__events">
-              ${nextEvents.map((event) => `
-                <article class="next-card__event">
-                  <a class="next-card__poster" href="${routes.next}" aria-label="Open ${event.title} event details">
-                    ${imageTag(event.poster, `${event.title} poster for ${event.date}`, { sizes: 'min(544px, 70vw)' })}
-                  </a>
-                  <h2>${event.title}</h2>
-                  <p><time datetime="${event.datetime}">${event.date}</time> · ${event.venue.split(' · ')[0]}</p>
-                </article>
-              `).join('')}
+              <article class="next-card__event">
+                <a class="next-card__poster" href="${routes.next}" aria-label="View next event status">
+                  ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: 'min(544px, 70vw)' })}
+                </a>
+                <h2>Coming Soon</h2>
+                <p>New event details will be announced soon.</p>
+              </article>
             </div>
           </section>
 
@@ -729,14 +717,9 @@
           <section class="tickets-strip tickets-strip--soon">
             ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
             <div>
-              <h2><span>Event</span> Details</h2>
-              <div class="tickets-strip__details">
-                <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
-                <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
-              </div>
-              <div class="tickets-strip__links">
-                ${nextEvents.map((event) => `<a class="details-status" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>`).join('')}
-              </div>
+              <h2><span>Details</span> Soon</h2>
+              <p>Our next event will be announced soon.</p>
+              <span class="details-status">Stay tuned</span>
             </div>
           </section>
         </div>
@@ -761,14 +744,12 @@
         <section class="mobile-home-section mobile-home-next-card">
           <h2><span>Next</span> Event</h2>
           <div class="mobile-home-next-events">
-            ${nextEvents.map((event) => `
-              <article class="mobile-home-next-event">
-                <a href="${routes.next}" class="mobile-home-poster" aria-label="Open ${event.title} event details">
-                  ${imageTag(event.poster, `${event.title} poster for ${event.date}`, { sizes: '342px' })}
-                </a>
-                <p>${event.title} · <time datetime="${event.datetime}">${event.date}</time></p>
-              </article>
-            `).join('')}
+            <article class="mobile-home-next-event">
+              <a href="${routes.next}" class="mobile-home-poster" aria-label="View next event status">
+                ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '342px' })}
+              </a>
+              <p>Coming soon · Stay tuned</p>
+            </article>
           </div>
         </section>
         <section class="mobile-home-section mobile-home-about">
@@ -792,14 +773,9 @@
           ${pastEvents.map((event) => mobileHomeEvent(event)).join('')}
         </section>
         <section class="mobile-home-section mobile-home-tickets">
-          <h2><span>Event</span> Details</h2>
-          <div class="mobile-home-ticket-details">
-            <p>${nextEvent.date} · ${nextEvent.venue} · ${nextEvent.hours}</p>
-            <p>${afterPartyEvent.date} · ${afterPartyEvent.venue} · ${afterPartyEvent.hours}</p>
-          </div>
-          <div class="mobile-home-ticket-links">
-            ${nextEvents.map((event) => `<a class="mobile-home-ticket-status" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>`).join('')}
-          </div>
+          <h2><span>Details</span> Soon</h2>
+          <p>Our next event will be announced soon.</p>
+          <span class="mobile-home-ticket-status">Stay tuned</span>
         </section>
       </div>
     `;
@@ -835,80 +811,37 @@
     return `
       <div class="with-mobile">
         <div class="desktop-view">
-          ${nextEvents.map((event, index) => renderDesktopNextEvent(event, index)).join('')}
-          ${renderFeaturedDrinks('desktop')}
+          <section class="next-event-page section-border">
+            <figure class="next-event-page__poster">
+              ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '(max-width: 1050px) 46vw, 560px', priority: true })}
+            </figure>
+            <div class="next-event-page__content">
+              <p class="event-teaser__eyebrow">Next Event</p>
+              <h1>Coming Soon</h1>
+              <span class="green-rule"></span>
+              <p class="next-event-page__bio">New event details will be announced soon.</p>
+            </div>
+          </section>
         </div>
       </div>
-    `;
-  }
-
-  function renderDesktopNextEvent(event, index) {
-    return `
-      <section class="next-event-page section-border">
-        <figure class="next-event-page__poster">
-          ${imageTag(event.poster, `${event.title} poster for ${event.date} at ${event.venue.split(' · ')[0]}`, { sizes: '(max-width: 1050px) 46vw, 560px', priority: index === 0 })}
-        </figure>
-        <div class="next-event-page__content">
-          <p class="event-teaser__eyebrow">${event.eyebrow}</p>
-          <h1>${event.title}</h1>
-          <p class="next-event-page__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
-          <span class="green-rule"></span>
-          ${event.bio.map((paragraph) => `<p class="next-event-page__bio">${paragraph}</p>`).join('')}
-          <a class="next-event-page__tickets" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>
-        </div>
-      </section>
     `;
   }
 
   function renderMobileNextEvent() {
     return `
       <article class="mobile-view mobile-next-page">
-        ${nextEvents.map((event, index) => renderMobileNextEventCard(event, index)).join('')}
-        ${renderFeaturedDrinks('mobile')}
+        <section class="mobile-next-event">
+          <p class="mobile-next-event__eyebrow">Next Event</p>
+          <figure>
+            ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '342px', priority: true })}
+          </figure>
+          <div class="mobile-next-event__content">
+            <h1>Coming Soon</h1>
+            <span></span>
+            <p class="mobile-next-event__bio">New event details will be announced soon.</p>
+          </div>
+        </section>
       </article>
-    `;
-  }
-
-  function renderFeaturedDrinks(view) {
-    const isMobile = view === 'mobile';
-    const sizes = isMobile ? '342px' : '(max-width: 1050px) 70vw, 520px';
-    return `
-      <section class="featured-drinks featured-drinks--${view} section-border" aria-labelledby="featured-drinks-${view}">
-        <div class="featured-drinks__heading">
-          <p>At the bar</p>
-          <h2 id="featured-drinks-${view}">Featured Drink</h2>
-        </div>
-        <div class="featured-drinks__grid">
-          ${featuredDrinks.map((drink) => `
-            <article class="featured-drink-card">
-              <figure>
-                ${imageTag(drink.image, drink.alt, { sizes })}
-              </figure>
-              <h3>${drink.name}</h3>
-              ${drink.note ? `<p>${drink.note}</p>` : ''}
-            </article>
-          `).join('')}
-        </div>
-        <p class="featured-drinks__notice">Alcohol service is 19+. Please enjoy responsibly.</p>
-      </section>
-    `;
-  }
-
-  function renderMobileNextEventCard(event, index) {
-    return `
-      <section class="mobile-next-event">
-        <p class="mobile-next-event__eyebrow">${event.eyebrow}</p>
-        <figure>
-          ${imageTag(event.poster, `${event.title} poster for ${event.date} at ${event.venue.split(' · ')[0]}`, { sizes: '342px', priority: index === 0 })}
-        </figure>
-        <div class="mobile-next-event__content">
-          <h1>${event.title}</h1>
-          <p class="mobile-next-event__meta"><time datetime="${event.datetime}">${event.date}</time><br>${event.venue}<br>${event.hours}</p>
-          <span></span>
-          ${event.bio.map((paragraph) => `<p class="mobile-next-event__bio">${paragraph}</p>`).join('')}
-          <a class="mobile-next-event__tickets" href="${event.ticketUrl}" target="_blank" rel="noreferrer">${event.ticketLabel}</a>
-        </div>
-      </section>
     `;
   }
 
@@ -966,6 +899,7 @@
           <div>
             ${mobile.tags.map((tag) => `<span>${tag}</span>`).join('')}
           </div>
+          ${mobile.showIntro ? `<p class="mobile-recap-copy">${recap.intro}</p>` : ''}
         </section>
         <section class="mobile-recap-photos">
           <div class="mobile-recap-label"><span></span>Photos</div>
@@ -978,7 +912,7 @@
           </div>
         </section>
         <section class="mobile-recap-actions">
-          ${mobile.creditUrl ? `<a class="mobile-recap-credit" href="${mobile.creditUrl}" target="_blank" rel="noreferrer">${mobile.credit}</a>` : `<p class="mobile-recap-credit">${mobile.credit}</p>`}
+          ${mobile.credit ? (mobile.creditUrl ? `<a class="mobile-recap-credit" href="${mobile.creditUrl}" target="_blank" rel="noreferrer">${mobile.credit}</a>` : `<p class="mobile-recap-credit">${mobile.credit}</p>`) : ''}
           <nav aria-label="Recap navigation">
             <a href="${older ? older.href : routes.home}">← ${older ? older.title : 'All Events'}</a>
             <a href="${newer ? newer.href : routes.home}">${newer ? newer.title : 'All Events'} →</a>
@@ -1102,7 +1036,7 @@
             `).join('')}
           </div>
           <div class="current-artist-intro">
-            <p class="current-artist-eyebrow">August 14 Artist</p>
+            <p class="current-artist-eyebrow">Featured Artist</p>
             <h1>${artist.name}</h1>
             <div class="current-artist-socials">
               ${socials.map((social) => `<a class="current-artist-instagram" href="${social.href}" target="_blank" rel="noreferrer">${social.label}</a>`).join('')}

@@ -2352,5 +2352,139 @@ window.INSTINCT_IMAGES = {
         "height": 1616
       }
     ]
+  },
+  "vol6-photo1": {
+    "src": "./assets/vol6-photo1.webp",
+    "width": 800,
+    "height": 1000,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo1-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/vol6-photo1.webp",
+        "width": 800,
+        "height": 1000
+      }
+    ]
+  },
+  "vol6-photo2": {
+    "src": "./assets/vol6-photo2.webp",
+    "width": 800,
+    "height": 1000,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo2-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/vol6-photo2.webp",
+        "width": 800,
+        "height": 1000
+      }
+    ]
+  },
+  "vol6-photo3": {
+    "src": "./assets/vol6-photo3.webp",
+    "width": 1280,
+    "height": 853,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo3-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/vol6-photo3-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/vol6-photo3.webp",
+        "width": 1280,
+        "height": 853
+      }
+    ]
+  },
+  "vol6-photo4": {
+    "src": "./assets/vol6-photo4.webp",
+    "width": 800,
+    "height": 1000,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo4-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/vol6-photo4.webp",
+        "width": 800,
+        "height": 1000
+      }
+    ]
+  },
+  "vol6-photo5": {
+    "src": "./assets/vol6-photo5.webp",
+    "width": 1280,
+    "height": 853,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo5-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/vol6-photo5-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/vol6-photo5.webp",
+        "width": 1280,
+        "height": 853
+      }
+    ]
+  },
+  "vol6-photo6": {
+    "src": "./assets/vol6-photo6.webp",
+    "width": 1280,
+    "height": 853,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo6-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/vol6-photo6-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/vol6-photo6.webp",
+        "width": 1280,
+        "height": 853
+      }
+    ]
+  },
+  "vol6-photo7": {
+    "src": "./assets/vol6-photo7.webp",
+    "width": 640,
+    "height": 960,
+    "candidates": [
+      {
+        "src": "./assets/vol6-photo7-480.webp",
+        "width": 480,
+        "height": 720
+      },
+      {
+        "src": "./assets/vol6-photo7.webp",
+        "width": 640,
+        "height": 960
+      }
+    ]
   }
 };
