@@ -316,6 +316,15 @@
     { slug: 'zak-mtl', label: 'ZAK (MTL)', href: routes.zakMtl }
   ];
 
+  const upcomingEvent = {
+    title: 'Instinct Afterparty',
+    date: 'Friday, September 11, 2026',
+    address: '222 Slater St, Ottawa',
+    age: '19+',
+    poster: asset('september-11-afterparty-poster'),
+    lineup: currentArtistNav
+  };
+
   const artists = {
     'ott-krishhh': {
       currentEvent: true,
@@ -742,11 +751,11 @@
             <p class="next-card__eyebrow">Next Event</p>
             <div class="next-card__events">
               <article class="next-card__event">
-                <a class="next-card__poster" href="${routes.next}" aria-label="View next event status">
-                  ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: 'min(544px, 70vw)' })}
+                <a class="next-card__poster" href="${routes.next}" aria-label="View ${upcomingEvent.title} details">
+                  ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster`, { sizes: 'min(544px, 70vw)' })}
                 </a>
-                <h2>Coming Soon</h2>
-                <p>New event details will be announced soon.</p>
+                <h2>${upcomingEvent.title}</h2>
+                <p>${upcomingEvent.date} · ${upcomingEvent.age}</p>
               </article>
             </div>
           </section>
@@ -778,9 +787,9 @@
           <section class="tickets-strip tickets-strip--soon">
             ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
             <div>
-              <h2><span>Details</span> Soon</h2>
-              <p>Our next event will be announced soon.</p>
-              <span class="details-status">Stay tuned</span>
+              <h2><span>September 11</span> Afterparty</h2>
+              <p>${upcomingEvent.address} · ${upcomingEvent.age}</p>
+              <a class="details-status" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
             </div>
           </section>
         </div>
@@ -806,10 +815,10 @@
           <h2><span>Next</span> Event</h2>
           <div class="mobile-home-next-events">
             <article class="mobile-home-next-event">
-              <a href="${routes.next}" class="mobile-home-poster" aria-label="View next event status">
-                ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '342px' })}
+              <a href="${routes.next}" class="mobile-home-poster" aria-label="View ${upcomingEvent.title} details">
+                ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster`, { sizes: '342px' })}
               </a>
-              <p>Coming soon · Stay tuned</p>
+              <p>${upcomingEvent.date} · ${upcomingEvent.age}</p>
             </article>
           </div>
         </section>
@@ -834,9 +843,9 @@
           ${pastEvents.map((event) => mobileHomeEvent(event)).join('')}
         </section>
         <section class="mobile-home-section mobile-home-tickets">
-          <h2><span>Details</span> Soon</h2>
-          <p>Our next event will be announced soon.</p>
-          <span class="mobile-home-ticket-status">Stay tuned</span>
+          <h2><span>September 11</span> Afterparty</h2>
+          <p>${upcomingEvent.address} · ${upcomingEvent.age}</p>
+          <a class="mobile-home-ticket-status" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
         </section>
       </div>
     `;
@@ -874,13 +883,20 @@
         <div class="desktop-view">
           <section class="next-event-page section-border">
             <figure class="next-event-page__poster">
-              ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '(max-width: 1050px) 46vw, 560px', priority: true })}
+              ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster featuring Stinc the octopus and the September 11 lineup`, { sizes: '(max-width: 1050px) 46vw, 560px', priority: true })}
             </figure>
             <div class="next-event-page__content">
               <p class="event-teaser__eyebrow">Next Event</p>
-              <h1>Coming Soon</h1>
+              <h1>${upcomingEvent.title}</h1>
               <span class="green-rule"></span>
-              <p class="next-event-page__bio">New event details will be announced soon.</p>
+              <p class="next-event-page__meta">${upcomingEvent.date}<br>${upcomingEvent.address}<br>${upcomingEvent.age}</p>
+              <div class="next-event-page__lineup">
+                <h2>Lineup</h2>
+                <nav aria-label="September 11 DJ lineup">
+                  ${upcomingEvent.lineup.map((artist) => `<a href="${artist.href}">${artist.label}</a>`).join('')}
+                </nav>
+              </div>
+              <a class="next-event-page__tickets" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
             </div>
           </section>
         </div>
@@ -894,12 +910,19 @@
         <section class="mobile-next-event">
           <p class="mobile-next-event__eyebrow">Next Event</p>
           <figure>
-            ${imageTag(asset('next-backdrop'), 'Instinct event atmosphere', { sizes: '342px', priority: true })}
+            ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster featuring Stinc the octopus and the September 11 lineup`, { sizes: '342px', priority: true })}
           </figure>
           <div class="mobile-next-event__content">
-            <h1>Coming Soon</h1>
+            <h1>${upcomingEvent.title}</h1>
             <span></span>
-            <p class="mobile-next-event__bio">New event details will be announced soon.</p>
+            <p class="mobile-next-event__meta">${upcomingEvent.date}<br>${upcomingEvent.address}<br>${upcomingEvent.age}</p>
+            <div class="mobile-next-event__lineup">
+              <h2>Lineup</h2>
+              <nav aria-label="September 11 DJ lineup">
+                ${upcomingEvent.lineup.map((artist) => `<a href="${artist.href}">${artist.label}</a>`).join('')}
+              </nav>
+            </div>
+            <a class="mobile-next-event__tickets" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
           </div>
         </section>
       </article>

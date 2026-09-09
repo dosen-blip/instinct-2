@@ -2090,6 +2090,36 @@
     ]
   },
   {
+    "name": "september-11-afterparty-poster",
+    "originalBytes": 1510881,
+    "optimizedBytes": 311988,
+    "original": {
+      "width": 1180,
+      "height": 1474
+    },
+    "fallback": {
+      "width": 1180,
+      "height": 1474
+    },
+    "qualityChecks": [
+      {
+        "file": "september-11-afterparty-poster-480.webp",
+        "quality": 90,
+        "psnr": 46.37
+      },
+      {
+        "file": "september-11-afterparty-poster-960.webp",
+        "quality": 90,
+        "psnr": 47.34
+      },
+      {
+        "file": "september-11-afterparty-poster.webp",
+        "quality": 90,
+        "psnr": 49.02
+      }
+    ]
+  },
+  {
     "name": "ty-band",
     "originalBytes": 7881194,
     "optimizedBytes": 702448,

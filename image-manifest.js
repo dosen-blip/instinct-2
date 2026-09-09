@@ -2557,5 +2557,27 @@ window.INSTINCT_IMAGES = {
         "height": 2048
       }
     ]
+  },
+  "september-11-afterparty-poster": {
+    "src": "./assets/september-11-afterparty-poster.webp",
+    "width": 1180,
+    "height": 1474,
+    "candidates": [
+      {
+        "src": "./assets/september-11-afterparty-poster-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/september-11-afterparty-poster-960.webp",
+        "width": 960,
+        "height": 1199
+      },
+      {
+        "src": "./assets/september-11-afterparty-poster.webp",
+        "width": 1180,
+        "height": 1474
+      }
+    ]
   }
 };
