@@ -52,6 +52,17 @@ for (const item of report) {
 }
 
 const app = readFileSync('app.js', 'utf8');
+if (existsSync('content.js')) {
+  const contentContext = { window: {} };
+  vm.runInNewContext(readFileSync('content.js', 'utf8'), contentContext);
+  const catalog = contentContext.window.INSTINCT_CONTENT;
+  const names = [
+    ...Object.values(catalog.events).flatMap(event => [event.cover, ...event.posters, ...(event.drinks || []).map(drink => drink.image)]),
+    ...Object.values(catalog.artists).map(artist => artist.portrait),
+    ...Object.values(catalog.media).map(item => item.image)
+  ];
+  for (const name of names) if (!manifest[name]) failures.push(`Catalog image missing from manifest: ${name}`);
+}
 for (const match of app.matchAll(/asset\('([^']+)'\)/g)) {
   if (!manifest[match[1]]) failures.push(`Referenced image missing from manifest: ${match[1]}`);
 }

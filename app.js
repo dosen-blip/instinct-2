@@ -1,764 +1,359 @@
 (function () {
-  const imageManifest = window.INSTINCT_IMAGES || {};
-  const imageRecordsBySrc = new Map(Object.values(imageManifest).map((record) => [record.src, record]));
+  'use strict';
+  const content = window.INSTINCT_CONTENT;
+  const imageManifest = window.INSTINCT_IMAGES;
+  const imageRecordsBySrc = new Map(Object.values(imageManifest).map(record => [record.src, record]));
   const mobileMedia = window.matchMedia('(max-width: 720px)');
+  const asset = name => imageManifest[name]?.src || `./assets/${name}.webp`;
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const url = value => {
+    const text = String(value || '');
+    if (text.startsWith('./') || text.startsWith('#')) return esc(text);
+    try { return ['https:', 'http:', 'mailto:'].includes(new URL(text).protocol) ? esc(text) : '#'; }
+    catch { return '#'; }
+  };
+  const routeFor = id => `./${encodeURIComponent(id)}.html`;
+  const routes = {home:'./index.html',next:'./next-event.html',events:'./past-events.html',artists:'./artists.html',gallery:'./gallery.html'};
+  const links = content.links;
+  let archive;
   let cleanupPage = () => {};
-  const asset = (name) => imageManifest[name]?.src || `./assets/${name}.webp`;
-
-  function imageRecord(src) {
-    return imageRecordsBySrc.get(src);
-  }
+  let statusKey = '';
 
   function imageTag(src, alt, options = {}) {
-    const record = imageRecord(src);
-    const {
-      className = '',
-      sizes = '100vw',
-      priority = false
-    } = options;
-    const classAttribute = className ? ` class="${className}"` : '';
+    const record = imageRecordsBySrc.get(src);
+    const {className = '', sizes = '100vw', priority = false} = options;
     const responsive = record?.candidates?.length > 1
-      ? ` srcset="${record.candidates.map((candidate) => `${candidate.src} ${candidate.width}w`).join(', ')}" sizes="${sizes}"`
-      : '';
+      ? ` srcset="${record.candidates.map(candidate => `${url(candidate.src)} ${candidate.width}w`).join(', ')}" sizes="${esc(sizes)}"` : '';
     const dimensions = record ? ` width="${record.width}" height="${record.height}"` : '';
-    const loading = priority ? ' loading="eager" fetchpriority="high"' : ' loading="lazy"';
-    return `<img${classAttribute} src="${src}"${responsive}${dimensions}${loading} decoding="async" alt="${alt}">`;
+    return `<img${className ? ` class="${esc(className)}"` : ''} src="${url(src)}"${responsive}${dimensions} loading="${priority ? 'eager' : 'lazy'}"${priority ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(alt)}">`;
   }
-  const routes = {
-    home: './index.html',
-    next: './next-event.html',
-    escapade: './escapade-afterparty.html',
-    vol1: './vol-1.html',
-    vol2: './vol-2.html',
-    vol3: './vol-3.html',
-    vol4: './vol-4.html',
-    vol6: './vol-6.html',
-    djCobb: './dj-cobb.html',
-    sebBalla: './seb-b-balla.html',
-    babyjake: './babyjake.html',
-    ty: './ty-groove.html',
-    seb: './seb-couture.html',
-    dose: './dose.html',
-    dosen: './dosen.html',
-    toneA: './tone-a.html',
-    comfort: './comfort.html',
-    g3lio: './g3lio.html',
-    ooj: './ooj.html',
-    nikoBalla: './niko-couture-b2b-balla.html',
-    arturExists: './artur-exists.html',
-    ottKrishhh: './ott-krishhh.html',
-    caploch: './caploch.html',
-    zakMtl: './zak-mtl.html'
-  };
-
-  const links = {
-    instagram: 'https://www.instagram.com/instinct.groove?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
-    sept11Tickets: 'https://simpli.events/e/48f1ed',
-    email: 'mailto:Info@instinctgroove.net',
-    vol1Photos: 'https://www.amazon.ca/photos/share/hd6a0KdI2dAZxDCE4eaotcu17Nv4ZzNjFgM6xWcwHdU',
-    vol3Photos: 'https://drive.google.com/drive/folders/1IrkD4W7mA4Zn4aVnKx7xN2WxENsm5GLd?usp=sharing',
-    mystic: 'https://www.instagram.com/mysticdoesmedia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==',
-    curtis: 'https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='
-  };
-
-  // Recap clip shown in the mobile home "Event Preview" window. Desktop keeps the poster image.
-  const homePreviewVideo = './assets/home-preview.mp4';
-
-  const recaps = {
-    'vol-6': {
-      title: 'Vol. 6',
-      eyebrow: 'Event Recap',
-      date: 'August 14th, 2026 - Snider Park + City At Night',
-      intro: 'Vol. 6 took Instinct beyond the club and into the streets with our first block party, bringing the sound outdoors alongside a live sax performance from G3LIO. As the sun went down, the energy carried straight into the afterparty, where a constant flow of high-energy sets kept the dance floor moving all night long. Another step forward for Instinct, and another chapter in the sound and community we’re building.',
-      layout: 'centered',
-      photos: [
-        asset('vol6-photo1'),
-        asset('vol6-photo2'),
-        asset('vol6-photo3'),
-        asset('vol6-photo4'),
-        asset('vol6-photo5'),
-        asset('vol6-photo6'),
-        asset('vol6-photo7')
-      ],
-      lineup: [
-        { name: 'Dosen', href: routes.dosen, image: asset('block-party-artist-dosen') },
-        { name: 'Tone A', href: routes.toneA, image: asset('block-party-artist-tone-a') },
-        { name: 'Comfort', href: routes.comfort, image: asset('block-party-artist-comfort') },
-        { name: 'G3LIO', href: routes.g3lio, image: asset('block-party-artist-g3lio') },
-        { name: 'OOJ', href: routes.ooj, image: asset('block-party-artist-ooj') },
-        { name: 'Niko Couture B2B Balla', href: routes.nikoBalla, image: asset('block-party-artist-niko-balla') },
-        { name: 'Artur.Exists', href: routes.arturExists, image: asset('block-party-artist-artur-exists') }
-      ],
-      mobile: {
-        title: 'Vol.6',
-        date: 'August 2026 · Snider Park + City At Night',
-        poster: asset('vol6-photo1'),
-        tags: ['Dosen', 'Tone A', 'Comfort', 'G3LIO', 'OOJ', 'Niko Couture B2B Balla', 'Artur.Exists'],
-        showIntro: true,
-        credit: '',
-        photos: [
-          asset('vol6-photo1'),
-          asset('vol6-photo2'),
-          asset('vol6-photo3'),
-          asset('vol6-photo4'),
-          asset('vol6-photo5'),
-          asset('vol6-photo6'),
-          asset('vol6-photo7')
-        ]
-      }
-    },
-    'escapade-afterparty': {
-      title: 'Escapade Afterparty',
-      eyebrow: 'Event Recap',
-      date: 'June 26th, 2026 - ANNX',
-      intro: 'The Escapade Afterparty brought festival weekend into ANNX for one more late-night session. DJ Cobb, Seb B b2b Balla, and Baby Jake carried the room through a packed night of minimal tech and house, surrounded by the lighting, greenery, and close-quarters energy that define Instinct.',
-      layout: 'centered',
-      photoUrl: links.curtis,
-      photos: [
-        asset('escapade-photo1'),
-        asset('escapade-photo2'),
-        asset('escapade-photo3'),
-        asset('escapade-photo4'),
-        asset('escapade-photo5'),
-        asset('escapade-photo6'),
-        asset('escapade-photo7'),
-        asset('escapade-photo8')
-      ],
-      lineup: [
-        { name: 'DJ Cobb', href: routes.djCobb, image: asset('mobile-mcp-artist-dj-cobb-photo') },
-        { name: 'Seb B b2b Balla', href: routes.sebBalla, image: asset('mobile-mcp-artist-seb-balla-photo') },
-        { name: 'Baby Jake', href: routes.babyjake, image: asset('mobile-mcp-artist-babyjake-photo') }
-      ],
-      mobile: {
-        title: 'Escapade Afterparty',
-        date: 'June 2026 · ANNX',
-        poster: asset('escapade-photo2'),
-        tags: ['DJ Cobb', 'Seb B b2b Balla', 'Baby Jake'],
-        credit: 'Photos By: @_Curtisperry',
-        creditUrl: links.curtis,
-        photos: [
-          asset('escapade-photo1'),
-          asset('escapade-photo2'),
-          asset('escapade-photo3'),
-          asset('escapade-photo4'),
-          asset('escapade-photo5'),
-          asset('escapade-photo6'),
-          asset('escapade-photo7'),
-          asset('escapade-photo8')
-        ]
-      }
-    },
-    'vol-1': {
-      title: 'Vol. 1',
-      eyebrow: 'Event Recap',
-      date: 'November 21st, 2025 - ANNX',
-      intro: 'The first Instinct event marked the moment everything became real. What started as an idea between three friends came to life in a packed room, filled with energy, movement, and a sound that felt new to the city. From the vine-covered space to the deep, rolling minimal grooves, every detail clicked, creating an atmosphere that was both intimate and electric.',
-      layout: 'masonry',
-      photoUrl: links.vol1Photos,
-      photos: [
-        asset('vol1-photo1'),
-        asset('vol1-photo2'),
-        asset('vol1-photo3'),
-        asset('vol1-photo4'),
-        asset('vol1-photo7'),
-        asset('vol1-photo5'),
-        asset('vol1-photo6')
-      ],
-      lineup: [
-        { name: 'VIQ', image: asset('vol1-lineup-viq') },
-        { name: 'Danford b2b Enko', image: asset('vol1-lineup-danford') },
-        { name: 'Zaq Black', image: asset('vol1-lineup-zaq') }
-      ],
-      mobile: {
-        title: 'Vol.1',
-        date: 'November 2025 · ANNX',
-        poster: asset('mobile-mcp-vol1-poster'),
-        tags: ['VIQ', 'Danford b2b ENko', 'ZAKBLACK'],
-        credit: 'Photos By: @Mysticdoesmedia',
-        creditUrl: links.mystic,
-        photos: [
-          asset('mobile-mcp-vol1-photo1'),
-          asset('mobile-mcp-vol1-photo2'),
-          asset('mobile-mcp-vol1-photo3'),
-          asset('mobile-mcp-vol1-photo4'),
-          asset('mobile-mcp-vol1-photo5'),
-          asset('mobile-mcp-vol1-photo6')
-        ]
-      }
-    },
-    'vol-2': {
-      title: 'Vol. 2',
-      eyebrow: 'Event Recap',
-      date: 'January 23rd, 2026 - ANNX',
-      intro: 'The second Instinct event built on that momentum, elevating the atmosphere to another level. With the addition of deep purple lighting woven through the vine-covered space, the room took on a darker, more immersive energy that perfectly matched the sound. The vibe felt tighter, more intentional, and fully in sync with the vision.',
-      layout: 'split',
-      photos: [
-        asset('vol2-photo1'),
-        asset('vol2-photo4'),
-        asset('vol2-photo2'),
-        asset('vol2-photo3'),
-        asset('vol2-photo6'),
-        asset('vol2-photo7'),
-        asset('vol2-photo5')
-      ],
-      lineup: [
-        { name: 'MAC:D', image: asset('vol2-lineup-macd') },
-        { name: 'Chefnier b2b Moose', image: asset('vol2-lineup-chefnier') },
-        { name: 'Benvi', image: asset('vol2-lineup-benvi') }
-      ],
-      mobile: {
-        title: 'Vol.2',
-        date: 'January 2026 · ANNX',
-        poster: asset('mobile-mcp-vol2-poster'),
-        tags: ['Mac:D', 'Chefnier B2b Moose', 'Benvi'],
-        credit: 'Photos By: THE DIGI',
-        photos: [
-          asset('mobile-mcp-vol2-photo1'),
-          asset('mobile-mcp-vol2-photo2'),
-          asset('mobile-mcp-vol2-photo3'),
-          asset('mobile-mcp-vol2-photo4'),
-          asset('mobile-mcp-vol2-photo5'),
-          asset('mobile-mcp-vol2-photo6')
-        ]
-      }
-    },
-    'vol-3': {
-      title: 'Vol. 3',
-      eyebrow: 'Event Recap',
-      date: 'March 6th, 2026 - ANNX',
-      intro: 'Vol. 3 proved that each event keeps leveling up. The vision felt sharper, the crowd more locked in, and the energy from start to finish was undeniable. Everything from the atmosphere to the sound hit harder and flowed smoother, with feature cocktails adding another layer to the experience: creative, unique, and just as dialed in as the music.',
-      layout: 'centered',
-      photoUrl: links.vol3Photos,
-      photos: [
-        asset('vol3-photo1'),
-        asset('vol3-photo2'),
-        asset('vol3-photo3'),
-        asset('vol3-photo4'),
-        asset('vol3-photo5'),
-        asset('vol3-photo6'),
-        asset('vol3-photo7'),
-        asset('vol3-photo8'),
-        asset('vol3-photo9')
-      ],
-      lineup: [
-        { name: '50nic', image: asset('vol3-lineup-50nic') },
-        { name: 'Comfort', image: asset('vol3-lineup-comfort') },
-        { name: 'Babyjake', image: asset('vol3-lineup-babyjake') }
-      ],
-      mobile: {
-        title: 'Vol.3',
-        date: 'March 2026 · ANNX',
-        poster: asset('mobile-mcp-vol3-poster'),
-        tags: ['50nic', 'Comfort', 'Babyjake'],
-        credit: 'Photos By: @Mysticdoesmedia',
-        creditUrl: links.mystic,
-        photos: [
-          asset('mobile-mcp-vol3-photo1'),
-          asset('mobile-mcp-vol3-photo2'),
-          asset('mobile-mcp-vol3-photo3'),
-          asset('mobile-mcp-vol3-photo4'),
-          asset('mobile-mcp-vol3-photo5'),
-          asset('mobile-mcp-vol3-photo6')
-        ]
-      }
-    },
-    'vol-4': {
-      title: 'Vol. 4',
-      eyebrow: 'Event Recap',
-      date: 'April 2026 - City at Night',
-      intro: 'Vol. 4 carried Instinct into a new room with a sharper club feel, keeping the same minimal groove while letting the purple-lit City at Night energy take over. The night brought a focused lineup, a packed dance floor, and another chapter in the sound the crew is building.',
-      layout: 'centered',
-      photoUrl: links.curtis,
-      photos: [
-        asset('mobile-mcp-vol4-photo1'),
-        asset('mobile-mcp-vol4-photo2'),
-        asset('mobile-mcp-vol4-photo3'),
-        asset('mobile-mcp-vol4-photo4'),
-        asset('mobile-mcp-vol4-photo5'),
-        asset('mobile-mcp-vol4-photo6')
-      ],
-      lineup: [
-        { name: 'Tygroove', image: asset('next-ty') },
-        { name: 'Seb Couture', image: asset('next-seb') },
-        { name: 'D.O.S.E', image: asset('next-dose') }
-      ],
-      mobile: {
-        title: 'Vol.4',
-        date: 'April 2026 · City at Night',
-        poster: asset('mobile-mcp-vol4-poster'),
-        tags: ['Tygroove', 'Seb couture', 'd.o.s.e'],
-        credit: 'Photos By: @_Curtisperry',
-        creditUrl: links.curtis,
-        photos: [
-          asset('mobile-mcp-vol4-photo1'),
-          asset('mobile-mcp-vol4-photo2'),
-          asset('mobile-mcp-vol4-photo3'),
-          asset('mobile-mcp-vol4-photo4'),
-          asset('mobile-mcp-vol4-photo5'),
-          asset('mobile-mcp-vol4-photo6')
-        ]
-      }
-    }
-  };
-
-  const pastEvents = [
-    { slug: 'vol-6', href: routes.vol6, title: 'Vol. 6 Block Party + AP', date: 'August 14, 2026', venue: 'Snider Park + City At Night', image: asset('vol6-photo1') },
-    { slug: 'escapade-afterparty', href: routes.escapade, title: 'Escapade Afterparty', date: 'June 26, 2026', venue: 'ANNX', image: asset('escapade-photo2') },
-    { slug: 'vol-4', href: routes.vol4, title: 'Vol. 4', date: 'April 2026', venue: 'City at Night', image: asset('home-vol4-card') },
-    { slug: 'vol-3', href: routes.vol3, title: 'Vol. 3', date: 'March 6, 2026', venue: 'ANNX', image: asset('home-vol3-card') },
-    { slug: 'vol-2', href: routes.vol2, title: 'Vol. 2', date: 'January 23, 2026', venue: 'ANNX', image: asset('home-vol2-card') },
-    { slug: 'vol-1', href: routes.vol1, title: 'Vol. 1', date: 'November 21, 2025', venue: 'ANNX', image: asset('home-vol1-card') }
-  ];
-
-  const currentArtistNav = [
-    { slug: 'ott-krishhh', label: 'OTT.KRISHHH', href: routes.ottKrishhh },
-    { slug: 'caploch', label: 'CAPLOCH', href: routes.caploch },
-    { slug: 'zak-mtl', label: 'ZAK (MTL)', href: routes.zakMtl }
-  ];
-
-  const upcomingEvent = {
-    title: 'Instinct Afterparty',
-    date: 'Friday, September 11, 2026',
-    address: '222 Slater St, Ottawa',
-    age: '19+',
-    poster: asset('september-11-afterparty-poster'),
-    lineup: currentArtistNav
-  };
-
-  const artists = {
-    'ott-krishhh': {
-      currentEvent: true,
-      slug: 'ott-krishhh',
-      name: 'OTT.KRISHHH',
-      bio: [
-        'OTT.KRISHHH is an Ottawa-based DJ whose sound sits between minimal and rugged Tech House, blending deep grooves, rolling basslines, and high-energy club moments. With a taste for darker, dirtier sounds around 130 BPM, his sets move between stripped-back minimal grooves and punchy, dance-floor-driven Tech House. After making his Toronto debut, OTT.KRISHHH continued his run with his White Rabbit debut at City At Night, followed by his Montreal debut at Montreal Music Week during ÎleSoniq en ville. His sets are built around infectious grooves, rising energy, and keeping the dance floor locked in.'
-      ],
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/ott.krishhh/' },
-        { label: 'Set', href: 'https://www.youtube.com/watch?v=BTYSGlqz0UY' }
-      ],
-      portrait: asset('artist-ott-krishhh'),
-      alt: 'OTT.KRISHHH performing behind DJ decks in black and white',
-      qas: [
-        { question: 'Worst song request you’ve ever gotten?', answer: 'Spinning Afro House on a cruise and someone really looked me dead in the eyes like, “Can you play a wedding song?” Babe… this is a cruise party, not your cousin’s reception.' },
-        { question: 'Gridwrks or City at Night?', answer: 'Gridwrks is cute, but I gotta keep it OG. City At Night forever.' },
-        { question: 'What’s your DJ superpower?', answer: 'Making people say “I don’t know this song, but I NEED to Shazam it” only for them to never find the exact edit.' }
-      ],
-      accent: '#32e07a'
-    },
-    caploch: {
-      currentEvent: true,
-      slug: 'caploch',
-      name: 'CAPLOCH',
-      bio: [
-        'Caploch is an electronic music producer and DJ blending house, progressive, melodic techno, and UK-inspired sounds. Inspired by the mystery of Loch Ness and the digital world, Caploch’s identity brings together deep, atmospheric soundscapes with energetic club production. Based in Ottawa, Caploch has been producing music since 2019 and performing as a DJ across private events and nightlife settings. Alongside original releases, Caploch shares DJ mixes, radio-style sets, and behind-the-scenes content through the Captain’s Orders series, building a world around the music that is equal parts electronic, aquatic, and futuristic.'
-      ],
-      socials: [
-        { label: 'SoundCloud', href: 'https://soundcloud.com/caploch' },
-        { label: 'Instagram', href: 'https://www.instagram.com/caplochmusic/' }
-      ],
-      portrait: asset('artist-caploch'),
-      alt: 'CAPLOCH performing beneath blue stage lights',
-      qas: [
-        { question: 'Would you rather DJ without seeing BPM or Key of a track?', answer: 'Definitely Key, these ears work for years.' },
-        { question: 'Furthest you’ve played music from home?', answer: 'Colorado Springs!' },
-        { question: 'Ibiza or Miami?', answer: 'Ibizazazaza' }
-      ],
-      accent: '#4f7dff'
-    },
-    'zak-mtl': {
-      currentEvent: true,
-      slug: 'zak-mtl',
-      name: 'ZAK (MTL)',
-      bio: [
-        'Known for his disco-inspired selections and his deep and contiguous grooves, ZAK has carved out a place of choice in the Montreal music scene thanks to his ability to get the dance floors pumping from beginning to end.'
-      ],
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/zakkk_ch/' }
-      ],
-      portrait: asset('artist-zak-mtl'),
-      alt: 'ZAK performing behind DJ decks in a crowded club',
-      qas: [
-        { question: 'What’s your biggest pet peeve as a DJ?', answer: 'My biggest pet peeve by far is definitely when someone tries touching the decks as a joke while I’m playing.' },
-        { question: 'Ibiza or Miami?', answer: 'Easily Ibiza and by a mile!' },
-        { question: 'What would be your dream festival to attend?', answer: 'Would be a close one between EDC and Creamfields. Two very different vibes and crowds but I think Creamfields would take it.' }
-      ],
-      accent: '#a855f7'
-    },
-    dosen: {
-      currentEvent: true,
-      slug: 'dosen',
-      name: 'DOSEN',
-      setTime: '7:00 PM–8:20 PM',
-      location: 'Snider Park',
-      bio: [
-        "DOSEN is an Ottawa-based DJ whose sound is rooted in minimal, gritty tech house with shades of trance, house, and techno. Since making his debut at EXOSPHERE 002, he has become a rising presence in Ottawa's underground, playing OFF GRID and Frequency Shift events and opening the official Escapade afterparty for Odd Mob B2B Walker & Royce. His sets move between deep grooves and high-energy moments, built to draw people in and keep the room moving."
-      ],
-      instagram: 'https://www.instagram.com/matia_dosen/',
-      site: 'https://dosen.ca',
-      portrait: asset('block-party-artist-dosen'),
-      alt: 'DOSEN seated in a blue-lit outdoor lounge',
-      accent: '#32e07a'
-    },
-    'tone-a': {
-      currentEvent: true,
-      slug: 'tone-a',
-      name: 'TONE A',
-      setTime: '8:20 PM–9:40 PM',
-      location: 'Snider Park',
-      bio: [
-        'A seasoned selector in Ottawa’s underground dance music scene, with close to 15 years of experience rocking dance floors and curating unforgettable nights. As co-founder of White Rabbit Events, he’s been a driving force behind community-focused events that blend immersive vibes with cutting-edge sound.',
-        'He’s held respected residencies at venues like Sotto, BPM After Hours, Waverly, Buddha Bar (Thursdays), the Floorplay Group, and currently holds down Saturday nights at City at Night, one of Ottawa’s premier clubs. His presence has also been felt at major events and venues including Multiple Escapades & Afters, Circus Afterhours, Newspeak, Wiggle Room, DNA, FMG, and Mercury Lounge, solidifying his rep as a trusted selector and dedicated promoter.',
-        'With a deep musical background and an instinct for reading rooms, Tone A’s sets are known to shake foundations and elevate crowds. He’s shared the stage with international heavyweights like Claptone, Roger Sanchez, Victor Calderone, Matador, Carlo Lio, Mark Knight, Weiss, Eli & Fur, Max Chapman, Harvey McKay, Walker & Royce, Miss Melera, The Cube Guys, Nathan Barato, John Acquaviva, and more.',
-        'Fueled by a lifelong passion for dance music, Tone A continues to be a cornerstone of Ottawa nightlife curating vibes, building community, and delivering sets you won’t soon forget.'
-      ],
-      instagram: 'https://www.instagram.com/toneasound/',
-      portrait: asset('block-party-artist-tone-a'),
-      alt: 'TONE A smiling in a gold hood and baseball cap',
-      accent: '#e5f109'
-    },
-    comfort: {
-      currentEvent: true,
-      slug: 'comfort',
-      name: 'COMFORT + G3LIO',
-      setTime: '9:40 PM–11:00 PM',
-      location: 'Snider Park',
-      members: [
-        {
-          name: 'COMFORT',
-          bio: [
-            'Comfort has been part of Ottawa’s electronic scene since 2017, shaping the culture as the founder of FMG Collective, Intersection and Solstice, while curating the official afterparties for Escapade Music Festival. His sound blends high-energy house with melodic, trance-leaning elements, delivering hypnotic sets that keep the dancefloor moving and fully locked in.'
-          ],
-          instagram: 'https://www.instagram.com/comfort.adam_/',
-          portrait: asset('block-party-artist-comfort'),
-          alt: 'COMFORT performing behind DJ equipment'
-        },
-        {
-          name: 'G3LIO',
-          bio: [
-            'Angelo Leo is an Ottawa-based musician and entertainment consultant known for a dynamic sound blending jazz, soul, and contemporary influences. They have collaborated with artists worldwide, contributing to records that have collectively surpassed 10 million streams.'
-          ],
-          instagram: 'https://www.instagram.com/g3lio/',
-          portrait: asset('block-party-artist-g3lio'),
-          alt: 'G3LIO playing saxophone on stage'
-        }
-      ],
-      accent: '#a855f7'
-    },
-    ooj: {
-      currentEvent: true,
-      slug: 'ooj',
-      name: 'OOJ',
-      setTime: '10:00 PM–11:00 PM',
-      location: 'City At Night',
-      bio: [
-        'Orange Octopus Jim (OOJ) is an Ottawa-based DJ and producer known for feel-good dance floors that blend house, techno and sparkle to build moments that feel playful.',
-        'Inspired by everything from late-night club culture to beach sunsets and underwater daydreams, his sets balance groove with discovery.'
-      ],
-      instagram: 'https://www.instagram.com/ooj_matthew/',
-      portrait: asset('block-party-artist-ooj'),
-      alt: 'Orange Octopus Jim logo glowing white against an orange background',
-      accent: '#ff5a24'
-    },
-    'niko-couture-b2b-balla': {
-      currentEvent: true,
-      slug: 'niko-couture-b2b-balla',
-      name: 'NIKO COUTURE B2B BALLA',
-      setTime: '11:00 PM–1:00 AM',
-      location: 'City At Night',
-      bio: [
-        'Ottawa selectors BALLA and Niko Couture link up for a set of deep, minimal house driven by groovy, rolling rhythms. Friends for years, Niko was one of the first people to put BALLA behind the decks. This marks their first public set together, carrying that history into the room.',
-        'They’re playing the slow burn: melodic, hypnotic deep house from the opening record, with warm basslines and jacking percussion setting the pace. The energy builds track by track, taking the room on a journey as the night unfolds.'
-      ],
-      socials: [
-        { label: 'NIKO COUTURE Instagram', href: 'https://www.instagram.com/niko.couturee/' },
-        { label: 'BALLA Instagram', href: 'https://www.instagram.com/gab.balladelli/' }
-      ],
-      portrait: asset('block-party-artist-niko-balla'),
-      alt: 'Niko Couture and BALLA standing together in an elevator',
-      accent: '#f2c56b'
-    },
-    'artur-exists': {
-      currentEvent: true,
-      slug: 'artur-exists',
-      name: 'ARTUR.EXISTS',
-      setTime: '1:00 AM–2:30 AM',
-      location: 'City At Night',
-      bio: [
-        "It is my first my summer in Montreal and I'll bring some good vibes to Ottawa where my journey began. City At Night is the place where my first big events happened and it's always be like a home to me :)",
-        "Montreal showed me how any genre can be funky and energetic, this time we will go back to 2000's and bring you best energy at the end of the night with the mixes of Benny Benassi, Madonna and even Britney Spears following with funky tech house music.",
-        'Be there or be square!!'
-      ],
-      instagram: 'https://www.instagram.com/artur.exists/',
-      portrait: asset('block-party-artist-artur-exists'),
-      alt: 'ARTUR.EXISTS performing behind DJ decks in black and white',
-      accent: '#a855f7'
-    },
-    'ty-groove': {
-      name: 'Ty Groove',
-      setTime: '10PM - 11:30pm',
-      bio: 'I started to DJ back in 2022 after having found a love for House and Dance Music from attending multiple festivals and sets in Montreal with some great friends.',
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/tyler_mitche11?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-        { label: 'SoundCloud', href: 'https://on.soundcloud.com/uoigNFNPZ2Bue1Slur' }
-      ],
-      band: asset('ty-band'),
-      portrait: asset('ty-portrait'),
-      lower: asset('ty-lower'),
-      qas: [
-        { question: "What's a song that gets you lost in the groove?", answer: 'Oblivion by Kerri Chandler' },
-        { question: 'What genres do you secretly enjoy but have never played in a set?', answer: 'Hard groove Techno and Trance Classics. Would totally play if the opportunity presented itself.' },
-        { question: 'Favourite BPM?', answer: "Good Ol' 128 BPM. Can't go wrong." }
-      ]
-    },
-    'seb-couture': {
-      name: 'Seb Couture',
-      setTime: '11:30pm - 1:00am',
-      bio: 'Sebastian Couture is an Ottawa-based DJ and producer whose musical roots began behind the drums, growing up in a family immersed in music. Drawn to the energy of the dance floor, he transitioned from a career in sales to fully pursue music, studying production while developing his craft as a DJ. His sound is shaped by festivals, raves, and underground parties across Miami, Europe, and Tulum.',
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/sebastian_couture?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-        { label: 'SoundCloud', href: 'https://tr.ee/pckFnVF9bI' }
-      ],
-      band: asset('seb-band'),
-      portrait: asset('seb-portrait'),
-      lower: asset('seb-lower'),
-      qas: [
-        { question: 'What song would ignite the dance floor if you dropped at a dj set?', answer: 'Back & Forth - Fedde Le Grand, Mr V - Tony Romera 2025 rework' },
-        { question: 'Which genre apart from Minimal are you really feeling these days?', answer: 'Lately I have been into the Breakbeat vibe: funky, swingy drums and refreshed retro sounds.' },
-        { question: 'Favourite BPM?', answer: 'My sets usually range from 126 BPM into the mid 130s. I love controlling energy and creating dips and peaks.' }
-      ]
-    },
-    dose: {
-      name: 'D.O.S.E',
-      setTime: '1:00am - 2:30am',
-      bio: 'I am a house DJ and producer based out of Ottawa, recently making strides in the industry. Captivating audiences with underground house and deep minimal grooves, mixed with old-school disco and soul, D.O.S.E keeps each selection constantly moving.',
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/d.o.s.e.music?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-        { label: 'Youtube', href: 'https://www.youtube.com/watch?v=JTqPRcelXSs&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGntHhnA5lUeyjB5QxaOU9eQtpJYGM6kKJqk6KmtomrKV_ATGEwk3vgoh2gIgI_aem_diVbeksgRDlVhUG6FWVoig' }
-      ],
-      band: asset('dose-band'),
-      portrait: asset('dose-portrait'),
-      lower: asset('dose-lower'),
-      qas: [
-        { question: 'Favourite Dj?', answer: 'Ruze' },
-        { question: 'What genres do you secretly enjoy but have never played in a set?', answer: 'UKG' },
-        { question: 'Favourite BPM?', answer: '124-128' }
-      ]
-    },
-    'dj-cobb': {
-      name: 'DJ Cobb',
-      setTime: '11:30pm - 1:00am',
-      bio: 'DJ Cobb is a dance music DJ focusing on house, tech house, and minimal sounds, with a passion for creating groovy sets that keep people moving from start to finish.',
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/j_francoeur13?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' }
-      ],
-      band: asset('mobile-mcp-artist-dj-cobb-hero'),
-      portrait: asset('mobile-mcp-artist-dj-cobb-photo'),
-      lower: asset('mobile-mcp-artist-dj-cobb-hero'),
-      qas: [
-        { question: "Favourite DJ set you've been to?", answer: "Cloonee at a New City Gas afterparty - it's the set that pushed me to start DJing." },
-        { question: 'What are you doing if the decks die mid-set?', answer: 'Have some shots.' },
-        { question: 'Favorite drunk food?', answer: 'Shawarma and another beer.' }
-      ],
-      mobile: {
-        hero: asset('mobile-mcp-artist-dj-cobb-hero'),
-        feature: asset('mobile-mcp-artist-dj-cobb-photo'),
-        accent: '#9900ff',
-        bio: [
-          'DJ Cobb is a dance music DJ focusing on house, tech house, and minimal sounds, with a passion for creating groovy sets that keep people moving from start to finish.',
-          "After three years behind the decks and diving into music production, he's constantly exploring new sounds and finding new ways to build energy on the dance floor.",
-          'Inspired by friends who DJ and a love for electronic music, DJ Cobb brings a groove-driven style that blends clean transitions, infectious rhythms, and good vibes.'
-        ],
-        nav: [
-          { label: '← Seb B/Balla', href: routes.sebBalla },
-          { label: '← BabyJake', href: routes.babyjake }
-        ]
-      }
-    },
-    'seb-b-balla': {
-      name: 'Seb B b2b Balla',
-      setTime: '11:30pm - 1:00am',
-      bio: 'Seb B b2b Balla is a high-energy back-to-back pairing that blends deep, driving techno with euphoric peaks and hypnotic grooves.',
-      socials: [
-        { label: 'Seb B', href: 'https://www.instagram.com/seb.belanger?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-        { label: 'Balla', href: 'https://www.instagram.com/gab.balladelli?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' }
-      ],
-      band: asset('mobile-mcp-artist-seb-balla-hero'),
-      portrait: asset('mobile-mcp-artist-seb-balla-photo'),
-      lower: asset('mobile-mcp-artist-seb-balla-hero'),
-      qas: [
-        { question: 'Fun Fact', answer: "Founder of Frequency Shift- Ottawas largest emerging dance themed event company." },
-        { question: 'Never pre planned a set, always go with the flow.', answer: '' },
-        { question: 'Professional Drink and rallier', answer: 'Preferred drink of choice- jaggerbomb.' }
-      ],
-      mobile: {
-        hero: asset('mobile-mcp-artist-seb-balla-hero'),
-        feature: asset('mobile-mcp-artist-seb-balla-photo'),
-        accent: '#9b5de5',
-        bio: [
-          'Seb B b2b Balla is a high-energy back-to-back pairing that blends deep, driving techno with euphoric peaks and hypnotic grooves. Together they craft a seamless sonic journey that moves effortlessly between pounding rhythms and melodic tension, building a dancefloor connection that only comes from two DJs in perfect sync. These two are the dumb and dumber duo of the century.'
-        ],
-        nav: [
-          { label: '← Dj Cobb', href: routes.djCobb },
-          { label: 'BabyJake →', href: routes.babyjake }
-        ]
-      }
-    },
-    babyjake: {
-      name: 'BabyJake',
-      setTime: '1:00am - 2:30am',
-      bio: 'BabyJake is a 22 year old producer who has spent the last 5 years perfecting his craft of creating original house tracks.',
-      socials: [
-        { label: 'Instagram', href: 'https://www.instagram.com/jakee.hill?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==' },
-        { label: 'Spotify', href: 'https://open.spotify.com/artist/62wwMykR0Wt6oaLkDVYlR1?si=8QfLLu4jSTKiE6B4Lsu79g' }
-      ],
-      band: asset('mobile-mcp-artist-babyjake-hero'),
-      portrait: asset('mobile-mcp-artist-babyjake-photo'),
-      lower: asset('mobile-mcp-artist-babyjake-hero'),
-      qas: [
-        { question: "Best set I've been to?", answer: 'Above and Beyond' },
-        { question: 'What would you do if the decks die?', answer: 'AP at my place' },
-        { question: 'Favourite drunk food?', answer: 'Gotta be the shawarma beside City at Night' }
-      ],
-      mobile: {
-        hero: asset('mobile-mcp-artist-babyjake-hero'),
-        feature: asset('mobile-mcp-artist-babyjake-photo'),
-        accent: '#9900ff',
-        bio: [
-          'BabyJake is a 22 year old producer who has spent the last 5 years perfecting his craft of creating original house tracks. His deep love for electronic music is fueled by the unity and freedom that the dance floor offers.',
-          'Having more years producing under his belt than DJing, his trained ear is focused on crystal clear mixes with influences from disco, minimal, and old school progressive house.'
-        ],
-        nav: [
-          { label: '← Seb B/Balla', href: routes.sebBalla },
-          { label: '← Dj Cobb', href: routes.djCobb }
-        ]
-      }
-    }
-  };
-
-  function getRoute() {
-    const file = window.location.pathname.split('/').pop() || 'index.html';
-    return file.replace('.html', '') || 'index';
+  function dateLabel(event) {
+    return new Intl.DateTimeFormat('en-CA', {dateStyle:'long',timeZone:'UTC'}).format(new Date(`${event.date}T12:00:00Z`));
   }
-
+  function eventDate(event) { return `<time datetime="${esc(event.date)}">${esc(dateLabel(event))}</time>`; }
+  function textLink(href, label, external = false, className = 'archive-link') {
+    return `<a class="${className}" href="${url(href)}"${external ? ' target="_blank" rel="noreferrer"' : ''}>${esc(label)}</a>`;
+  }
+  function pageHeading(kicker, title, copy = '') {
+    return `<header class="archive-heading"><p class="archive-kicker">${esc(kicker)}</p><h1>${esc(title)}</h1>${copy ? `<p class="archive-intro">${esc(copy)}</p>` : ''}</header>`;
+  }
+  function getRoute() {return (window.location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '');}
   function render() {
     cleanupPage();
-    const app = document.getElementById('app');
+    archive = window.INSTINCT_ARCHIVE.create(content);
+    statusKey = archive.pastEvents.map(event => event.id).join('|');
     const route = getRoute();
-    let page = '';
-
-    if (route === 'index') {
-      page = renderHome();
-    } else if (route === 'next-event') {
-      page = renderNextEvent();
-    } else if (recaps[route]) {
-      page = renderRecap(recaps[route]);
-    } else if (route === 'g3lio') {
-      page = renderArtist(artists.comfort);
-    } else if (artists[route]) {
-      page = renderArtist(artists[route]);
-    } else {
-      page = renderMissing();
-    }
-
-    app.innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
-    const cleanupLightbox = setupLightbox();
-    const cleanupNav = setupNav();
-    cleanupPage = () => {
-      cleanupLightbox();
-      cleanupNav();
-    };
+    const event = archive.byId[route] || archive.byId[content.collaborations?.[route]?.eventId];
+    let page;
+    if (route === 'index') page = renderHome();
+    else if (route === 'past-events') page = renderArchive();
+    else if (route === 'artists') page = renderDirectory();
+    else if (route === 'gallery') page = renderGallery();
+    else if (route === 'next-event') page = renderNextEvent();
+    else if (event) page = renderEvent(event);
+    else if (content.artists[route]) page = renderArtist(content.artists[route]);
+    else page = `<article class="archive-shell">${pageHeading('Instinct Groove','Page not found')}${textLink(routes.home,'Return home')}</article>`;
+    document.getElementById('app').innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
     document.documentElement.dataset.route = route;
+    const cleanupNav = setupNav();
+    const cleanupViewer = setupViewer();
+    const cleanupFilters = setupFilters(route);
+    const cleanupGlow = setupHeroGlow();
+    cleanupPage = () => { cleanupGlow(); cleanupViewer(); cleanupNav(); cleanupFilters(); };
   }
-
+  function setupHeroGlow() {
+    const hero = document.querySelector('.home-hero, .mobile-home-hero');
+    if (!hero) return () => {};
+    const glow = document.createElement('span');
+    glow.className = 'hero-energy';
+    glow.setAttribute('aria-hidden', 'true');
+    // Fixed turbulence breaks up the light; movement deforms it without a noise loop.
+    glow.innerHTML = `<svg class="hero-light-filter" width="0" height="0" aria-hidden="true"><defs><filter id="hero-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".009 .014" numOctaves="2" seed="17" result="flow"/><feDisplacementMap in="SourceGraphic" in2="flow" scale="42" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="9"/></filter></defs></svg>`;
+    hero.append(glow);
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    let frame = 0, visible = true, lastTime = 0, energy = 0;
+    let bounds = hero.getBoundingClientRect();
+    let target = {x: 50, y: 57}, green = {...target}, purple = {...target};
+    const paint = () => {
+      glow.style.setProperty('--glow-x', `${green.x * bounds.width / 100}px`);
+      glow.style.setProperty('--glow-y', `${green.y * bounds.height / 100}px`);
+      glow.style.setProperty('--echo-x', `${purple.x * bounds.width / 100}px`);
+      glow.style.setProperty('--echo-y', `${purple.y * bounds.height / 100}px`);
+      glow.style.setProperty('--light-energy', energy.toFixed(4));
+      glow.style.setProperty('--light-spread', (1.24 - energy * .24).toFixed(4));
+      glow.style.setProperty('--bend-x', `${Math.max(-12, Math.min(12, (green.x-purple.x)*.8))}deg`);
+      glow.style.setProperty('--bend-y', `${Math.max(-9, Math.min(9, (green.y-purple.y)*.6))}deg`);
+    };
+    const tick = time => {
+      frame = 0;
+      // Time-based damping keeps the same feel on 60 Hz and 120 Hz displays.
+      const elapsed = lastTime ? Math.min(time - lastTime, 50) : 16.67;
+      lastTime = time;
+      const follow = 1 - Math.exp(-elapsed / 85);
+      const trail = 1 - Math.exp(-elapsed / 360);
+      const impulse = Math.min(1, Math.hypot(target.x-green.x, target.y-green.y) / 12);
+      energy += (impulse-energy) * (1-Math.exp(-elapsed/(impulse>energy?100:650)));
+      for (const axis of ['x', 'y']) {
+        green[axis] += (target[axis] - green[axis]) * follow;
+        purple[axis] += (green[axis] - purple[axis]) * trail;
+      }
+      paint();
+      if (Math.abs(target.x-purple.x)+Math.abs(target.y-purple.y) > .08 || energy > .002) frame = requestAnimationFrame(tick);
+      else lastTime = 0;
+    };
+    const stop = () => { cancelAnimationFrame(frame); frame = 0; lastTime = 0; };
+    const reset = () => { stop(); energy = 0; target = {x:50,y:57}; green = {...target}; purple = {...target}; paint(); hero.classList.remove('is-tracking'); };
+    const move = event => {
+      if (motion.matches || !pointer.matches || !visible || document.hidden) return;
+      bounds = hero.getBoundingClientRect();
+      target = {x: (event.clientX-bounds.left)/bounds.width*100, y: (event.clientY-bounds.top)/bounds.height*100};
+      hero.classList.add('is-tracking');
+      if (!frame) frame = requestAnimationFrame(tick);
+    };
+    const leave = () => {
+      hero.classList.remove('is-tracking'); target = {x:50,y:57};
+      if (!motion.matches && visible && !document.hidden && !frame) frame = requestAnimationFrame(tick);
+    };
+    const visibility = () => { hero.classList.toggle('energy-paused', !visible || document.hidden); if (!visible || document.hidden) reset(); };
+    const observer = new IntersectionObserver(entries => {visible = entries[0].isIntersecting; visibility();});
+    observer.observe(hero);
+    const resize = new ResizeObserver(() => { bounds = hero.getBoundingClientRect(); paint(); });
+    resize.observe(hero);
+    paint();
+    hero.addEventListener('pointermove', move);
+    hero.addEventListener('pointerleave', leave);
+    motion.addEventListener('change', reset);
+    pointer.addEventListener('change', reset);
+    document.addEventListener('visibilitychange', visibility);
+    return () => {
+      stop(); observer.disconnect(); resize.disconnect(); glow.remove();
+      hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerleave', leave);
+      motion.removeEventListener('change', reset); pointer.removeEventListener('change', reset);
+      document.removeEventListener('visibilitychange', visibility);
+    };
+  }
   function siteHeader(route) {
-    const isRecap = Boolean(recaps[route]);
-    const isArtist = Boolean(artists[route]);
-    const linkClass = (name) => (route === name ? ' class="is-active"' : '');
-
-    return `
-      <header class="site-header">
-        <nav class="site-nav" aria-label="Primary navigation">
-          <a class="site-brand ${route === 'index' ? 'is-active' : ''}" href="${routes.home}" aria-label="Instinct Groove — home">
-            <span class="site-brand__mark" aria-hidden="true"></span>
-            <span class="site-brand__name">Instinct Groove</span>
-          </a>
-          <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
-          <div class="site-nav__links" id="site-menu">
-            <a${linkClass('next-event')} href="${routes.next}">Next Event</a>
-            <details class="site-nav-menu ${isRecap ? 'is-active' : ''}">
-              <summary>Past Events</summary>
-              <div>
-                ${pastEvents.map((event) => `<a${linkClass(event.slug)} href="${event.href}">${event.title}</a>`).join('')}
-              </div>
-            </details>
-            <details class="site-nav-menu ${isArtist ? 'is-active' : ''}">
-              <summary>Artists</summary>
-              <div>
-                ${currentArtistNav.map((artist) => `<a${linkClass(artist.slug)} href="${artist.href}">${artist.label}</a>`).join('')}
-              </div>
-            </details>
-            <a class="is-cta" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Sept. 11 Tickets</a>
-            <a href="${links.instagram}" target="_blank" rel="noreferrer">Instagram</a>
-          </div>
-        </nav>
-      </header>
-    `;
+    const active = (id, test = false) => route === id || test ? ' class="is-active" aria-current="page"' : '';
+    const next = archive.upcomingEvents[0];
+    return `<header class="site-header"><nav class="site-nav" aria-label="Primary navigation">
+      <a class="site-brand" href="${routes.home}" aria-label="Instinct Groove — home"><span class="site-brand__mark" aria-hidden="true"></span><span class="site-brand__name">Instinct Groove</span></a>
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-menu">Menu</button>
+      <div class="site-nav__links" id="site-menu">
+        <a${active('next-event')} href="${routes.next}">Next Event</a>
+        <a${active('past-events',Boolean(archive.byId[route]?.past))} href="${routes.events}">Past Events</a>
+        <a${active('artists',Boolean(content.artists[route]))} href="${routes.artists}">Artists</a>
+        <a${active('gallery')} href="${routes.gallery}">Gallery</a>
+        ${next?.ticketUrl ? `<a class="is-cta" href="${url(next.ticketUrl)}" target="_blank" rel="noreferrer">Tickets</a>` : ''}
+        <a href="${url(links.instagram)}" target="_blank" rel="noreferrer">Instagram</a>
+      </div></nav></header>`;
   }
-
   function setupNav() {
     const header = document.querySelector('.site-header');
-    if (!header) return () => {};
     const toggle = header.querySelector('.site-nav__toggle');
-    if (toggle) {
-      toggle.addEventListener('click', () => {
-        const open = header.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-      header.querySelectorAll('.site-nav__links a').forEach((a) => {
-        a.addEventListener('click', () => {
-          header.classList.remove('is-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        });
+    const close = () => {header.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
+    toggle.addEventListener('click', () => {const open = header.classList.toggle('is-open');toggle.setAttribute('aria-expanded',String(open));});
+    const escape = e => {if(e.key === 'Escape' && header.classList.contains('is-open')){close();toggle.focus();}};
+    header.addEventListener('keydown', escape);
+    const onScroll = () => header.classList.toggle('is-scrolled',window.scrollY > 24);
+    onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+    return () => {window.removeEventListener('scroll',onScroll);header.removeEventListener('keydown',escape);};
+  }
+  function eventCard(event) {
+    const media = archive.mediaFor(event.id);
+    const label = event.past ? (media.length ? `${media.filter(m=>m.type==='photo').length} photos` : 'Event details') : 'Upcoming';
+    return `<a class="archive-card" href="${routeFor(event.id)}"><div class="archive-card-image">${imageTag(asset(event.cover),`${event.title} — ${event.posters.includes(event.cover) ? 'event poster' : 'event photograph'}`,{sizes:'(max-width: 720px) calc(100vw - 40px), (max-width: 1050px) 45vw, 390px'})}<span class="archive-badge">${esc(label)}</span></div><div class="archive-card-copy"><p>${eventDate(event)}</p><h3>${esc(event.title)}</h3><p>${esc(event.venue)}</p></div></a>`;
+  }
+  function renderArchive() {
+    const years = [...new Set(archive.pastEvents.map(event=>event.date.slice(0,4)))];
+    return `<article class="archive-shell">${pageHeading('The nights that brought us here','Past Events','Posters, lineups, photographs and memories. Every chapter stays here.')}${years.map(year=>`<section class="archive-section" aria-labelledby="year-${year}"><div class="archive-section-heading"><h2 id="year-${year}">${year}</h2><span>${archive.pastEvents.filter(event=>event.date.startsWith(year)).length} ${archive.pastEvents.filter(event=>event.date.startsWith(year)).length === 1 ? 'event' : 'events'}</span></div><div class="archive-card-grid">${archive.pastEvents.filter(event=>event.date.startsWith(year)).map(eventCard).join('')}</div></section>`).join('')||'<p>Our first event is still ahead. Watch this space.</p>'}</article>`;
+  }
+  function nextSpotlight() {
+    const next = archive.upcomingEvents[0];
+    return `<section class="archive-home-spotlight section-border"><div class="archive-shell"><p class="archive-kicker">Next Event</p>${next ? `<div class="archive-spotlight-grid"><div><h2>${esc(next.title)}</h2><p>${eventDate(next)} · ${esc(next.venue)}</p>${textLink(routeFor(next.id),'Explore the event')}${next.ticketUrl ? textLink(next.ticketUrl,'Tickets',true):''}</div><a class="archive-spotlight-poster" href="${routeFor(next.id)}">${imageTag(asset(next.posters[0]||next.cover),`${next.title} poster`,{sizes:'(max-width:720px) 100vw, 420px'})}</a></div>` : `<h2>See you at the next one.</h2><p>New event details will be announced here.</p><div class="archive-actions">${textLink(links.instagram,'Follow Instinct on Instagram',true)}${textLink(routes.events,'Explore past events')}</div>`}</div></section>`;
+  }
+  function homeArchive() {
+    return `<section class="archive-shell archive-section"><div class="archive-section-heading"><h2>Past Events</h2>${textLink(routes.events,'View all past events →')}</div><div class="archive-card-grid">${archive.pastEvents.slice(0,3).map(eventCard).join('')}</div></section>`;
+  }
+  function homeGallery() {
+    return `<section class="archive-shell archive-section archive-home-gallery"><p class="archive-kicker">Inside Instinct</p><h2>The room. The people. The groove.</h2><p>Explore photographs and film from the dance floor.</p>${textLink(routes.gallery,'Explore the Gallery →')}</section>`;
+  }
+  function renderNextEvent() {
+    const next = archive.upcomingEvents[0];
+    if(next) return renderEvent(next);
+    return `<article class="archive-shell">${pageHeading('Next Event','More nights ahead.','New event details will be announced here. Until then, revisit the nights that brought us together.')}<div class="archive-actions">${textLink(links.instagram,'Follow Instinct on Instagram',true)}${textLink(routes.events,'All past events')}</div><section class="archive-section"><h2>Most recent event</h2><div class="archive-card-grid">${archive.pastEvents.slice(0,1).map(eventCard).join('')}</div></section></article>`;
+  }
+  function lineupCards(lineup) {
+    return `<div class="archive-lineup-grid">${lineup.map(set=>{
+      const lead = content.artists[set.profileId||set.artistIds[0]];
+      return `<article class="archive-lineup-card"><span class="archive-lineup-image">${imageTag(asset(lead.portrait),lead.alt,{sizes:'(max-width:720px) 42vw, 260px'})}</span><div><h3>${esc(set.label)}</h3>${set.time?`<p>${esc(set.time)}</p>`:''}<div class="archive-actions">${set.profileId?textLink(routeFor(set.profileId),set.artistIds.length>1?'About this collaboration →':'Artist profile →'):''}${(!set.profileId||set.artistIds.length>1)?set.artistIds.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join(''):''}</div></div></article>`;
+    }).join('')}</div>`;
+  }
+  function renderEvent(event) {
+    const photos = archive.mediaFor(event.id);
+    const neighbors = event.past ? archive.pastEvents : archive.upcomingEvents;
+    const index = neighbors.findIndex(item=>item.id===event.id);
+    const older = event.past ? neighbors[index+1] : null;
+    const newer = event.past ? neighbors[index-1] : null;
+    const announcement = event.announcements;
+    const ticket = !event.past && event.ticketUrl;
+    return `<article class="archive-shell archive-event"><a class="archive-back" href="${routes.events}">← All past events</a>
+      ${pageHeading(event.past?'Event archive':'Upcoming event',event.title)}
+      <p class="archive-event-meta">${eventDate(event)} · ${esc(event.venue)}${event.hours?`<br>${esc(event.hours)}`:''}${event.address?`<br>${esc(event.address)}`:''}</p>
+      <div class="archive-actions">${photos.length?textLink(`./gallery.html?event=${event.id}`,'View event album →'):''}${ticket?textLink(ticket,'Get tickets',true):''}${event.sourceUrl?textLink(event.sourceUrl,'Original announcement',true):''}</div>
+      ${event.intro?`<p class="archive-event-intro">${esc(event.intro)}</p>`:''}
+      ${announcement.length?announcement.map(section=>`<section class="archive-section archive-event-chapter" id="${esc(section.id)}"><div class="archive-announcement-grid"><figure>${posterCard(section.poster,event,section.title)}</figure><div><p class="archive-kicker">${esc(section.id==='block-party'?'Outdoors':'After dark')}</p><h2>${esc(section.title)}</h2><p class="archive-event-meta">${esc(section.venue)}<br>${esc(section.hours)}</p>${!event.past&&section.ticketUrl?textLink(section.ticketUrl,'Get tickets',true):''}${section.copy.map(p=>`<p>${esc(p)}</p>`).join('')}${textLink(section.sourceUrl,'Original announcement',true)}</div></div><h3 class="archive-subheading">Lineup</h3>${lineupCards(section.lineup)}</section>`).join(''):`${event.posters.length?`<section class="archive-section archive-announcement-grid"><figure>${posterCard(event.posters[0],event)}</figure><div><p class="archive-kicker">The original flyer</p><h2>${event.past?'A night to remember.':'Join us on the dance floor.'}</h2><p>${eventDate(event)} · ${esc(event.venue)}</p>${event.age?`<p>${esc(event.age)}</p>`:''}${event.sourceUrl?textLink(event.sourceUrl,'Read the announcement',true):''}</div></section>`:''}<section class="archive-section"><h2>Lineup</h2>${lineupCards(event.lineup)}</section>`}
+      ${photos.length?`<section class="archive-section" id="photos"><div class="archive-section-heading"><h2>From the night</h2>${textLink(`./gallery.html?event=${event.id}`,'Open album →')}</div><div class="archive-media-grid">${photos.map(mediaCard).join('')}</div>${creditLine(event)}${event.albumUrl?textLink(event.albumUrl,'Full photographer album ↗',true):''}</section>`:`<section class="archive-section archive-empty"><h2>The night stays here.</h2><p>The original event details and lineup are preserved here. Photos and videos can join them when available.</p></section>`}
+      ${event.drinks?.length?`<details class="archive-details"><summary>From the original announcement: featured drinks</summary><div class="archive-lineup-grid">${event.drinks.map(drink=>`<article>${imageTag(asset(drink.image),drink.alt,{sizes:'(max-width:720px) 42vw, 280px'})}<h3>${esc(drink.name)}</h3>${drink.note?`<p>${esc(drink.note)}</p>`:''}</article>`).join('')}</div></details>`:''}
+      <nav class="archive-pager" aria-label="Event navigation">${older?textLink(routeFor(older.id),`← ${older.title}`):'<span></span>'}${textLink(routes.events,'All events')}${newer?textLink(routeFor(newer.id),`${newer.title} →`):'<span></span>'}</nav>
+    </article>`;
+  }
+  function posterCard(image,event,label=event.title) {
+    return `<button type="button" class="archive-poster" data-poster="${esc(image)}" data-event="${esc(event.id)}" aria-label="Open ${esc(label)} poster">${imageTag(asset(image),`${label} original event poster`,{sizes:'(max-width:720px) calc(100vw - 40px), 480px'})}</button>`;
+  }
+  function creditLine(item) {return item.credit?`<p class="archive-credit">Photography: ${item.creditUrl?textLink(item.creditUrl,item.credit,true):esc(item.credit)}</p>`:'';}
+  function renderDirectory() {
+    const all = Object.values(content.artists).filter(artist=>!artist.memberIds).sort((a,b)=>a.name.localeCompare(b.name));
+    return `<article class="archive-shell">${pageHeading('The people behind the sound','Artists','Every lineup is part of the story. Explore the artists and the nights they played.')}<label class="archive-search">Find an artist<input type="search" id="artist-search" placeholder="Search names" autocomplete="off"></label><p class="archive-result-count" id="artist-count" role="status">${all.length} artist profiles</p><section class="archive-section"><h2>All artists · A–Z</h2><div class="archive-artist-grid" id="artist-directory">${all.map(artistCard).join('')}</div><p id="artist-empty" hidden>No artists match that name. Try another spelling.</p></section></article>`;
+  }
+  function artistCard(artist) {
+    const appearances = archive.appearancesFor(artist.id);
+    const count = new Set(appearances.map(item=>item.event.id)).size;
+    const portrait = imageTag(asset(artist.portrait),artist.alt,{sizes:'(max-width:720px) 42vw, 280px'});
+    return `<a class="archive-artist-card" data-name="${esc(artist.name.toLowerCase())}" href="${routeFor(artist.id)}"><span class="archive-artist-image">${portrait}</span><div><h3>${esc(artist.name)}</h3><p>${artist.memberIds?'Collaboration · ':''}${count} ${count===1?'event':'events'}</p></div></a>`;
+  }
+  function renderArtist(artist) {
+    const appearances = archive.appearancesFor(artist.id);
+    const partners = [...new Set(appearances.filter(set=>set.b2b).flatMap(set=>set.artistIds).filter(id=>id!==artist.id))];
+    return `<article class="archive-shell archive-artist"><a class="archive-back" href="${routes.artists}">← All artists</a><section class="archive-artist-hero"><figure>${imageTag(asset(artist.portrait),artist.alt,{sizes:'(max-width:720px) calc(100vw - 40px), 500px',priority:true})}${artist.imageCaption?`<figcaption>${esc(artist.imageCaption)}</figcaption>`:''}</figure><div>${pageHeading(artist.memberIds?'Instinct collaboration':'Instinct artist',artist.name)}<div class="archive-actions">${artist.socials.map(link=>textLink(link.href,link.label,true)).join('')}</div>${artist.memberIds?`<div class="archive-actions">${artist.memberIds.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join('')}</div>`:''}</div></section>${partners.length?`<section class="archive-section"><h2>B2B’d with</h2><div class="archive-actions">${partners.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join('')}</div></section>`:''}${artist.bio.length?`<section class="archive-section archive-bio"><h2>Bio</h2>${artist.bio.map(p=>`<p>${esc(p)}</p>`).join('')}</section>`:''}<section class="archive-section"><h2>Played at Instinct</h2><div class="archive-appearances">${appearances.map(({event,time,section,venue,label})=>`<a class="archive-appearance" href="${routeFor(event.id)}"><div><p>${eventDate(event)}${!event.past?' · Upcoming':''}</p><h3>${esc(event.title)}</h3><p>${esc(section||venue||event.venue)}${section?` · ${esc(venue)}`:''}</p>${label!==artist.name?`<p>As ${esc(label)}</p>`:''}${time?`<p>Set: ${esc(time)}</p>`:''}</div><span aria-hidden="true">↗</span></a>`).join('')}</div></section>${artist.qas.length?`<section class="archive-section"><p class="archive-kicker">From the artist interview</p><h2>Quick questions</h2><div class="archive-qa-grid">${artist.qas.map(item=>`<article><h3>${esc(item.question)}</h3>${item.answer?`<p>${esc(item.answer)}</p>`:''}</article>`).join('')}</div></section>`:''}<div class="archive-actions">${textLink(routes.artists,'All artists')}${textLink(routes.events,'Explore past events')}</div></article>`;
+  }
+  function gallerySelection() {
+    const params = new URLSearchParams(location.search);
+    return {event:archive.byId[params.get('event')]?params.get('event'):'',type:['photo','video'].includes(params.get('type'))?params.get('type'):''};
+  }
+  function galleryItems(selection) {return archive.mediaFor(selection.event).filter(item=>!selection.type||item.type===selection.type);}
+  function renderGallery() {
+    const selection = gallerySelection();
+    const items = galleryItems(selection);
+    return `<article class="archive-shell">${pageHeading('Inside Instinct','Gallery','The room, the people and the moments in between. Photographs and film from Instinct.')}<section aria-label="Gallery filters" class="archive-filters"><div role="group" aria-label="Media type">${[['','All'],['photo','Photos'],['video','Videos']].map(([value,label])=>`<button type="button" data-type="${value}" aria-pressed="${selection.type===value}">${label}</button>`).join('')}</div><label>Event<select id="gallery-event"><option value="">All events</option>${archive.events.map(event=>`<option value="${esc(event.id)}"${selection.event===event.id?' selected':''}>${esc(event.title)} · ${esc(dateLabel(event))}</option>`).join('')}</select></label></section><p class="archive-result-count" id="gallery-count" role="status">${items.length} ${items.length===1?'item':'items'}</p><div id="gallery-results">${galleryResults(items,selection)}</div></article>`;
+  }
+  function galleryResults(items,selection,limits = {}) {
+    if (!items.length) return '<div class="archive-empty"><h2>No media in this selection yet.</h2><p>Choose another event or switch back to All.</p></div>';
+    const groups = new Map();
+    for (const item of items) {
+      const id = item.eventId || 'instinct-film';
+      if (!groups.has(id)) groups.set(id, []);
+      groups.get(id).push(item);
+    }
+    return [...groups].map(([id,media]) => {
+      const event = archive.byId[id];
+      const limit = limits[id] || 6;
+      return `<section class="archive-section archive-gallery-group" data-gallery-group="${esc(id)}" aria-labelledby="album-${esc(id)}"><header class="archive-gallery-context"><h2 id="album-${esc(id)}">${esc(event?.title || 'Instinct film')}</h2>${event?`<p>${eventDate(event)} · ${esc(event.venue)}</p>${textLink(routeFor(event.id),'Explore this event →')}${creditLine(event)}`:''}</header><div class="archive-media-grid">${media.slice(0,limit).map(mediaCard).join('')}</div>${media.length>limit?`<button class="archive-more" type="button" data-gallery-more="${esc(id)}">Show more · ${media.length-limit} remaining<span class="visually-hidden"> in ${esc(event?.title || 'Instinct film')}</span></button>`:''}</section>`;
+    }).join('');
+  }
+  function mediaCard(item) {
+    return `<button type="button" class="archive-media-card ${item.type==='video'?'is-video':''}" data-media="${esc(item.id)}" aria-label="${esc(item.type==='video'?'Play '+item.title:'Open '+item.alt)}"><span class="archive-media-image">${imageTag(asset(item.image),item.alt,{sizes:'(max-width:720px) 42vw, (max-width:1050px) 45vw, 390px'})}${item.type==='video'?`<span class="archive-play">▶ Play · ${esc(item.duration)}</span>`:''}</span></button>`;
+  }
+  function setupFilters(route) {
+    if(route==='artists') {
+      const search = document.getElementById('artist-search');
+      search.addEventListener('input',()=>{
+        let count=0;
+        document.querySelectorAll('#artist-directory .archive-artist-card').forEach(card=>{card.hidden=!card.dataset.name.includes(search.value.trim().toLowerCase());if(!card.hidden)count++;});
+        document.getElementById('artist-count').textContent=`${count} artist ${count===1?'profile':'profiles'}`;
+        document.getElementById('artist-empty').hidden=count>0;
       });
     }
-    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    if(route==='gallery') {
+      let selection=gallerySelection();
+      let limits={};
+      const update=(reset = true)=>{
+        if(reset)limits={};
+        const items=galleryItems(selection);
+        document.querySelectorAll('[data-type]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.type===selection.type)));
+        document.getElementById('gallery-results').innerHTML=galleryResults(items,selection,limits);
+        document.getElementById('gallery-count').textContent=`${items.length} ${items.length===1?'item':'items'}`;
+        const params=new URLSearchParams();if(selection.event)params.set('event',selection.event);if(selection.type)params.set('type',selection.type);
+        history.replaceState(null,'',`./gallery.html${params.size?'?'+params:''}`);
+      };
+      document.getElementById('gallery-results').addEventListener('click',e=>{
+        const button=e.target.closest('[data-gallery-more]');
+        if(!button)return;
+        const id=button.dataset.galleryMore;
+        const previousLimit=limits[id]||6;
+        limits[id]=previousLimit+12;
+        update(false);
+        document.querySelector(`[data-gallery-group="${id}"]`).querySelectorAll('[data-media]')[previousLimit]?.focus();
+      });
+      document.querySelectorAll('[data-type]').forEach(button=>button.addEventListener('click',()=>{selection.type=button.dataset.type;update();}));
+      document.getElementById('gallery-event').addEventListener('change',e=>{selection.event=e.target.value;update();});
+    }
+    return ()=>{};
   }
-
+  function setupViewer() {
+    const dialog = document.getElementById('media-viewer');
+    const stage = dialog.querySelector('.viewer-stage');
+    const caption = dialog.querySelector('.viewer-caption');
+    const previous = dialog.querySelector('[data-previous]');
+    const next = dialog.querySelector('[data-next]');
+    const close = dialog.querySelector('[data-close]');
+    let items=[],index=0,trigger;
+    const show=()=>{
+      const item=items[index];const event=archive.byId[item.eventId];
+      stage.innerHTML=item.type==='video'?`<video controls playsinline preload="metadata" poster="${url(asset(item.image))}" aria-label="${esc(item.title)}"><source src="${url(item.src)}" type="video/mp4">Your browser cannot play this video. ${textLink(item.src,'Open video',true)}</video>`:imageTag(asset(item.image),item.alt,{sizes:'90vw',priority:true});
+      caption.innerHTML=`<p><span class="viewer-counter">${index+1} / ${items.length}</span></p>${item.credit?`<p>Photography: ${item.creditUrl?textLink(item.creditUrl,item.credit,true):esc(item.credit)}</p>`:''}${event?textLink(routeFor(event.id),'View event →'):''}`;
+      previous.disabled=index===0;next.disabled=index===items.length-1;
+      if(document.activeElement===previous&&previous.disabled)close.focus();if(document.activeElement===next&&next.disabled)close.focus();
+    };
+    const open=e=>{
+      const button=e.target.closest('[data-media], [data-poster]');if(!button)return;
+      trigger=button;
+      if(button.dataset.poster){items=[{type:'photo',image:button.dataset.poster,eventId:button.dataset.event,caption:'Original event poster',alt:`${archive.byId[button.dataset.event].title} original event poster`}];index=0;}
+      else {items=getRoute()==='gallery'?galleryItems(gallerySelection()):[...document.querySelectorAll('[data-media]')].map(el=>content.media[el.dataset.media]).filter(Boolean);index=items.findIndex(item=>item.id===button.dataset.media);}
+      if(index<0)return;
+      show();dialog.showModal();document.body.classList.add('no-scroll');close.focus();
+    };
+    const step=delta=>{const target=index+delta;if(target<0||target>=items.length)return;index=target;show();};
+    const onClose=()=>{stage.innerHTML='';caption.innerHTML='';document.body.classList.remove('no-scroll');trigger?.focus();};
+    const onKey=e=>{if(e.target.tagName==='VIDEO')return;if(e.key==='ArrowRight'){e.preventDefault();step(1);}if(e.key==='ArrowLeft'){e.preventDefault();step(-1);}};
+    const onBackdrop=e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}};
+    const prevClick=()=>step(-1),nextClick=()=>step(1),closeClick=()=>dialog.close();
+    document.getElementById('app').addEventListener('click',open);
+    previous.addEventListener('click',prevClick);next.addEventListener('click',nextClick);close.addEventListener('click',closeClick);
+    dialog.addEventListener('close',onClose);dialog.addEventListener('keydown',onKey);dialog.addEventListener('click',onBackdrop);
+    return()=>{if(dialog.open)dialog.close();onClose();document.getElementById('app').removeEventListener('click',open);previous.removeEventListener('click',prevClick);next.removeEventListener('click',nextClick);close.removeEventListener('click',closeClick);dialog.removeEventListener('close',onClose);dialog.removeEventListener('keydown',onKey);dialog.removeEventListener('click',onBackdrop);};
+  }
+  function homePreviewMedia(posterName,alt) {
+    return `<video autoplay muted loop playsinline preload="metadata" poster="${url(asset(posterName))}" aria-label="${esc(alt)}"><source src="./assets/home-preview.mp4" type="video/mp4">${imageTag(asset(posterName),alt,{sizes:'(max-width:720px) 342px, 420px'})}</video>`;
+  }
+  function siteFooter() {
+    return `<footer class="site-footer"><div class="site-footer__inner"><a class="site-footer__brand" href="${routes.home}">Instinct Groove</a><nav class="archive-footer-links" aria-label="Footer navigation">${textLink(routes.events,'Past Events')}${textLink(routes.artists,'Artists')}${textLink(routes.gallery,'Gallery')}</nav><div class="site-footer__contacts"><a href="${url(links.instagram)}" target="_blank" rel="noreferrer">@Instinct.groove</a><a href="${url(links.email)}">Info@instinctgroove.net</a></div><p>Ottawa's Minimal Tech &amp; House Experience</p></div></footer>`;
+  }
+  function homeDefinition() {
+    return `<section class="home-definition section-border" aria-label="The meaning of Instinct"><div class="home-definition__inner"><p class="home-definition__label">Instinct <span>/ noun</span></p><p class="home-definition__text">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p></div></section>`;
+  }
   function renderHome() {
     if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileHome()}</div>`;
     return `
       <div class="with-mobile">
         <div class="desktop-view">
-          <section class="home-hero section-border">
+          <h1 class="visually-hidden">Instinct Groove</h1>
+          <section class="home-hero">
             ${imageTag(asset('home-hero'), 'Instinct Groove artwork', { className: 'home-hero__image', sizes: '100vw', priority: true })}
-            <p class="home-hero__tagline">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p>
           </section>
+
+          ${homeDefinition()}
 
           <section class="preview-panel section-border">
             <div class="preview-panel__inner">
-              <h2><span>Event</span> Preview</h2>
+              <h2><span>Inside</span> Instinct</h2>
               <div class="preview-panel__media">
-                ${homePreviewMedia('home-preview', 'Event preview atmosphere', homePreviewVideo)}
+                ${homePreviewMedia('home-preview', 'Event preview atmosphere')}
               </div>
             </div>
           </section>
 
-          <section class="next-card next-card--poster section-border">
-            <p class="next-card__eyebrow">Next Event</p>
-            <div class="next-card__events">
-              <article class="next-card__event">
-                <a class="next-card__poster" href="${routes.next}" aria-label="View ${upcomingEvent.title} details">
-                  ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster`, { sizes: 'min(544px, 70vw)' })}
-                </a>
-                <h2>${upcomingEvent.title}</h2>
-                <p>${upcomingEvent.date} · ${upcomingEvent.age}</p>
-              </article>
-            </div>
-          </section>
+          ${nextSpotlight()}
 
           <section class="about-section section-border">
             <div class="section-kicker"><span></span>About the Event</div>
@@ -777,21 +372,8 @@
             </div>
           </section>
 
-          <section class="previous-events section-border">
-            <h2>Past Events</h2>
-            <div class="event-tiles">
-              ${pastEvents.map((event) => eventTile(event)).join('')}
-            </div>
-          </section>
-
-          <section class="tickets-strip tickets-strip--soon">
-            ${imageTag(asset('home-tickets'), '', { sizes: '100vw' })}
-            <div>
-              <h2><span>September 11</span> Afterparty</h2>
-              <p>${upcomingEvent.address} · ${upcomingEvent.age}</p>
-              <a class="details-status" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
-            </div>
-          </section>
+          ${homeArchive()}
+          ${homeGallery()}
         </div>
       </div>
     `;
@@ -800,28 +382,19 @@
   function renderMobileHome() {
     return `
       <div class="mobile-view mobile-home">
+        <h1 class="visually-hidden">Instinct Groove</h1>
         <section class="mobile-home-hero">
           ${imageTag(asset('mobile-mcp-home-hero'), 'Instinct Groove artwork', { sizes: '390px', priority: true })}
           <p class="mobile-home-welcome">Welcome to.....</p>
-          <p class="mobile-home-tagline">Instinct is a natural unlearned and innate drive to act in a certain way in response to specific stimuli, often without conscious thought.</p>
         </section>
+        ${homeDefinition()}
         <section class="mobile-home-section mobile-home-preview">
-          <div class="mobile-section-label"><span></span>Event Preview</div>
+          <div class="mobile-section-label"><span></span>Inside Instinct</div>
           <div class="mobile-home-video">
-            ${homePreviewMedia('mobile-home-preview', 'Event preview', homePreviewVideo)}
+            ${homePreviewMedia('mobile-home-preview', 'Event preview')}
           </div>
         </section>
-        <section class="mobile-home-section mobile-home-next-card">
-          <h2><span>Next</span> Event</h2>
-          <div class="mobile-home-next-events">
-            <article class="mobile-home-next-event">
-              <a href="${routes.next}" class="mobile-home-poster" aria-label="View ${upcomingEvent.title} details">
-                ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster`, { sizes: '342px' })}
-              </a>
-              <p>${upcomingEvent.date} · ${upcomingEvent.age}</p>
-            </article>
-          </div>
-        </section>
+        ${nextSpotlight()}
         <section class="mobile-home-section mobile-home-about">
           <div class="mobile-section-label"><span></span>About the Event</div>
           <h2>Behind the Sound</h2>
@@ -838,496 +411,17 @@
             ${imageTag(asset('mobile-mcp-home-crew'), 'The Instinct Groove crew', { sizes: '342px' })}
           </div>
         </section>
-        <section class="mobile-home-section mobile-home-events">
-          <h2>Past Events</h2>
-          ${pastEvents.map((event) => mobileHomeEvent(event)).join('')}
-        </section>
-        <section class="mobile-home-section mobile-home-tickets">
-          <h2><span>September 11</span> Afterparty</h2>
-          <p>${upcomingEvent.address} · ${upcomingEvent.age}</p>
-          <a class="mobile-home-ticket-status" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
-        </section>
+        ${homeArchive()}
+        ${homeGallery()}
       </div>
     `;
   }
 
-  function mobileHomeEvent(event) {
-    return `
-      <a class="mobile-home-event" href="${event.href}">
-        ${imageTag(event.image, `${event.title} event recap`, { sizes: '342px' })}
-        <span class="mobile-home-event__meta">
-          <strong>${event.title}</strong>
-          <small>${event.date} · ${event.venue}</small>
-        </span>
-      </a>
-    `;
-  }
 
-  function eventTile(event) {
-    return `
-      <a class="event-tile" href="${event.href}">
-        ${imageTag(event.image, `${event.title} event recap`, { sizes: '(max-width: 1050px) 45vw, 230px' })}
-        <span class="event-tile__meta">
-          <strong>${event.title}</strong>
-          <small>${event.date}</small>
-          <small>${event.venue}</small>
-        </span>
-      </a>
-    `;
-  }
-
-  function renderNextEvent() {
-    if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileNextEvent()}</div>`;
-    return `
-      <div class="with-mobile">
-        <div class="desktop-view">
-          <section class="next-event-page section-border">
-            <figure class="next-event-page__poster">
-              ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster featuring Stinc the octopus and the September 11 lineup`, { sizes: '(max-width: 1050px) 46vw, 560px', priority: true })}
-            </figure>
-            <div class="next-event-page__content">
-              <p class="event-teaser__eyebrow">Next Event</p>
-              <h1>${upcomingEvent.title}</h1>
-              <span class="green-rule"></span>
-              <p class="next-event-page__meta">${upcomingEvent.date}<br>${upcomingEvent.address}<br>${upcomingEvent.age}</p>
-              <div class="next-event-page__lineup">
-                <h2>Lineup</h2>
-                <nav aria-label="September 11 DJ lineup">
-                  ${upcomingEvent.lineup.map((artist) => `<a href="${artist.href}">${artist.label}</a>`).join('')}
-                </nav>
-              </div>
-              <a class="next-event-page__tickets" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
-            </div>
-          </section>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderMobileNextEvent() {
-    return `
-      <article class="mobile-view mobile-next-page">
-        <section class="mobile-next-event">
-          <p class="mobile-next-event__eyebrow">Next Event</p>
-          <figure>
-            ${imageTag(upcomingEvent.poster, `${upcomingEvent.title} poster featuring Stinc the octopus and the September 11 lineup`, { sizes: '342px', priority: true })}
-          </figure>
-          <div class="mobile-next-event__content">
-            <h1>${upcomingEvent.title}</h1>
-            <span></span>
-            <p class="mobile-next-event__meta">${upcomingEvent.date}<br>${upcomingEvent.address}<br>${upcomingEvent.age}</p>
-            <div class="mobile-next-event__lineup">
-              <h2>Lineup</h2>
-              <nav aria-label="September 11 DJ lineup">
-                ${upcomingEvent.lineup.map((artist) => `<a href="${artist.href}">${artist.label}</a>`).join('')}
-              </nav>
-            </div>
-            <a class="mobile-next-event__tickets" href="${links.sept11Tickets}" target="_blank" rel="noreferrer">Get Tickets</a>
-          </div>
-        </section>
-      </article>
-    `;
-  }
-
-  function renderRecap(recap) {
-    const currentSlug = Object.keys(recaps).find((slug) => recaps[slug] === recap);
-    if (mobileMedia.matches) return `<div class="with-mobile">${renderMobileRecap(recap, currentSlug)}</div>`;
-    const photos = recap.photos.map((src, index) => `
-      <button class="photo-card photo-card--${index + 1}" type="button" data-lightbox="${src}" aria-label="Open ${recap.title} photo ${index + 1}">
-        ${imageTag(src, `${recap.title} photo ${index + 1}`, { sizes: recapPhotoSizes(recap.layout, index) })}
-      </button>
-    `).join('');
-
-    return `
-      <div class="with-mobile">
-        <article class="desktop-view recap-page recap-page--${recap.layout}">
-          <section class="recap-intro">
-            <div class="section-kicker ${recap.layout === 'centered' ? 'section-kicker--center' : ''}"><span></span>${recap.eyebrow}<span></span></div>
-            <h1>${recap.title}</h1>
-            <p class="recap-date">${recap.date}</p>
-            <p class="recap-copy">${recap.intro}</p>
-          </section>
-          <section class="recap-gallery recap-gallery--${recap.layout}">
-            ${photos}
-          </section>
-          ${recap.photoUrl ? `<div class="recap-photo-link"><a class="button" href="${recap.photoUrl}" target="_blank" rel="noreferrer">View All Photos</a></div>` : ''}
-          <section class="recap-lineup section-border">
-            <h2>Lineup</h2>
-            <div class="lineup-grid">
-              ${recap.lineup.map((artist) => lineupCard(artist)).join('')}
-            </div>
-          </section>
-          ${recapPager(currentSlug)}
-        </article>
-      </div>
-    `;
-  }
-
-  function recapPhotoSizes(layout, index) {
-    if (layout === 'centered' && index === 0) return '(max-width: 1050px) calc(100vw - 48px), 1152px';
-    if (layout === 'split') return '(max-width: 1050px) calc(100vw - 48px), 610px';
-    return '(max-width: 1050px) calc(100vw - 48px), 384px';
-  }
-
-  function renderMobileRecap(recap, currentSlug) {
-    const mobile = recap.mobile;
-    const { older, newer } = recapNeighbors(currentSlug);
-    return `
-      <article class="mobile-view mobile-recap">
-        <section class="mobile-recap-poster">
-          ${imageTag(mobile.poster, `${mobile.title} poster`, { sizes: '390px', priority: true })}
-        </section>
-        <section class="mobile-recap-info">
-          <h1>${mobile.title}</h1>
-          <p>${mobile.date}</p>
-          <div>
-            ${mobile.tags.map((tag) => `<span>${tag}</span>`).join('')}
-          </div>
-          ${mobile.showIntro ? `<p class="mobile-recap-copy">${recap.intro}</p>` : ''}
-        </section>
-        <section class="mobile-recap-photos">
-          <div class="mobile-recap-label"><span></span>Photos</div>
-          <div class="mobile-recap-grid">
-            ${mobile.photos.map((src, index) => `
-              <button type="button" data-lightbox="${src}" aria-label="Open ${mobile.title} photo ${index + 1}">
-                ${imageTag(src, `${mobile.title} photo ${index + 1}`, { sizes: '342px' })}
-              </button>
-            `).join('')}
-          </div>
-        </section>
-        <section class="mobile-recap-actions">
-          ${mobile.credit ? (mobile.creditUrl ? `<a class="mobile-recap-credit" href="${mobile.creditUrl}" target="_blank" rel="noreferrer">${mobile.credit}</a>` : `<p class="mobile-recap-credit">${mobile.credit}</p>`) : ''}
-          <nav aria-label="Recap navigation">
-            ${older ? `<a class="mobile-recap-previous" href="${older.href}">← ${older.title}</a>` : '<span class="mobile-recap-nav-spacer" aria-hidden="true"></span>'}
-            ${newer ? `<a class="mobile-recap-next" href="${newer.href}">${newer.title} →</a>` : '<span class="mobile-recap-nav-spacer" aria-hidden="true"></span>'}
-          </nav>
-        </section>
-      </article>
-    `;
-  }
-
-  function recapNeighbors(currentSlug) {
-    const index = pastEvents.findIndex((event) => event.slug === currentSlug);
-    return {
-      older: pastEvents[index + 1] || null,
-      newer: pastEvents[index - 1] || null
-    };
-  }
-
-  function recapPager(currentSlug) {
-    const { older, newer } = recapNeighbors(currentSlug);
-
-    return `
-      <nav class="recap-pager" aria-label="Previous and next event recaps">
-        ${older ? `
-          <a href="${older.href}">
-            <span>Older</span>
-            ${older.title}
-          </a>
-        ` : '<span class="recap-pager__spacer" aria-hidden="true"></span>'}
-        <a href="${routes.home}">
-          <span>All Events</span>
-          Home
-        </a>
-        ${newer ? `
-          <a href="${newer.href}">
-            <span>Newer</span>
-            ${newer.title}
-          </a>
-        ` : '<span class="recap-pager__spacer" aria-hidden="true"></span>'}
-      </nav>
-    `;
-  }
-
-  function renderArtist(artist) {
-    if (artist.currentEvent) return renderCurrentArtist(artist);
-    if (mobileMedia.matches && artist.mobile) {
-      return `<div class="with-mobile">${renderMobileArtist(artist)}</div>`;
-    }
-    const desktop = `
-      <article class="desktop-view artist-page">
-        <section class="artist-hero">
-          <div class="artist-hero__glow"></div>
-          <h1>${artist.name}</h1>
-          <div class="artist-socials">
-            ${artist.socials.map((link) => `<a href="${link.href}" target="_blank" rel="noreferrer">${link.label}</a>`).join('')}
-          </div>
-        </section>
-
-        <section class="artist-info">
-          <div class="artist-bio">
-            <div class="section-kicker"><span></span>Bio</div>
-            <p>${artist.bio}</p>
-          </div>
-          <div class="set-card">
-            <span>Set Time</span>
-            <strong>${artist.setTime}</strong>
-          </div>
-        </section>
-
-        <figure class="artist-band artist-band--top">
-          ${imageTag(artist.band, `${artist.name} event atmosphere`, { sizes: '100vw' })}
-        </figure>
-
-        <section class="qa-block qa-block--left">
-          ${qa(artist.qas[0])}
-        </section>
-
-        <section class="artist-feature">
-          <button type="button" data-lightbox="${artist.portrait}">
-            ${imageTag(artist.portrait, artist.name, { sizes: '1024px' })}
-          </button>
-        </section>
-
-        <section class="qa-block qa-block--right">
-          ${qa(artist.qas[1])}
-        </section>
-
-        <figure class="artist-band artist-band--lower">
-          ${imageTag(artist.lower, `${artist.name} event crowd`, { sizes: '100vw' })}
-        </figure>
-
-        <section class="qa-block qa-block--left">
-          ${qa(artist.qas[2])}
-        </section>
-      </article>
-    `;
-
-    if (!artist.mobile) {
-      return desktop.replace(' class="desktop-view artist-page"', ' class="artist-page"');
-    }
-
-    return `
-      <div class="with-mobile">
-        ${desktop}
-      </div>
-    `;
-  }
-
-  function renderCurrentArtist(artist) {
-    const members = artist.members || [artist];
-    const hasSetDetails = Boolean(artist.setTime || artist.location || artist.performanceNote);
-    const socials = artist.socials || members.flatMap((member) => [
-      {
-        label: members.length > 1 ? `${member.name} Instagram` : 'Instagram',
-        href: member.instagram
-      },
-      ...(member.site ? [{ label: 'Site', href: member.site }] : [])
-    ]);
-    return `
-      <article class="current-artist-page" style="--current-artist-accent: ${artist.accent}">
-        <section class="current-artist-hero">
-          <div class="current-artist-portraits ${members.length > 1 ? 'is-pair' : ''}">
-            ${members.map((member) => `
-              <figure class="current-artist-portrait">
-                ${imageTag(member.portrait, member.alt, { sizes: members.length > 1 ? '(max-width: 720px) 158px, 300px' : '(max-width: 720px) 390px, 620px', priority: true })}
-              </figure>
-            `).join('')}
-          </div>
-          <div class="current-artist-intro">
-            <p class="current-artist-eyebrow">Featured Artist</p>
-            <h1>${artist.name}</h1>
-            <div class="current-artist-socials">
-              ${socials.map((social) => `<a class="current-artist-instagram" href="${social.href}" target="_blank" rel="noreferrer">${social.label}</a>`).join('')}
-            </div>
-          </div>
-        </section>
-
-        <section class="current-artist-details ${hasSetDetails ? '' : 'current-artist-details--bio-only'}">
-          <div class="current-artist-bio">
-            <div class="section-kicker"><span></span>Bio</div>
-            ${members.map((member) => `
-              <section class="current-artist-member">
-                ${members.length > 1 ? `<h2>${member.name}</h2>` : ''}
-                ${member.bio.map((paragraph) => `<p>${paragraph}</p>`).join('')}
-              </section>
-            `).join('')}
-          </div>
-          ${hasSetDetails ? `
-            <aside class="current-artist-set">
-              <span>Set</span>
-              ${artist.setTime ? `<strong>${artist.setTime}</strong>` : ''}
-              ${artist.location ? `<p>${artist.location}</p>` : ''}
-              ${artist.performanceNote ? `<small>${artist.performanceNote}</small>` : ''}
-            </aside>
-          ` : ''}
-        </section>
-
-        ${artist.qas ? `
-          <section class="current-artist-qa" aria-labelledby="current-artist-qa-title">
-            <div class="section-kicker section-kicker--center"><span></span>Quick Questions<span></span></div>
-            <h2 id="current-artist-qa-title">Q+A</h2>
-            <div class="current-artist-qa__grid">
-              ${artist.qas.map((item, index) => `
-                <article class="current-artist-qa__card">
-                  <span>0${index + 1}</span>
-                  <h3>${item.question}</h3>
-                  <p>${item.answer}</p>
-                </article>
-              `).join('')}
-            </div>
-          </section>
-        ` : ''}
-
-        <nav class="current-artist-tabs" aria-label="Artist navigation">
-          ${currentArtistNav.map((item) => {
-            const classes = [item.slug === artist.slug ? 'is-active' : '', item.wide ? 'is-wide' : ''].filter(Boolean).join(' ');
-            return `<a${classes ? ` class="${classes}"` : ''}${item.slug === artist.slug ? ' aria-current="page"' : ''} href="${item.href}">${item.label}</a>`;
-          }).join('')}
-        </nav>
-      </article>
-    `;
-  }
-
-  function renderMobileArtist(artist) {
-    const mobile = artist.mobile;
-    return `
-      <article class="mobile-view mobile-artist" style="--artist-accent: ${mobile.accent}">
-        <section class="mobile-artist-hero">
-          ${imageTag(mobile.hero, artist.name, { sizes: '390px', priority: true })}
-          <div class="mobile-artist-gradient"></div>
-          <div class="mobile-artist-glow mobile-artist-glow--one"></div>
-          <div class="mobile-artist-glow mobile-artist-glow--two"></div>
-          <div class="mobile-artist-title">
-            <h1>${artist.name}</h1>
-            <div>
-              ${artist.socials.map((link) => `<a href="${link.href}" target="_blank" rel="noreferrer">${link.label}</a>`).join('')}
-            </div>
-          </div>
-        </section>
-        <section class="mobile-artist-bio">
-          <div class="mobile-artist-label"><span></span>Bio</div>
-          <div>
-            ${mobile.bio.map((paragraph) => `<p>${paragraph}</p>`).join('')}
-          </div>
-          <aside>
-            <span>Set Time</span>
-            <strong>${artist.setTime}</strong>
-          </aside>
-        </section>
-        <section class="mobile-artist-qa">
-          ${mobileArtistQa(artist.qas[0], 'left')}
-          <button type="button" class="mobile-artist-photo" data-lightbox="${mobile.feature}" aria-label="Open ${artist.name} photo">
-            ${imageTag(mobile.feature, artist.name, { sizes: '342px' })}
-          </button>
-          ${mobileArtistQa(artist.qas[1], 'right')}
-          ${mobileArtistQa(artist.qas[2], 'left')}
-        </section>
-        <nav class="mobile-artist-nav" aria-label="Artist navigation">
-          ${mobile.nav.map((item) => `<a href="${item.href}">${item.label}</a>`).join('')}
-        </nav>
-      </article>
-    `;
-  }
-
-  function mobileArtistQa(item, side) {
-    return `
-      <div class="mobile-artist-question mobile-artist-question--${side}">
-        <h2>${item.question}</h2>
-        ${item.answer ? `<p>${item.answer}</p>` : ''}
-      </div>
-    `;
-  }
-
-  function qa(item) {
-    return `
-      <div>
-        <h2>${item.question}</h2>
-        <p>${item.answer}</p>
-      </div>
-    `;
-  }
-
-  function lineupCard(artist) {
-    const tag = artist.href ? 'a' : 'div';
-    const href = artist.href ? ` href="${artist.href}"` : '';
-    return `
-      <${tag} class="lineup-card"${href}>
-        ${imageTag(artist.image, artist.name, { sizes: '(max-width: 720px) 342px, 400px' })}
-        <span>${artist.name}</span>
-      </${tag}>
-    `;
-  }
-
-  function homePreviewMedia(posterName, alt, video = '') {
-    const poster = asset(posterName);
-
-    if (!video) {
-      return imageTag(poster, alt, { sizes: '342px' });
-    }
-
-    const type = video.endsWith('.webm') ? 'video/webm' : 'video/mp4';
-    return `
-      <video autoplay muted loop playsinline preload="metadata" poster="${poster}" aria-label="${alt}">
-        <source src="${video}" type="${type}">
-        ${imageTag(poster, alt, { sizes: '342px' })}
-      </video>
-    `;
-  }
-
-  function siteFooter() {
-    return `
-      <footer class="site-footer">
-        <a class="site-footer__brand" href="${routes.home}">Instinct Groove</a>
-        <div>
-          <a href="${links.instagram}" target="_blank" rel="noreferrer">@Instinct.groove</a>
-          <a href="${links.email}">Info@instinctgroove.net</a>
-        </div>
-        <p>Ottawa's Minimal Tech & House Experience</p>
-      </footer>
-    `;
-  }
-
-  function renderMissing() {
-    return `
-      <section class="missing-page">
-        <h1>Page not found</h1>
-        <a class="button" href="${routes.home}">Return home</a>
-      </section>
-    `;
-  }
-
-  function setupLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    const image = lightbox.querySelector('.lightbox__image');
-    const close = lightbox.querySelector('.lightbox__close');
-    let trigger = null;
-
-    document.querySelectorAll('[data-lightbox]').forEach((button) => {
-      button.addEventListener('click', () => {
-        trigger = button;
-        image.src = button.dataset.lightbox;
-        image.alt = button.querySelector('img')?.alt || 'Expanded event image';
-        lightbox.classList.add('is-open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('no-scroll');
-        close.focus();
-      });
-    });
-
-    const hide = () => {
-      lightbox.classList.remove('is-open');
-      lightbox.setAttribute('aria-hidden', 'true');
-      image.removeAttribute('src');
-      document.body.classList.remove('no-scroll');
-      trigger?.focus();
-      trigger = null;
-    };
-
-    close.addEventListener('click', hide);
-    lightbox.addEventListener('click', (event) => {
-      if (event.target === lightbox) hide();
-    });
-    const onKeydown = (event) => {
-      if (event.key === 'Escape' && lightbox.classList.contains('is-open')) hide();
-    };
-    window.addEventListener('keydown', onKeydown);
-    return () => {
-      hide();
-      window.removeEventListener('keydown', onKeydown);
-    };
-  }
-
-  mobileMedia.addEventListener('change', render);
+  mobileMedia.addEventListener('change',render);
+  window.addEventListener('popstate',render);
+  function refreshStatus(){const fresh=window.INSTINCT_ARCHIVE.create(content);if(fresh.pastEvents.map(event=>event.id).join('|')!==statusKey)render();}
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshStatus();});
+  window.setInterval(refreshStatus,60000);
   render();
 }());

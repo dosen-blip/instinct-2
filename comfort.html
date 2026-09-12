@@ -6,15 +6,19 @@
     <meta name="theme-color" content="#000000">
     <link rel="icon" href="./assets/instinct-mark.svg" type="image/svg+xml">
     <title>COMFORT | Instinct Groove</title>
-    <link rel="stylesheet" href="./styles.css?v=artists-20260831b">
-    <script src="./image-manifest.js?v=artists-20260831" defer></script>
-    <script src="./app.js?v=sept11-tickets" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=20260912-archive">
+    <link rel="stylesheet" href="./archive.css?v=20260912-archive">
+    <script src="./image-manifest.js?v=20260912-archive" defer></script>
+    <script src="./content.js?v=20260912-archive" defer></script>
+    <script src="./catalog.js?v=20260912-archive" defer></script>
+    <script src="./app.js?v=20260912-archive" defer></script>
   </head>
   <body>
     <main id="app"></main>
-    <div class="lightbox" id="lightbox" aria-hidden="true">
-      <button class="lightbox__close" type="button" aria-label="Close image">Close</button>
-      <img class="lightbox__image" alt="">
-    </div>
+    <dialog class="media-viewer" id="media-viewer" aria-label="Media viewer" aria-describedby="viewer-caption">
+      <div class="viewer-toolbar"><div><button type="button" data-previous aria-label="Previous image or video">← Previous</button><button type="button" data-next aria-label="Next image or video">Next →</button></div><button type="button" data-close aria-label="Close media viewer">Close</button></div>
+      <div class="viewer-stage"></div>
+      <div class="viewer-caption" id="viewer-caption" aria-live="polite"></div>
+    </dialog>
   </body>
 </html>
