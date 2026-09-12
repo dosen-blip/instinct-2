@@ -311,6 +311,6 @@
 @media (max-width: 720px) {
   .home-opening .mobile-home-hero > img {
     position: absolute; z-index: -2; top: -120px; left: 0;
-    width: 100%; height: calc(100% + 240px); object-fit: cover;
+    width: 100%; height: calc(100% + 240px); object-fit: contain;
   }
 }
