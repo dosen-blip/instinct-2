@@ -338,11 +338,13 @@
       <div class="with-mobile">
         <div class="desktop-view">
           <h1 class="visually-hidden">Instinct Groove</h1>
+          <div class="home-opening">
           <section class="home-hero">
             ${imageTag(asset('home-hero'), 'Instinct Groove artwork', { className: 'home-hero__image', sizes: '100vw', priority: true })}
           </section>
 
           ${homeDefinition()}
+          </div>
 
           <section class="preview-panel section-border">
             <div class="preview-panel__inner">
@@ -383,11 +385,13 @@
     return `
       <div class="mobile-view mobile-home">
         <h1 class="visually-hidden">Instinct Groove</h1>
+        <div class="home-opening">
         <section class="mobile-home-hero">
           ${imageTag(asset('mobile-mcp-home-hero'), 'Instinct Groove artwork', { sizes: '390px', priority: true })}
           <p class="mobile-home-welcome">Welcome to.....</p>
         </section>
         ${homeDefinition()}
+        </div>
         <section class="mobile-home-section mobile-home-preview">
           <div class="mobile-section-label"><span></span>Inside Instinct</div>
           <div class="mobile-home-video">

@@ -296,3 +296,21 @@
   }
 
 }
+
+/* One continuous backdrop, clipped only after the definition. */
+.home-opening { position: relative; isolation: isolate; overflow: hidden; background: #000; }
+.home-opening .home-hero, .home-opening .mobile-home-hero {
+  overflow: visible; isolation: auto; background: transparent;
+}
+.home-opening .home-definition { position: relative; z-index: 1; background: transparent; }
+.home-opening .home-hero::after { display: none; }
+.home-opening::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,.45) 100%);
+}
+@media (max-width: 720px) {
+  .home-opening .mobile-home-hero > img {
+    position: absolute; z-index: -2; top: -120px; left: 0;
+    width: 100%; height: calc(100% + 240px); object-fit: cover;
+  }
+}
