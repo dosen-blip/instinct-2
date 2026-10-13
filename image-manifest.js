@@ -2606,5 +2606,27 @@ window.INSTINCT_IMAGES = {
         "height": 2048
       }
     ]
+  },
+  "snooko-portrait": {
+    "src": "./assets/snooko-portrait.webp",
+    "width": 1358,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/snooko-portrait-480.webp",
+        "width": 480,
+        "height": 724
+      },
+      {
+        "src": "./assets/snooko-portrait-960.webp",
+        "width": 960,
+        "height": 1448
+      },
+      {
+        "src": "./assets/snooko-portrait.webp",
+        "width": 1358,
+        "height": 2048
+      }
+    ]
   }
 };

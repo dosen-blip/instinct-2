@@ -499,15 +499,29 @@ window.INSTINCT_CONTENT = {
     "snooko": {
       "id": "snooko",
       "name": "Snooko",
-      "bio": [],
-      "portrait": "instinct-anniversary-poster",
-      "alt": "Snooko billing on the Instinct Anniversary event poster",
-      "imageCaption": "Billing shown on the Instinct Anniversary event poster.",
+      "bio": [
+        "Rising out of Miami’s house scene, Snooko crafts groove-forward, tech-house-focused tracks designed for movement—earning nods from Michael Bibi, Beltran, Cloonee, Luuk Van Dijk, SIDEPIECE, Andruss, Jay De Lys, and others. His live sets are the standout: animated, unpredictable, and deeply interactive, blurring the line between DJ and crowd. That momentum has taken him from Club Space to international dance floors, solidifying a reputation for immersive, energy-driven shows."
+      ],
+      "portrait": "snooko-portrait",
+      "alt": "Snooko seated in an armchair wearing sunglasses",
       "accent": "#32e07a",
-      "socials": [],
+      "socials": [
+        {
+          "label": "Instagram",
+          "href": "https://www.instagram.com/snooko_ofc/"
+        },
+        {
+          "label": "SoundCloud",
+          "href": "https://soundcloud.com/snooko"
+        },
+        {
+          "label": "Spotify",
+          "href": "https://open.spotify.com/artist/0KAsH8x2fuBX1ExPyXaHMx?si=CBS40qgrRjiOGZteus2dLA"
+        }
+      ],
       "qas": [],
       "sources": [
-        "User-supplied Instinct Anniversary poster attached October 13, 2026"
+        "User-supplied Snooko portrait and biography attached October 13, 2026"
       ]
     },
     "ott-krishhh": {

@@ -2155,6 +2155,36 @@
     ]
   },
   {
+    "name": "snooko-portrait",
+    "originalBytes": 1526506,
+    "optimizedBytes": 431436,
+    "original": {
+      "width": 1638,
+      "height": 2471
+    },
+    "fallback": {
+      "width": 1358,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "snooko-portrait-480.webp",
+        "quality": 85,
+        "psnr": 43.03
+      },
+      {
+        "file": "snooko-portrait-960.webp",
+        "quality": 85,
+        "psnr": 41.88
+      },
+      {
+        "file": "snooko-portrait.webp",
+        "quality": 85,
+        "psnr": 41.85
+      }
+    ]
+  },
+  {
     "name": "ty-band",
     "originalBytes": 7881194,
     "optimizedBytes": 702448,
