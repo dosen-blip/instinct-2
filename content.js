@@ -490,6 +490,8 @@ window.INSTINCT_CONTENT = {
       ],
       "mediaIds": [],
       "announcements": [],
+      "ticketUrl": "https://simpli.events/e/SNOOKO",
+      "ticketLabel": "NOV 13 TICKETS",
       "sources": [
         "User-supplied Instinct Anniversary poster attached October 13, 2026"
       ]
