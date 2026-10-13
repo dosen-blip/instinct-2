@@ -44,7 +44,8 @@
     archive = window.INSTINCT_ARCHIVE.create(content);
     statusKey = archive.pastEvents.map(event => event.id).join('|');
     const route = getRoute();
-    const event = archive.byId[route] || archive.byId[content.collaborations?.[route]?.eventId];
+    const event = archive.byId[route];
+    const collaboration = content.collaborations?.[route];
     let page;
     if (route === 'index') page = renderHome();
     else if (route === 'past-events') page = renderArchive();
@@ -53,6 +54,7 @@
     else if (route === 'next-event') page = renderNextEvent();
     else if (event) page = renderEvent(event);
     else if (content.artists[route]) page = renderArtist(content.artists[route]);
+    else if (collaboration) page = renderArtist(collaboration);
     else page = `<article class="archive-shell">${pageHeading('Instinct Groove','Page not found')}${textLink(routes.home,'Return home')}</article>`;
     document.getElementById('app').innerHTML = `${siteHeader(route)}${page}${siteFooter()}`;
     document.documentElement.dataset.route = route;
@@ -186,8 +188,9 @@
   }
   function lineupCards(lineup) {
     return `<div class="archive-lineup-grid">${lineup.map(set=>{
-      const lead = content.artists[set.profileId||set.artistIds[0]];
-      return `<article class="archive-lineup-card"><span class="archive-lineup-image">${imageTag(asset(lead.portrait),lead.alt,{sizes:'(max-width:720px) 42vw, 260px'})}</span><div><h3>${esc(set.label)}</h3>${set.time?`<p>${esc(set.time)}</p>`:''}<div class="archive-actions">${set.profileId?textLink(routeFor(set.profileId),set.artistIds.length>1?'About this collaboration →':'Artist profile →'):''}${(!set.profileId||set.artistIds.length>1)?set.artistIds.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join(''):''}</div></div></article>`;
+      const profileId = set.profileId || set.collaborationId;
+      const lead = content.artists[profileId||set.artistIds[0]] || content.collaborations?.[profileId];
+      return `<article class="archive-lineup-card"><span class="archive-lineup-image">${imageTag(asset(lead.portrait),lead.alt,{sizes:'(max-width:720px) 42vw, 260px'})}</span><div><h3>${esc(set.label)}</h3>${set.time?`<p>${esc(set.time)}</p>`:''}<div class="archive-actions">${profileId?textLink(routeFor(profileId),set.artistIds.length>1?'About this collaboration →':'Artist profile →'):''}${(!profileId||set.artistIds.length>1)?set.artistIds.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join(''):''}</div></div></article>`;
     }).join('')}</div>`;
   }
   function renderEvent(event) {
@@ -225,7 +228,7 @@
   }
   function renderArtist(artist) {
     const appearances = archive.appearancesFor(artist.id);
-    const partners = [...new Set(appearances.filter(set=>set.b2b).flatMap(set=>set.artistIds).filter(id=>id!==artist.id))];
+    const partners = artist.memberIds ? [] : [...new Set(appearances.filter(set=>set.b2b).flatMap(set=>set.artistIds).filter(id=>id!==artist.id))];
     return `<article class="archive-shell archive-artist"><a class="archive-back" href="${routes.artists}">← All artists</a><section class="archive-artist-hero"><figure>${imageTag(asset(artist.portrait),artist.alt,{sizes:'(max-width:720px) calc(100vw - 40px), 500px',priority:true})}${artist.imageCaption?`<figcaption>${esc(artist.imageCaption)}</figcaption>`:''}</figure><div>${pageHeading(artist.memberIds?'Instinct collaboration':'Instinct artist',artist.name)}<div class="archive-actions">${artist.socials.map(link=>textLink(link.href,link.label,true)).join('')}</div>${artist.memberIds?`<div class="archive-actions">${artist.memberIds.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join('')}</div>`:''}</div></section>${partners.length?`<section class="archive-section"><h2>B2B’d with</h2><div class="archive-actions">${partners.map(id=>textLink(routeFor(id),content.artists[id].name+' →')).join('')}</div></section>`:''}${artist.bio.length?`<section class="archive-section archive-bio"><h2>Bio</h2>${artist.bio.map(p=>`<p>${esc(p)}</p>`).join('')}</section>`:''}<section class="archive-section"><h2>Played at Instinct</h2><div class="archive-appearances">${appearances.map(({event,time,section,venue,label})=>`<a class="archive-appearance" href="${routeFor(event.id)}"><div><p>${eventDate(event)}${!event.past?' · Upcoming':''}</p><h3>${esc(event.title)}</h3><p>${esc(section||venue||event.venue)}${section?` · ${esc(venue)}`:''}</p>${label!==artist.name?`<p>As ${esc(label)}</p>`:''}${time?`<p>Set: ${esc(time)}</p>`:''}</div>${mobileMedia.matches ? '' : '<span aria-hidden="true">↗</span>'}</a>`).join('')}</div></section>${artist.qas.length?`<section class="archive-section"><p class="archive-kicker">From the artist interview</p><h2>Quick questions</h2><div class="archive-qa-grid">${artist.qas.map(item=>`<article><h3>${esc(item.question)}</h3>${item.answer?`<p>${esc(item.answer)}</p>`:''}</article>`).join('')}</div></section>`:''}<div class="archive-actions">${textLink(routes.artists,'All artists')}${textLink(routes.events,'Explore past events')}</div></article>`;
   }
   function gallerySelection() {

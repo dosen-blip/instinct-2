@@ -1937,14 +1937,17 @@ window.INSTINCT_CONTENT = {
     "danford-b2b-enko": {
       "id": "danford-b2b-enko",
       "name": "Danford b2b Enko",
-      "bio": [],
-      "portrait": "vol1-lineup-danford",
-      "alt": "Danford b2b Enko at Instinct",
+      "bio": [
+        "Danford and Enko are Ottawa-based DJs with a shared love for all things house. After combining their tastes and finding their niche on a trip to Ibiza, Maggie and Alex came home inspired to start Instinct, their own event series focused on minimal tech house and the deeper, groovier sounds they love.",
+        "Together, their sets are high-energy, hypnotic and a little acidy, blending deep grooves, rolling basslines and plenty of chunes to keep you moving."
+      ],
+      "portrait": "danford-b2b-enko-portrait",
+      "alt": "Danford and Enko standing together against a blue studio backdrop",
       "accent": "#32e07a",
       "socials": [],
       "qas": [],
       "sources": [
-        "git:222b4e1:app.js:vol-1.lineup"
+        "User-supplied Danford and Enko portrait and joint biography attached October 13, 2026"
       ],
       "memberIds": [
         "danford",

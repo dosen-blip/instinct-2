@@ -19,7 +19,7 @@
       const sets = event.announcements.length
         ? event.announcements.flatMap(section => section.lineup.map(set => ({ ...set, section: section.title, venue: section.venue })))
         : event.lineup;
-      return sets.filter(set => set.artistIds.includes(artistId) || set.profileId === artistId)
+      return sets.filter(set => set.artistIds.includes(artistId) || set.profileId === artistId || set.collaborationId === artistId)
         .map(set => ({ event, ...set }));
     });
     const pastEvents = events.filter(event => event.past);

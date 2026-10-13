@@ -330,6 +330,41 @@
     ]
   },
   {
+    "name": "danford-b2b-enko-portrait",
+    "originalBytes": 3329292,
+    "optimizedBytes": 326226,
+    "original": {
+      "width": 7731,
+      "height": 9663
+    },
+    "fallback": {
+      "width": 1639,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "danford-b2b-enko-portrait-480.webp",
+        "quality": 85,
+        "psnr": 45.56
+      },
+      {
+        "file": "danford-b2b-enko-portrait-960.webp",
+        "quality": 85,
+        "psnr": 46.62
+      },
+      {
+        "file": "danford-b2b-enko-portrait-1440.webp",
+        "quality": 85,
+        "psnr": 47.11
+      },
+      {
+        "file": "danford-b2b-enko-portrait.webp",
+        "quality": 85,
+        "psnr": 47.18
+      }
+    ]
+  },
+  {
     "name": "dose-band",
     "originalBytes": 438550,
     "optimizedBytes": 103014,
