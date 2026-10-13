@@ -28,6 +28,7 @@
     return `<img${className ? ` class="${esc(className)}"` : ''} src="${url(src)}"${responsive}${dimensions} loading="${priority ? 'eager' : 'lazy'}"${priority ? ' fetchpriority="high"' : ''} decoding="async" alt="${esc(alt)}">`;
   }
   function dateLabel(event) {
+    if (event.displayDate) return event.displayDate;
     return new Intl.DateTimeFormat('en-CA', {dateStyle:'long',timeZone:'UTC'}).format(new Date(`${event.date}T12:00:00Z`));
   }
   function eventDate(event) { return `<time datetime="${esc(event.date)}">${esc(dateLabel(event))}</time>`; }

@@ -2579,5 +2579,32 @@ window.INSTINCT_IMAGES = {
         "height": 1474
       }
     ]
+  },
+  "instinct-anniversary-poster": {
+    "src": "./assets/instinct-anniversary-poster.webp",
+    "width": 1638,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/instinct-anniversary-poster-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/instinct-anniversary-poster-960.webp",
+        "width": 960,
+        "height": 1200
+      },
+      {
+        "src": "./assets/instinct-anniversary-poster-1440.webp",
+        "width": 1440,
+        "height": 1800
+      },
+      {
+        "src": "./assets/instinct-anniversary-poster.webp",
+        "width": 1638,
+        "height": 2048
+      }
+    ]
   }
 };

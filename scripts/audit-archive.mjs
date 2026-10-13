@@ -53,7 +53,8 @@ for(const slug of original)check(existsSync(`${slug}.html`),`Legacy URL lost: ${
 // Date boundaries cover the overnight event and date-only events in Ottawa, independent of the test machine's timezone.
 for(const [instant,id,past] of [
  ['2026-08-15T06:29:59Z','vol-6',false],['2026-08-15T06:30:00Z','vol-6',true],
- ['2026-09-12T03:59:59Z','vol-7',false],['2026-09-12T04:00:00Z','vol-7',true]
+ ['2026-09-12T03:59:59Z','vol-7',false],['2026-09-12T04:00:00Z','vol-7',true],
+ ['2026-11-14T04:59:59Z','instinct-anniversary',false],['2026-11-14T05:00:00Z','instinct-anniversary',true]
 ])check(create(data,new Date(instant)).byId[id].past===past,`Incorrect event transition: ${id} at ${instant}`);
 for(const instant of ['2025-01-01T12:00:00Z','2026-09-12T12:00:00Z','2030-01-01T12:00:00Z']){
  const snapshot=create(data,new Date(instant));

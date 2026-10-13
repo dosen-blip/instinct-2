@@ -449,9 +449,67 @@ window.INSTINCT_CONTENT = {
         "git:222b4e1:app.js:upcomingEvent",
         "https://www.instagram.com/instinct.groove/ (bio: VOL. 7 SEPTEMBER 11TH)"
       ]
+    },
+    "instinct-anniversary": {
+      "id": "instinct-anniversary",
+      "title": "Instinct Anniversary",
+      "date": "2026-11-13",
+      "displayDate": "Friday, November 13th, 2026",
+      "venue": "221 Rideau St, Ottawa, ON @ GRIDWRKS",
+      "age": "19+",
+      "hours": "Doors at 10 PM",
+      "cover": "instinct-anniversary-poster",
+      "posters": [
+        "instinct-anniversary-poster"
+      ],
+      "intro": "",
+      "lineup": [
+        {
+          "artistIds": [
+            "snooko"
+          ],
+          "profileId": "snooko",
+          "label": "Snooko (Miami)"
+        },
+        {
+          "artistIds": [
+            "danford",
+            "enko"
+          ],
+          "label": "Danford b2b Enko",
+          "b2b": true,
+          "collaborationId": "danford-b2b-enko"
+        },
+        {
+          "artistIds": [
+            "seb-couture"
+          ],
+          "profileId": "seb-couture",
+          "label": "Sebastian Couture"
+        }
+      ],
+      "mediaIds": [],
+      "announcements": [],
+      "sources": [
+        "User-supplied Instinct Anniversary poster attached October 13, 2026"
+      ]
     }
   },
   "artists": {
+    "snooko": {
+      "id": "snooko",
+      "name": "Snooko",
+      "bio": [],
+      "portrait": "instinct-anniversary-poster",
+      "alt": "Snooko billing on the Instinct Anniversary event poster",
+      "imageCaption": "Billing shown on the Instinct Anniversary event poster.",
+      "accent": "#32e07a",
+      "socials": [],
+      "qas": [],
+      "sources": [
+        "User-supplied Instinct Anniversary poster attached October 13, 2026"
+      ]
+    },
     "ott-krishhh": {
       "id": "ott-krishhh",
       "name": "OTT.KRISHHH",

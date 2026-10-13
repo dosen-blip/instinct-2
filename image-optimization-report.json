@@ -965,6 +965,41 @@
     ]
   },
   {
+    "name": "instinct-anniversary-poster",
+    "originalBytes": 1454890,
+    "optimizedBytes": 1117392,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "instinct-anniversary-poster-480.webp",
+        "quality": 90,
+        "psnr": 44.93
+      },
+      {
+        "file": "instinct-anniversary-poster-960.webp",
+        "quality": 90,
+        "psnr": 45.03
+      },
+      {
+        "file": "instinct-anniversary-poster-1440.webp",
+        "quality": 90,
+        "psnr": 45.56
+      },
+      {
+        "file": "instinct-anniversary-poster.webp",
+        "quality": 90,
+        "psnr": 45.89
+      }
+    ]
+  },
+  {
     "name": "mobile-home-preview",
     "originalBytes": 74016,
     "optimizedBytes": 13016,
