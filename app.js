@@ -173,7 +173,7 @@
   }
   function nextSpotlight() {
     const next = archive.upcomingEvents[0];
-    return `<section class="archive-home-spotlight section-border"><div class="archive-shell"><p class="archive-kicker">Next Event</p>${next ? `<div class="archive-spotlight-grid"><div><h2>${esc(next.title)}</h2><p>${eventDate(next)} · ${esc(next.venue)}</p>${textLink(routeFor(next.id),'Explore the event')}${next.ticketUrl ? textLink(next.ticketUrl,next.ticketLabel || 'Tickets',true):''}</div><a class="archive-spotlight-poster" href="${routeFor(next.id)}">${imageTag(asset(next.posters[0]||next.cover),`${next.title} poster`,{sizes:'(max-width:720px) 100vw, 420px'})}</a></div>` : `<h2>See you at the next one.</h2><p>New event details will be announced here.</p><div class="archive-actions">${textLink(links.instagram,'Follow Instinct on Instagram',true)}${textLink(routes.events,'Explore past events')}</div>`}</div></section>`;
+    return `<section class="archive-home-spotlight section-border"><div class="archive-shell"><p class="archive-kicker">Next Event</p>${next ? `<div class="archive-spotlight-grid"><div><h2>${esc(next.title)}</h2>${next.id==='instinct-anniversary'?'<p class="archive-kicker">One year of Instinct · Headlined by SNOOKO / Miami</p>':''}<p>${eventDate(next)} · ${esc(next.venue)}</p><div class="archive-actions">${textLink(routes.next,'Explore the event')}${next.ticketUrl ? textLink(next.ticketUrl,next.ticketLabel || 'Tickets',true):''}</div></div><a class="archive-spotlight-poster" href="${routes.next}" aria-label="Explore ${esc(next.title)} — event details">${imageTag(asset(next.posters[0]||next.cover),`${next.title} poster`,{sizes:'(max-width:720px) 100vw, 420px'})}<span class="spotlight-poster-cta">Explore the event <span aria-hidden="true">↗</span></span></a></div>` : `<h2>See you at the next one.</h2><p>New event details will be announced here.</p><div class="archive-actions">${textLink(links.instagram,'Follow Instinct on Instagram',true)}${textLink(routes.events,'Explore past events')}</div>`}</div></section>`;
   }
   function homeArchive() {
     return `<section class="archive-shell archive-section"><div class="archive-section-heading"><h2>Past Events</h2>${textLink(routes.events,'View all past events →')}</div><div class="archive-card-grid">${archive.pastEvents.slice(0,3).map(eventCard).join('')}</div></section>`;
@@ -194,6 +194,7 @@
     }).join('')}</div>`;
   }
   function renderEvent(event) {
+    if (event.id === 'instinct-anniversary' && !event.past) return renderAnniversary(event);
     const photos = archive.mediaFor(event.id);
     const neighbors = event.past ? archive.pastEvents : archive.upcomingEvents;
     const index = neighbors.findIndex(item=>item.id===event.id);
@@ -214,6 +215,30 @@
   }
   function posterCard(image,event,label=event.title) {
     return `<button type="button" class="archive-poster" data-poster="${esc(image)}" data-event="${esc(event.id)}" aria-label="Open ${esc(label)} poster">${imageTag(asset(image),`${label} original event poster`,{sizes:'(max-width:720px) calc(100vw - 40px), 480px'})}</button>`;
+  }
+  function renderAnniversary(event) {
+    const artist = content.artists.snooko;
+    return `<article class="anniversary-page">
+      <section class="anniversary-hero" aria-labelledby="anniversary-title">
+        <div class="anniversary-portrait">${imageTag(asset(artist.portrait),artist.alt,{sizes:'(max-width:720px) 100vw, 65vw',priority:true})}</div>
+        <div class="anniversary-hero-copy archive-shell">
+          <p class="archive-kicker">Instinct Groove presents · 13.11.26</p>
+          <h1 id="anniversary-title">ONE YEAR.<br><span>ALL INSTINCT.</span></h1>
+          <p class="anniversary-label">Our first anniversary</p>
+          <div class="anniversary-headliner"><p class="archive-kicker">Headliner · Miami, FL</p><h2>SNOOKO</h2></div>
+          <p class="anniversary-lede">A year of finding our people on the dance floor.<br>Let’s celebrate the way we know best.</p>
+          <div class="archive-actions">${textLink(event.ticketUrl,'Get anniversary tickets ↗',true,'anniversary-ticket')}${textLink('#artist-spotlight','Meet the headliner ↓')}</div>
+        </div>
+      </section>
+      <div class="archive-shell anniversary-body">
+        <div class="anniversary-facts"><div><span>When</span><p>${eventDate(event)}<br>${esc(event.hours)}</p></div><div><span>Where</span><p>${esc(event.venue)}</p></div><div><span>On the door</span><p>${esc(event.age)}</p></div></div>
+        <section class="anniversary-story archive-section"><div><p class="archive-kicker">01 / A year together</p><h2>Same instinct.<br>A new chapter.</h2><p>${esc(event.intro)}</p><p>For everyone who’s been there from the beginning, and everyone stepping into the room for the first time: this one is for you.</p><div class="archive-actions">${textLink('#lineup','Explore the lineup ↓')}</div></div><figure>${posterCard(event.posters[0],event)}<figcaption>The anniversary flyer · tap to take a closer look</figcaption></figure></section>
+        <section class="archive-section anniversary-spotlight" id="artist-spotlight"><p class="archive-kicker">02 / Artist spotlight · Miami → Ottawa</p><div class="anniversary-spotlight-title"><h2>SNOOKO</h2><span>Our anniversary headliner</span></div><div class="anniversary-bio">${artist.bio.map(p=>`<p>${esc(p)}</p>`).join('')}</div><div class="archive-actions">${artist.socials.map(link=>textLink(link.href,link.label,true)).join('')}${textLink(routeFor(artist.id),'Full artist profile →')}</div></section>
+        <section class="archive-section anniversary-qa" aria-labelledby="snooko-qa"><p class="archive-kicker">03 / In his own words</p><h2 id="snooko-qa">Off the decks with SNOOKO.</h2><div class="archive-qa-grid">${artist.qas.map((item,index)=>`<article><span class="anniversary-question-number">0${index+1}</span><h3>${esc(item.question)}</h3><p>${esc(item.answer)}</p></article>`).join('')}</div></section>
+        <section class="archive-section" id="lineup"><p class="archive-kicker">04 / Sharing the booth</p><h2>Your anniversary lineup.</h2>${lineupCards(event.lineup)}</section>
+        <section class="archive-section anniversary-closing"><p class="archive-kicker">One year down. See you on the dance floor.</p><h2>Make it a night<br>to remember.</h2><p>${eventDate(event)} · ${esc(event.hours)} · ${esc(event.age)}</p>${textLink(event.ticketUrl,'Get anniversary tickets ↗',true,'anniversary-ticket')}</section>
+      </div>
+    </article>`;
   }
   function creditLine(item) {return item.credit?`<p class="archive-credit">Photography: ${item.creditUrl?textLink(item.creditUrl,item.credit,true):esc(item.credit)}</p>`:'';}
   function renderDirectory() {

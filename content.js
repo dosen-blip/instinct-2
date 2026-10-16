@@ -462,7 +462,7 @@ window.INSTINCT_CONTENT = {
       "posters": [
         "instinct-anniversary-poster"
       ],
-      "intro": "",
+      "intro": "One year of Instinct. One dance floor. A whole new chapter. Join us as we celebrate our first anniversary with Miami headliner SNOOKO, alongside Danford b2b Enko and Sebastian Couture.",
       "lineup": [
         {
           "artistIds": [
@@ -521,8 +521,14 @@ window.INSTINCT_CONTENT = {
           "href": "https://open.spotify.com/artist/0KAsH8x2fuBX1ExPyXaHMx?si=CBS40qgrRjiOGZteus2dLA"
         }
       ],
-      "qas": [],
+      "qas": [
+        { "question": "Guilty pleasure genre?", "answer": "Riddim/Dubstep" },
+        { "question": "What’s your toxic DJ trait?", "answer": "I’ve secretly played riddim at very select shows." },
+        { "question": "A track you drop too many times?", "answer": "Gala - Freed from Desire" },
+        { "question": "If your DJ name had lore, what would yours be?", "answer": "ACTUAL DJ NAME LORE: My dad caught a fish called a “Snook” a lot when my mom was pregnant with me, so much that everyone asked “when is baby Snooky coming?” So I’ve had the nickname “Snooky” since birth and when I became a DJ, I replaced the “Y” with an “O” to avoid any possible confusion with “Snooki” from Jersey Shore." }
+      ],
       "sources": [
+        "User-supplied Snooko Q&A attached October 16, 2026",
         "User-supplied Snooko portrait and biography attached October 13, 2026"
       ]
     },

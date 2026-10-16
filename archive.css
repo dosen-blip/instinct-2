@@ -1,4 +1,59 @@
 /* Shared archive, artist and media layouts. Uses the existing Instinct type and colour system. */
+.archive-spotlight-poster { display: block; border: 1px solid var(--line); padding: 12px; background: #08080c; }
+.archive-spotlight-poster:hover, .archive-spotlight-poster:focus-visible { border-color: var(--accent); }
+.spotlight-poster-cta { display: flex; justify-content: space-between; padding: 16px 4px 4px; color: var(--accent); font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.anniversary-hero { position: relative; isolation: isolate; overflow: hidden; background: #050508; }
+.anniversary-portrait { position: absolute; inset: 0 0 0 34%; z-index: -2; }
+.anniversary-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center 78%; filter: saturate(.6); }
+.anniversary-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,#000 3%,rgba(0,0,0,.94) 27%,rgba(0,0,0,.48) 52%,transparent 80%),linear-gradient(0deg,#000,transparent 25%,rgba(76,23,111,.15)); }
+.anniversary-hero-copy.archive-shell { padding-top: 64px; padding-bottom: 68px; }
+.anniversary-hero h1 { margin: 30px 0 18px; font: 850 clamp(48px,6.8vw,98px)/.98 var(--font-display); letter-spacing: -.045em; font-stretch: 115%; }
+.anniversary-hero h1 span { color: var(--accent); }
+.anniversary-label { text-transform: uppercase; font: 12px var(--font-mono); letter-spacing: .2em; color: var(--muted); }
+.anniversary-headliner { margin-top: 56px; }
+.anniversary-headliner .archive-kicker { margin-bottom: 10px; }
+.anniversary-hero .anniversary-headliner h2 { margin: 0; font: 850 clamp(72px,10vw,142px)/.95 var(--font-display); letter-spacing: -.05em; }
+.anniversary-lede { color: var(--muted); font-size: 18px; line-height: 1.7; margin: 24px 0; }
+.anniversary-ticket { display: inline-flex; justify-content: center; align-items: center; min-height: 52px; padding: 16px 24px; background: var(--accent); color: #000; font: 700 12px/1.5 var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.anniversary-ticket:hover { background: #fff; }
+.anniversary-body.archive-shell { padding-top: 0; }
+.anniversary-facts { display: grid; grid-template-columns: 1.2fr 1.4fr .5fr; gap: 30px; border-top: 1px solid var(--accent); border-bottom: 1px solid var(--line); padding: 28px 0; }
+.anniversary-facts span, .anniversary-question-number { color: var(--accent); text-transform: uppercase; font: 11px var(--font-mono); letter-spacing: .12em; }
+.anniversary-facts p { font-size: 14px; line-height: 1.8; margin-bottom: 0; }
+.anniversary-story { display: grid; grid-template-columns: 1fr .7fr; gap: 100px; align-items: center; padding-top: 64px; border: 0; }
+.anniversary-story h2 { margin-top: 0; }
+.anniversary-story p:not(.archive-kicker), .anniversary-bio p { font-size: 18px; line-height: 1.8; color: var(--muted); }
+.anniversary-story figure { margin: 0; }
+.anniversary-story figcaption { margin-top: 14px; color: var(--dim); font: 10px/1.7 var(--font-mono); }
+.anniversary-spotlight, .anniversary-qa { padding-top: 48px; margin-top: 64px; scroll-margin-top: 100px; }
+.anniversary-spotlight-title { display: flex; align-items: baseline; gap: 30px; flex-wrap: wrap; }
+.anniversary-spotlight-title h2 { margin: 0; font-size: clamp(52px,8vw,100px); }
+.anniversary-spotlight-title span { color: var(--dim); font: 11px var(--font-mono); text-transform: uppercase; }
+.anniversary-bio { max-width: 850px; }
+.anniversary-qa .archive-qa-grid { margin-top: 32px; }
+.anniversary-qa .archive-qa-grid article:last-child { grid-column: 1 / -1; }
+.anniversary-qa .archive-qa-grid article:last-child p { max-width: 900px; }
+.anniversary-closing { margin-top: 64px; padding: 48px 0 0; }
+.anniversary-closing h2 { margin-top: 0; }
+.anniversary-closing > p:not(.archive-kicker) { color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
+@media (max-width: 720px) {
+  .anniversary-hero-copy.archive-shell { padding-top: 32px; padding-bottom: 32px; }
+  .anniversary-portrait { inset: 0 0 0 8%; }
+  .anniversary-portrait img { object-position: 57% 75%; }
+  .anniversary-hero::after { background: linear-gradient(90deg,rgba(0,0,0,.7),rgba(0,0,0,.1)),linear-gradient(0deg,#000 1%,rgba(0,0,0,.22) 42%,rgba(0,0,0,.5) 80%); }
+  .anniversary-hero h1 { font-size: clamp(36px,9.8vw,68px); margin-top: 28px; }
+  .anniversary-hero .archive-kicker { font-size: 10px; }
+  .anniversary-headliner { margin-top: 150px; }
+  .anniversary-hero .anniversary-headliner h2 { font-size: clamp(65px,19vw,116px); }
+  .anniversary-lede { font-size: 15px; }
+  .anniversary-facts { grid-template-columns: 1fr; gap: 20px; padding: 24px 0; }
+  .anniversary-facts p { margin-top: 8px; }
+  .anniversary-story { grid-template-columns: 1fr; gap: 28px; padding-top: 20px; }
+  .anniversary-story figure { max-width: 440px; margin: 0 auto; }
+  .anniversary-story p:not(.archive-kicker), .anniversary-bio p { font-size: 16px; }
+  .anniversary-spotlight, .anniversary-qa { margin-top: 40px; padding-top: 32px; }
+  .anniversary-spotlight-title { gap: 12px; }
+}
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 .archive-shell { width: min(1200px, calc(100% - 64px)); margin: 0 auto; padding: 48px 0 72px; }
