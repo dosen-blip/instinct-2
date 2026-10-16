@@ -112,6 +112,7 @@ window.INSTINCT_CONTENT = {
         "git:222b4e1:app.js:vol-6"
       ],
       "credit": null,
+      "albumUrl": "https://www.dropbox.com/scl/fo/yblp5z1ex1jpu1mrndf91/AFYYFVS70veHy0XmtKhGAAc?rlkey=3uz7t5rvy6jogzri1mqi3jeks&st=9obkgxct&dl=0",
       "endsAt": "2026-08-15T02:30:00-04:00",
       "drinks": [
         {
@@ -178,7 +179,8 @@ window.INSTINCT_CONTENT = {
       "creditUrl": "https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
       "hours": "10 PM–2:30 AM",
       "address": "221 Rideau Street, Ottawa",
-      "endsAt": "2026-06-27T02:30:00-04:00"
+      "endsAt": "2026-06-27T02:30:00-04:00",
+      "albumUrl": "https://www.dropbox.com/scl/fo/pti9n4kuev1570nwcrh28/AAVuCqLH9CPB1BYrdfSechA?rlkey=yzkufk7jnay2xh9gwupw4ffaq&st=o8osy5qg&dl=0"
     },
     "vol-1": {
       "id": "vol-1",
@@ -348,7 +350,7 @@ window.INSTINCT_CONTENT = {
       ],
       "credit": "@Mysticdoesmedia",
       "creditUrl": "https://www.instagram.com/mysticdoesmedia?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
-      "albumUrl": "https://drive.google.com/drive/folders/1IrkD4W7mA4Zn4aVnKx7xN2WxENsm5GLd?usp=sharing"
+      "albumUrl": "https://www.amazon.ca/photos/share/5XVROEvDl8FSWzqqp4mQFGa87FLBtEsU0PEMiYIhaG2?"
     },
     "vol-4": {
       "id": "vol-4",
@@ -404,7 +406,8 @@ window.INSTINCT_CONTENT = {
       "creditUrl": "https://www.instagram.com/_curtisperry?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
       "hours": "10 PM–2:30 AM",
       "address": "222 Slater St, Ottawa",
-      "endsAt": "2026-05-02T02:30:00-04:00"
+      "endsAt": "2026-05-02T02:30:00-04:00",
+      "albumUrl": "https://www.dropbox.com/scl/fo/ja4sd4ygtidec1wbucopv/AN8BJEs8dWss1C80ZzS6MJc?rlkey=of72kz5ro92sfivnf4v1ze62w&st=8zv25jff&dl=0"
     },
     "vol-7": {
       "id": "vol-7",
