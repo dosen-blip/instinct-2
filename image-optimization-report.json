@@ -450,6 +450,41 @@
     ]
   },
   {
+    "name": "enko-portrait",
+    "originalBytes": 414810,
+    "optimizedBytes": 204688,
+    "original": {
+      "width": 1586,
+      "height": 1982
+    },
+    "fallback": {
+      "width": 1586,
+      "height": 1982
+    },
+    "qualityChecks": [
+      {
+        "file": "enko-portrait-480.webp",
+        "quality": 85,
+        "psnr": 46.25
+      },
+      {
+        "file": "enko-portrait-960.webp",
+        "quality": 85,
+        "psnr": 47.18
+      },
+      {
+        "file": "enko-portrait-1440.webp",
+        "quality": 85,
+        "psnr": 47.94
+      },
+      {
+        "file": "enko-portrait.webp",
+        "quality": 85,
+        "psnr": 47.08
+      }
+    ]
+  },
+  {
     "name": "escapade-photo1",
     "originalBytes": 2004182,
     "optimizedBytes": 458464,

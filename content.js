@@ -701,8 +701,13 @@ window.INSTINCT_CONTENT = {
           "href": "https://www.instagram.com/comfort.adam_/"
         }
       ],
-      "qas": [],
+      "qas": [
+        { "question": "What’s the one transition you overuse but swear “it always works”?", "answer": "When in doubt, REVERB out !!" },
+        { "question": "What’s a track that will always make it into your USB no matter what?", "answer": "Devault - fire to stone (ft. Njomza)" },
+        { "question": "Why do you throw events instead of just playing them?", "answer": "The goal has always been to give Ottawa a pedestal for artists to thrive!" }
+      ],
       "sources": [
+        "User-supplied artist text, October 16, 2026",
         "git:222b4e1:app.js:comfort"
       ]
     },
@@ -722,8 +727,13 @@ window.INSTINCT_CONTENT = {
           "href": "https://www.instagram.com/ooj_matthew/"
         }
       ],
-      "qas": [],
+      "qas": [
+        { "question": "What piece of art has influenced your DJing the most?", "answer": "Interstella 5555. It made electronic music feel like a complete universe instead of just a collection of songs. I’ve been chasing that feeling ever since - trying to make every set feel like its own little world." },
+        { "question": "What’s your favourite kind of dance floor?", "answer": "The kind where nobody’s trying to look cool anymore - everyone’s just a cool noodle. There are a few event series in Montreal that capture this feeling, and they’ve been a big inspiration for me." },
+        { "question": "If someone has never heard you play before, what should they expect?", "answer": "House music at the core, but no rules. Playful techno, forgotten gems & surprises… if it makes people grin and move, OOJ might play it. 🐙" }
+      ],
       "sources": [
+        "User-supplied artist text, October 16, 2026",
         "git:222b4e1:app.js:ooj"
       ]
     },
@@ -790,7 +800,9 @@ window.INSTINCT_CONTENT = {
       "id": "seb-couture",
       "name": "Seb Couture",
       "bio": [
-        "Sebastian Couture is an Ottawa-based DJ and producer whose musical roots began behind the drums, growing up in a family immersed in music. Drawn to the energy of the dance floor, he transitioned from a career in sales to fully pursue music, studying production while developing his craft as a DJ. His sound is shaped by festivals, raves, and underground parties across Miami, Europe, and Tulum."
+        "Sebastian Couture is an Ottawa-based DJ and producer whose musical roots began behind the drums, growing up in a family immersed in music. Drawn to the energy of the dance floor, he transitioned from a career in sales to fully pursue music—studying production while developing his craft as a DJ.",
+        "His sound and artistic identity have been heavily shaped by international experiences, including festivals, raves, and underground parties across global house music hubs such as Miami, Europe, and Tulum. Now a rising name in Ottawa’s scene, he delivers journey-driven sets rooted in underground house and tech house, with flares of minimal, indie, and electro.",
+        "With original productions set for release this year, Sebastian is carving out his place in the underground circuit."
       ],
       "portrait": "seb-portrait",
       "alt": "Seb Couture artist portrait",
@@ -812,14 +824,15 @@ window.INSTINCT_CONTENT = {
         },
         {
           "question": "Which genre apart from Minimal are you really feeling these days?",
-          "answer": "Lately I have been into the Breakbeat vibe: funky, swingy drums and refreshed retro sounds."
+          "answer": "I love so many genres this is a tough one! Lately, I’ve really been into the Breakbeat vibe. It seems to be regaining its popularity in the underground club scene. The funky, swingy drums and familiar but refreshed retro sounds always get me grooving."
         },
         {
           "question": "Favourite BPM?",
-          "answer": "My sets usually range from 126 BPM into the mid 130s. I love controlling energy and creating dips and peaks."
+          "answer": "Can’t choose one BPM! But, my sets usually range from 126bpm and can get up to the mid 130s. I love controlling energy and creating dips and peaks within my sets to keep things interesting 😎"
         }
       ],
       "sources": [
+        "User-supplied artist text, October 16, 2026",
         "git:222b4e1:app.js:seb-couture"
       ]
     },
@@ -827,7 +840,8 @@ window.INSTINCT_CONTENT = {
       "id": "dose",
       "name": "D.O.S.E",
       "bio": [
-        "I am a house DJ and producer based out of Ottawa, recently making strides in the industry. Captivating audiences with underground house and deep minimal grooves, mixed with old-school disco and soul, D.O.S.E keeps each selection constantly moving."
+        "I’m a house DJ/Producer based out of Ottawa, who has recently been making strides in the industry. Captivating audiences with a unique blend of underground house and deep minimal grooves, mixed with a steadfast love for old school disco and soul, D.O.S.E. makes sure that each selection keeps the crowd constantly moving.",
+        "He has played alongside leading international talent, including Matador, Frank Walker, RSCL, Distant Matter, and Sydney Blu. As a performing musician, he brings over a decade of experience performing classical music on national and international tours, and his music production benefits from having been involved with numerous prominent Canadian music organizations."
       ],
       "portrait": "dose-portrait",
       "alt": "D.O.S.E artist portrait",
@@ -857,6 +871,7 @@ window.INSTINCT_CONTENT = {
         }
       ],
       "sources": [
+        "User-supplied artist text, October 16, 2026",
         "git:222b4e1:app.js:dose"
       ]
     },
@@ -900,7 +915,7 @@ window.INSTINCT_CONTENT = {
       "name": "BabyJake",
       "bio": [
         "BabyJake is a 22 year old producer who has spent the last 5 years perfecting his craft of creating original house tracks. His deep love for electronic music is fueled by the unity and freedom that the dance floor offers.",
-        "Having more years producing under his belt than DJing, his trained ear is focused on crystal clear mixes with influences from disco, minimal, and old school progressive house."
+        "Having more years producing under his belt than DJing, his trained ear is focused on crystal clear mixes with influences from disco, minimal, and old school progressive house, including Eric Prydz and deadmau5."
       ],
       "portrait": "mobile-mcp-artist-babyjake-photo",
       "alt": "BabyJake artist portrait",
@@ -930,6 +945,7 @@ window.INSTINCT_CONTENT = {
         }
       ],
       "sources": [
+        "User-supplied Jake Hill artist text, October 16, 2026; matched through the existing jakee.hill Instagram link",
         "git:222b4e1:app.js:babyjake"
       ]
     },
@@ -1000,8 +1016,13 @@ window.INSTINCT_CONTENT = {
       "alt": "Benvi at Instinct",
       "accent": "#32e07a",
       "socials": [],
-      "qas": [],
+      "qas": [
+        { "question": "Favorite BPM?", "answer": "130" },
+        { "question": "Next on DJ “To-do list”?", "answer": "Learning how to play vinyl" },
+        { "question": "Biggest musical influence?", "answer": "Daft Punk" }
+      ],
       "sources": [
+        "User-supplied artist text, October 16, 2026; garbled bio omitted pending clarification",
         "git:222b4e1:app.js:vol-2.lineup"
       ]
     },
@@ -1093,13 +1114,13 @@ window.INSTINCT_CONTENT = {
       "id": "enko",
       "name": "Enko",
       "bio": [],
-      "portrait": "vol1-lineup-danford",
-      "alt": "Danford b2b Enko at Instinct",
-      "imageCaption": "Shared photograph from Danford b2b Enko at Instinct.",
+      "portrait": "enko-portrait",
+      "alt": "Enko performing at the DJ decks in warm, low light",
       "accent": "#32e07a",
       "socials": [],
       "qas": [],
       "sources": [
+        "User-supplied Enko portrait, October 16, 2026",
         "git:222b4e1:app.js:vol-1.lineup"
       ]
     },
@@ -1966,13 +1987,20 @@ window.INSTINCT_CONTENT = {
     "chefnier-b2b-moose": {
       "id": "chefnier-b2b-moose",
       "name": "Chefnier b2b Moose",
-      "bio": [],
+      "bio": [
+        "MOOSE & CHEFNIER are Ottawa DJs and longtime friends who mix together from time to time, bringing chill, melodic, and groovy dance vibes with a mixed-variety sound. Each has their own vibe, but when they link up, it’s all about good music and good energy."
+      ],
       "portrait": "vol2-lineup-chefnier",
       "alt": "Chefnier b2b Moose at Instinct",
       "accent": "#32e07a",
       "socials": [],
-      "qas": [],
+      "qas": [
+        { "question": "What’s the most chaotic thing in your fridge?", "answer": "Left over Chicken Parm (IYKYK)" },
+        { "question": "If cheese could talk, which one would be the biggest drama queen?", "answer": "Brie" },
+        { "question": "Alcohol of choice on a regular night?", "answer": "TEQUILA BABY" }
+      ],
       "sources": [
+        "User-supplied joint Chefnier and Moose bio and Q&A, October 16, 2026",
         "git:222b4e1:app.js:vol-2.lineup"
       ],
       "memberIds": [

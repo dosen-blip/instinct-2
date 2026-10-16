@@ -2655,5 +2655,32 @@ window.INSTINCT_IMAGES = {
         "height": 2048
       }
     ]
+  },
+  "enko-portrait": {
+    "src": "./assets/enko-portrait.webp",
+    "width": 1586,
+    "height": 1982,
+    "candidates": [
+      {
+        "src": "./assets/enko-portrait-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/enko-portrait-960.webp",
+        "width": 960,
+        "height": 1200
+      },
+      {
+        "src": "./assets/enko-portrait-1440.webp",
+        "width": 1440,
+        "height": 1800
+      },
+      {
+        "src": "./assets/enko-portrait.webp",
+        "width": 1586,
+        "height": 1982
+      }
+    ]
   }
 };
