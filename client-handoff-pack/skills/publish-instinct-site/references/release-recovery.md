@@ -6,7 +6,8 @@
 - Production branch: `main`
 - Workflow: `.github/workflows/static.yml`
 - Public domain: `instinctgroove.com`
-- The workflow installs WebP tooling, runs the image audit, uploads the static repository content, and deploys GitHub Pages.
+- The workflow installs WebP tooling, runs the image audit and the archive audit, uploads the static repository content, and deploys GitHub Pages.
+- The rendering system (`hero-3d/`, `world/`, `mobile/`, `assets/vendor/`, the `<!-- world -->` block in every page, `client-handoff-pack/rendering-manifest.json`) arrives only in the studio's own commits. Client tasks never stage it.
 
 ## Before Commit
 
@@ -15,10 +16,11 @@ git status --short --branch
 git remote -v
 git fetch origin main
 git log --oneline --decorate -5
+node scripts/rekey.mjs      # only after editing app.js, styles.css, archive.css, content.js, catalog.js or image-manifest.js
 node .agents/skills/publish-instinct-site/scripts/verify-site.mjs
 ```
 
-Inspect `git diff` and stage explicit task-owned paths. Do not include untracked `CLAUDE.md` unless the user explicitly requests it.
+Inspect `git diff` and stage explicit task-owned paths (with the pages `rekey.mjs` touched). Do not include untracked `CLAUDE.md` unless the user explicitly requests it. `git diff --stat -- hero-3d world mobile assets/vendor client-handoff-pack/rendering-manifest.json` must be empty.
 
 ## Remote Advanced or Push Rejected
 
@@ -63,7 +65,12 @@ Allow for normal CDN caching, but verify rather than assuming. If content appear
 
 ### Preflight fails
 
-Fix the local issue before commit. Explain only the visible impact unless details are requested.
+Fix the local issue before commit. Explain only the visible impact unless details are requested. Each problem comes with its fix:
+
+- a rendering-system file changed: `git checkout -- <path>` (never edit the file or the manifest to pass);
+- a page's head differs: copy a sibling page whole and change only its title;
+- cache keys stale or mixed: `node scripts/rekey.mjs`;
+- a new blur, blend, fixed layer, filter, big shadow or scroll listener: remove it or get the look another way.
 
 ### Workflow fails before deployment
 
@@ -76,6 +83,19 @@ Check custom-domain DNS/TLS, CDN cache, correct route, and whether the workflow 
 ### Serious live regression
 
 Create a narrow forward fix when fast and safe. Otherwise create a new revert commit for only the task commit, push, monitor, and verify. Never rewrite `main` history.
+
+### Rendering regression after a studio release
+
+If the opening, the wall, the lights, the vines, the page slide or the phone version broke right after a studio release (its commit touches `hero-3d/`, `world/`, `mobile/` or the `<!-- world -->` blocks):
+
+```sh
+git log --oneline -5 -- world hero-3d mobile    # find the studio commit
+git revert --no-edit <studio commit sha>        # a new commit; history is kept
+node .agents/skills/publish-instinct-site/scripts/verify-site.mjs
+git push origin main
+```
+
+The revert brings back the studio's previous files, page blocks and manifest together, so the preflight passes. Monitor the run, verify the public pages, and tell the client in one sentence that the previous version of the scene is back and the studio has been told. Never hand-edit `world/`, `hero-3d/` or `mobile/` to repair a release.
 
 ### Authentication missing
 

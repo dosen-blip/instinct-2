@@ -18,22 +18,29 @@ Turn a verified local change into a proven public result without making the clie
 
 1. Inspect `git status --short --branch`, current branch, remotes, recent commits, and `origin/main`.
 2. Preserve unrelated tracked and untracked work. If isolation is needed, use a temporary branch or worktree from current `origin/main`.
-3. Run:
+3. If the task edited `app.js`, `styles.css`, `archive.css`, `content.js`, `catalog.js` or `image-manifest.js`, refresh the cache keys so visitors get the new files (it updates every page the same way):
+
+```sh
+node scripts/rekey.mjs
+```
+
+4. Run the preflight and fix every problem it lists before going on:
 
 ```sh
 node .agents/skills/publish-instinct-site/scripts/verify-site.mjs
 ```
 
-4. Complete local visual and interaction checks on affected routes at phone and computer widths.
-5. Inspect the final diff. Stage explicit task paths only.
-6. Commit with a human-readable message describing the visible result.
-7. Fetch `origin/main` immediately before integration. If it advanced, replay the task commit onto it.
-8. Resolve mechanical or clearly compatible overlaps internally, preserve both intended changes, and rerun all checks.
-9. If a conflict represents a real content choice, keep both versions safe and ask one visible-content question without mentioning Git terminology.
-10. Push normally to `main`. Never force-push `main`.
-11. Identify the workflow run matching the pushed commit, wait for it to finish, and require a successful conclusion.
-12. Verify the affected public URL and requested content or interaction. Check custom-domain HTTP and HTTPS health separately.
-13. Report the visible result and honest live status in plain English.
+   It must end with "Site preflight passed". If it names a rendering-system file (`hero-3d/`, `world/`, `mobile/`, `assets/vendor/`, a page's `<!-- world -->` block, the rendering manifest), restore it with the `git checkout -- <path>` it gives; never edit those files or the manifest to make it pass.
+5. Complete local visual and interaction checks on affected routes at phone and computer widths, plus the scene checks in `$manage-instinct-site`'s verification reference when pages, home or global styles changed (the intro, one page slide, the phone hero).
+6. Inspect the final diff. Stage explicit task paths only, including the page files `rekey.mjs` changed. Nothing under the protected paths belongs in a client commit.
+7. Commit with a human-readable message describing the visible result.
+8. Fetch `origin/main` immediately before integration. If it advanced, replay the task commit onto it. If both sides changed cache keys, keep either and run `node scripts/rekey.mjs` again after the replay.
+9. Resolve mechanical or clearly compatible overlaps internally, preserve both intended changes, and rerun all checks.
+10. If a conflict represents a real content choice, keep both versions safe and ask one visible-content question without mentioning Git terminology.
+11. Push normally to `main`. Never force-push `main`.
+12. Identify the workflow run matching the pushed commit, wait for it to finish, and require a successful conclusion.
+13. Verify the affected public URL and requested content or interaction. Check custom-domain HTTP and HTTPS health separately.
+14. Report the visible result and honest live status in plain English.
 
 Read [references/release-recovery.md](references/release-recovery.md) for exact monitoring, conflict, rollback, and failure handling.
 
@@ -46,6 +53,7 @@ Read [references/release-recovery.md](references/release-recovery.md) for exact 
 - Never expose secrets in commits, logs, URLs, or the public Pages artifact.
 - Never hide a factual conflict. Ask only for the visible choice the client must own.
 - If a release is bad, create a forward fix or a new revert commit; do not rewrite published history.
+- Never edit, stage or commit the rendering system (`hero-3d/`, `world/`, `mobile/`, `assets/vendor/`, the `<!-- world -->` blocks, `client-handoff-pack/rendering-manifest.json`). A regression from a studio release is undone with `git revert` of that studio commit, never by hand-editing it.
 
 ## Client-Facing Status
 

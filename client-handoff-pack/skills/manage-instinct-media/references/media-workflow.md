@@ -35,13 +35,17 @@ Use the skill's `add-image.mjs` for one raster at a time. It:
 
 | Request | Likely source |
 |---|---|
-| Home hero | `renderHome()` and `renderMobileHome()` |
-| Next event poster/backdrop | `renderNextEvent()`, `renderMobileNextEvent()`, home teaser |
-| Recap gallery | matching `recaps[slug].photos` and `.mobile.photos` |
-| Recap poster | matching `recaps[slug].mobile.poster` plus archive card if requested |
-| Artist images | matching `artists[slug]` desktop and `mobile` fields |
-| Past-event card | `pastEvents` image |
-| Home preview | `homePreviewMedia()` and `homePreviewVideo` |
+| Event poster or cover | `content.js` event `cover`, `posters`, announcement `poster` |
+| Event photos (gallery) | `content.js` media records (`image`, `curated`, credit) and the event's `mediaIds` |
+| Artist photo | `content.js` artist `portrait` |
+| Featured drinks | `content.js` event `drinks[].image` |
+| Home crew photo | `asset('home-team')` in `renderHome()`, `asset('mobile-mcp-home-crew')` in `renderMobileHome()` |
+| Home film and its poster | `homePreviewMedia()`; `assets/home-preview.mp4`, posters `home-preview` / `mobile-home-preview` |
+| Home opening artwork | `asset('home-hero')` / `asset('mobile-mcp-home-hero')`: only a fallback now. Computers show the 3D opening and phones the pre-rendered plates, so a change there is a studio request |
+
+## Not Part of This Workflow
+
+The rendering system's images live outside `assets/`: the wall, leaf atlases and concrete textures (`world/assets/`, `hero-3d/assets/`), the phone hero plates (`mobile/hero/`) and the vendored Three.js files (`assets/vendor/`). They are tuned and encoded by the studio (some deliberately lossless, some lossy at measured settings), are not in `image-manifest.js`, and are not audited by `scripts/audit-images.mjs`. Never add, replace, re-encode or optimize them; the preflight reports any change with the command to restore it.
 
 ## Video Checks
 
@@ -51,7 +55,7 @@ Use `ffprobe` when available. Confirm:
 - dimensions and orientation match the placement;
 - file size is reasonable for mobile data;
 - poster fallback exists;
-- autoplay video is muted and does not trap user control;
+- an autoplaying video is muted and does not trap user control, and the phone home film does not autoplay (the phone layer starts it after the intro, near the screen);
 - playback and fallback work on phone and computer.
 
 Do not imply that the raster image audit validates the video.

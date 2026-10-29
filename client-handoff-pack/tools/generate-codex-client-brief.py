@@ -247,7 +247,7 @@ card_w = 170
 brief.card(42, 345, card_w, "Show me first", "Make and check the change, but do not publish it.", GREEN, min_height=90)
 brief.card(221, 345, card_w, "Make it live", "Publish the approved change and verify the public page.", PURPLE, min_height=90)
 brief.card(400, 345, card_w, "Undo that", "Return only the relevant change to the earlier working version.", GREEN, min_height=90)
-brief.chat(42, 220, 528, "Speak about what you can see", "Try: \"the top of the home page,\" \"the purple picture,\" \"the event boxes,\" or \"the phone menu.\" Codex will translate that into the technical work.", PURPLE)
+brief.chat(42, 220, 528, "Speak about what you can see", "Try: \"the top of the home page,\" \"the glowing sign,\" \"the event boxes,\" or \"the phone menu.\" Codex will translate that into the technical work.", PURPLE)
 brief.footer()
 
 # Page 2 - asking clearly
@@ -287,7 +287,7 @@ brief.chat(
     242,
     528,
     "You say",
-    "On the home page, change the August 14 event message to \"Lineup announcement coming Friday.\" Keep the date and the existing purple-and-green style. Show me how it looks on a phone and computer. Do not publish yet.",
+    "On the home page, change the August 14 event message to \"Lineup announcement coming Friday.\" Keep the date and the existing green-on-black style. Show me how it looks on a phone and computer. Do not publish yet.",
     PURPLE,
 )
 brief.card(42, 125, 528, "When words are hard", "Say: \"I do not know the right website terms. Ask me one simple question at a time, then tell me what you think I mean.\" A screenshot is often better than a technical explanation.", GREEN, min_height=72)
@@ -309,7 +309,7 @@ for index, (title, body) in enumerate(prompts):
     x = left if index % 2 == 0 else right
     y = y_values[index // 2]
     brief.card(x, y, width, title, body, GREEN if index % 2 == 0 else PURPLE, min_height=145, small=True)
-brief.card(42, 160, 528, "Mood-based requests are welcome", "Try: \"Make this feel more polished and energetic, but keep the black background, purple glow, green accents, and underground event feel. Give me two small options before editing.\"", PURPLE, min_height=83)
+brief.card(42, 160, 528, "Mood-based requests are welcome", "Try: \"Make this feel more polished and energetic, but keep the black background, the lit wall, the green accents, and the underground event feel. Give me two small options before editing.\"", PURPLE, min_height=83)
 brief.footer()
 
 # Page 4 - review
@@ -345,11 +345,11 @@ brief.page_header("What happens behind the scenes", "You do not need to perform 
 steps = [
     ("1", "Reads the project guide", "Loads the always-on instructions for this site."),
     ("2", "Translates the request", "Finds the right content, layout, or media source."),
-    ("3", "Makes the edit", "Changes only what is needed for the visible result."),
+    ("3", "Makes the edit", "Changes only what is needed; never the studio's scene."),
     ("4", "Checks both layouts", "Reviews phone and computer versions, links, and images."),
     ("5", "Creates a save point", "Records a clear GitHub version of the change."),
     ("6", "Safely syncs", "Keeps compatible work that somebody else added."),
-    ("7", "Publishes with Pages", "GitHub runs the image safety check and release."),
+    ("7", "Publishes with Pages", "Automatic safety checks run, then the release."),
     ("8", "Checks the public site", "Confirms the requested result before saying live."),
 ]
 for index, (number, title, body) in enumerate(steps):
@@ -368,13 +368,43 @@ brief.card(
     240,
     528,
     "This specific website",
-    "<b>app.js</b> holds most page content and behaviour. <b>styles.css</b> controls appearance. <b>assets/</b> holds approved media and fonts. Small <b>.html</b> files identify public pages. A push to <b>main</b> starts the GitHub Pages release and image audit. You never need to open these files yourself.",
+    "<b>content.js</b> holds the events, artists and photos. <b>app.js</b> builds the pages. <b>styles.css</b> controls appearance. <b>assets/</b> holds approved media. The lit wall, the opening and the page slides live in the studio's own folders, which Codex never edits. A push to <b>main</b> starts the safety checks and the release. You never need to open these files yourself.",
     GREEN,
     min_height=112,
 )
 brief.footer()
 
-# Page 6 - safety
+# Page 6 - the scene behind the pages
+brief.page_header("The scene behind your pages", "What Codex changes directly, and what goes to the studio")
+brief.paragraph(
+    "Every page hangs on a lit concrete wall with ivy, lamps and fireflies. On a computer the home page opens in the dark and the INSTINCT sign strikes on, and moving between pages slides along the wall. On a phone the opening is a pre-rendered version of the same scene. This scene is the studio's lighting and animation system.",
+    42, 664, 528,
+)
+brief.section_label("Names you can use", 42, 590)
+names = [
+    ("The opening", "The first seconds on the home page: black, then the sign lights the room."),
+    ("The lit sign", "The big glowing INSTINCT letters set into the wall."),
+    ("The wall", "The mossy concrete behind every page."),
+    ("The lamps", "The pools of light over headings and photos."),
+    ("The vines", "The ivy at the edges. One or two grow in fresh on every visit."),
+    ("The fireflies", "The small floating lights."),
+    ("The glowing button", "The main button on a page, lit from behind."),
+    ("The page slide", "On a computer, the sideways move from one page to the next."),
+]
+name_style = ParagraphStyle("name", fontName=FONT_BOLD, fontSize=8.8, leading=11, textColor=WHITE)
+y = 560
+for word, meaning in names:
+    brief.c.setFillColor(GREEN)
+    brief.c.circle(45, y - 5, 2.2, fill=1, stroke=0)
+    top = brief.paragraph(word, 56, y, 240, name_style)
+    y = brief.paragraph(meaning, 56, top - 1, 240, brief.small) - 11
+brief.card(312, 560, 258, "Codex changes directly", "Words, dates, lineups, links and ticket buttons. Photos and posters. New event and artist pages. Colours, sizes and spacing of the page's own text, boxes and buttons.", GREEN, min_height=112)
+brief.card(312, 436, 258, "Goes to the studio", "The opening, the sign, the wall, the light and haze, the vines, the fireflies, the glow behind buttons, the page slide and the phone opening. Codex does not edit these; it writes your request down for the studio.", PURPLE, min_height=124)
+brief.chat(42, 268, 528, "What Codex will say", "\"That is part of the site's lighting and animation system, which the studio looks after; I can pass your request on to them.\" Then it carries on with any part of your request that is ordinary content.", GREEN)
+brief.card(42, 170, 528, "Why it works this way", "The scene is built from the studio's own source and checked automatically before every release. Keeping it out of everyday edits keeps scrolling smooth, the opening intact and the page slides working. If a release ever breaks the scene, Codex restores the previous version safely.", PURPLE, min_height=84)
+brief.footer()
+
+# Page 7 - safety
 brief.page_header("Safety, publishing, and conflicts", "Simple client promises for work that affects the live site")
 brief.section_label("The promises", 42, 660)
 y = 628
@@ -385,6 +415,7 @@ for text in [
     "If two versions represent a real content decision, Codex asks one plain-English question.",
     "A change is not called live until the matching release succeeds and the public page is checked.",
     "Every published version has history and can be restored with a new safe save point.",
+    "Codex never edits the lighting and animation system; it passes those requests to the studio.",
 ]:
     y = brief.bullet(text, 42, y, 528)
 brief.card(42, 430, 528, "What a conflict sounds like in plain English", "\"Someone else updated the venue while I was changing the ticket link. Should the newer venue stay?\" Codex keeps both versions safe while you answer. You do not need to understand Git conflicts.", PURPLE, min_height=92)
@@ -393,7 +424,7 @@ brief.card(312, 315, 258, "Permission pop-ups", "Codex may pause before GitHub, 
 brief.chat(42, 165, 528, "If a release is stopped", "The safety check caught a problem, so the new version is not live yet. Codex will keep the previous site available when possible, fix the issue, and verify again before claiming success.", GREEN)
 brief.footer()
 
-# Page 7 - troubleshooting
+# Page 8 - troubleshooting
 brief.page_header("When something goes wrong", "Use one of these messages and let Codex investigate")
 left_cards = [
     ("I cannot see the update", "Check the latest release and public page. If it is live, help me rule out browser caching."),
@@ -416,6 +447,7 @@ glossary = [
     ("Preview", "Looking before it becomes public"),
     ("Conflict", "Two changes touched the same place"),
     ("Responsive", "Adapts to phones and computers"),
+    ("Studio", "The team that looks after the scene"),
 ]
 y = 622
 for word, meaning in glossary:

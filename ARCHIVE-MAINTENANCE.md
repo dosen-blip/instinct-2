@@ -9,11 +9,12 @@ This local preview starts from published revision `222b4e1` (September 8, 2026).
 - `app.js`: shared page templates, navigation, filters and accessible media viewer. Phone and computer layouts use the same event, artist and media content.
 - `archive.css`: the shared archive, Gallery and artist layouts, using the existing fonts and colours in `styles.css`.
 - `image-manifest.js` and `image-optimization-report.json`: generated image pipeline outputs. Do not hand-edit these.
+- `hero-3d/`, `world/`, `mobile/`, `assets/vendor/` and the `<!-- world -->` block in every page: the rendering system (3D opening, lit wall, page slides, phone version). Studio-maintained; never edited here. The class names the wall reads (headings, photo frames, sections) are listed in the handoff pack's site map.
 
 ## Add an event without displacing an older one
 
 1. Add a permanent event ID and record in `content.js`. Use the confirmed ISO date (`YYYY-MM-DD`), title, venue, poster, original announcement source and lineup.
-2. Add a matching `.html` shell using the same stylesheet and script load order as `vol-7.html`. Keep every existing URL.
+2. Add the matching page by copying `vol-7.html` whole to `<event-id>.html` and changing only its `<title>`. Every page other than home must keep exactly the same head (the page slide compares them, and the rendering block in it belongs to the studio). Keep every existing URL. The page takes its place on the wall by date automatically.
 3. Refer to existing artist IDs in the lineup. Add a new artist only if needed. Never copy biographies into the event.
 4. For multiple sessions, use `announcements`, each with its own title, poster, venue, hours and lineup. The combined lineup is derived automatically; do not duplicate it in the parent record.
 5. Keep event-specific set times in the lineup. Never store a set time or a permanent “current artist” flag on the artist profile.
@@ -43,15 +44,11 @@ Historical lineup acts without a previously written biography have a concise pro
 Run from this preview folder:
 
 ```sh
-node --check app.js
-node --check content.js
-node --check catalog.js
-node scripts/audit-images.mjs
-node scripts/audit-archive.mjs
-git diff --check
+node scripts/rekey.mjs     # after editing app.js, styles.css, archive.css, content.js, catalog.js or image-manifest.js
+node .agents/skills/publish-instinct-site/scripts/verify-site.mjs
 ```
 
-Also run the handoff pack's `publish-instinct-site/scripts/verify-site.mjs`, with this folder as the working directory. Both image and archive audits are now included in the local copy of the Pages workflow.
+The preflight runs the syntax checks, both audits, the whitespace check, the identical-head check, the rendering-system fingerprint and the cache keys. Both image and archive audits also run in the Pages workflow.
 
 The archive audit checks permanent routes, original URL retention, orphan artists, lineup connections, media ownership, duplicate selected photographs, asset references, script order, link schemes, complete date formats and event status boundaries. Keep visual and interaction checks at 390px and 1440px: image loading, overflow, keyboard use, Gallery filters, poster/media viewer, video playback and browser errors.
 

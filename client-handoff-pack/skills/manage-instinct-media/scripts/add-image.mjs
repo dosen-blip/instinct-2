@@ -253,6 +253,7 @@ try {
   }
 
   console.log(`Imported ${options.name} and passed the repository image audit.`);
+  console.log('image-manifest.js changed: once the image is placed, run node scripts/rekey.mjs so every page loads the new manifest.');
 } finally {
   rmSync(staging, { recursive: true, force: true });
 }
