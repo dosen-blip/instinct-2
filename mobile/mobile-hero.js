@@ -127,11 +127,39 @@ function buildFlies(list) {
     const glow = document.createElement('i'); glow.className = 'm-fly__light';
     body.style.setProperty('--c', f.c); body.style.setProperty('--s', (f.s * (0.8 + 0.5 * f.z)).toFixed(2));
     glow.style.setProperty('--c', f.c);
-    wake.append(glow, body);
-    fliesEl.append(wake);
+    const drift = document.createElement('i'); drift.className = 'm-fly__drift';   // carries it after the scroll (followFlies)
+    wake.append(glow, body); drift.append(wake);
+    fliesEl.append(drift);
     wake.style.left = `${f.x.toFixed(1)}px`; wake.style.top = `${f.y.toFixed(1)}px`;
-    return { ...f, i, wake, body, glow };
+    return { ...f, i, wake, body, glow, drift };
   });
+}
+// As over the desktop hero (fx.js follow, pace), and as the world's fireflies below do: as the page scrolls, each firefly
+// drifts down after the screen, by its own share of the scroll (.6-.95) and at its own pace (.35-.85 /s), so the ones in
+// view trail along and float back into place once the page stops; the moths keep to the sign. Scroll-driven, so it only
+// runs while one is still catching up. A firefly drifting into the plate's fade fades with it rather than being cut off
+// at the plate's edge.
+function followFlies(list) {
+  const k = () => Number(host.style.getPropertyValue('--k')) || 1;
+  const fl = list.filter((f) => f.kind !== 'moth').map((f) => ({ f, follow: 0.6 + 0.35 * (f.i * 0.618 % 1), pace: 0.35 + 0.5 * (f.i * 0.382 % 1), pan: null }));
+  let raf = 0, last = 0;
+  const tick = (now) => {
+    const dt = Math.min((now - last) / 1000, 1 / 20), sk = k();
+    last = now;
+    let moving = false;
+    for (const d of fl) {
+      const to = scrollY * d.follow;
+      d.pan = d.pan === null || still ? to : d.pan + (to - d.pan) * (1 - Math.exp(-dt * d.pace));
+      if (Math.abs(to - d.pan) > 0.5) moving = true; else d.pan = to;
+      const y = d.pan / sk;   // stage px
+      d.f.drift.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+      d.f.drift.style.opacity = Math.min(1, Math.max(0, (PLATE.h - 120 - d.f.y - y) / 320)).toFixed(3);
+    }
+    raf = moving ? requestAnimationFrame(tick) : 0;
+  };
+  const go = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick); } };
+  addEventListener('scroll', go, { passive: true });
+  go();
 }
 function animateFlies(list, n, at) {
   const anims = [];
@@ -233,6 +261,7 @@ if (!phone || params.has('nohero')) {
     SKIP_EVENTS.forEach((type) => addEventListener(type, skip, { passive: true }));
   }
   const list = buildFlies(flies());
+  followFlies(list);
   // the ivy painted on the plate, handed to the world layer in page px so it carries it on down (as site-hero.js does)
   fetch(url('./hero/hero-ivy.json')).then((r) => r.json()).then((ivy) => {
     const publish = () => {

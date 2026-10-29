@@ -49,7 +49,8 @@
   html.intro-pending :is(.m-plate__room, .m-plate__a, .m-fly, .world-over) { opacity: 0; }   /* .world-over: world.js's ivy over the plate */   /* black until the plates are decoded */
 
   /* its fireflies: the world's bodies, each with its light on the wall, added */
-  .m-fly { position: absolute; width: 0; height: 0; }
+  .m-fly, .m-fly__drift { position: absolute; width: 0; height: 0; }
+  .m-fly__drift { left: 0; top: 0; }
   .m-fly .world-fly, .m-fly__light { mix-blend-mode: plus-lighter; opacity: 0.5; }
   .m-fly__light {
     position: absolute; left: 0; top: 0; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%;

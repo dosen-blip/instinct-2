@@ -371,7 +371,7 @@ if (phoneMq.matches) for (const [k, src] of [[1, asset('./assets/wall-phone-1x.w
 }
 function bakePhone() {
   const vw = document.documentElement.clientWidth, h = Math.ceil(geo.h || 0), n = Math.ceil(h / BAKE_H);
-  const S = STILL_PHONE, H2 = S.h * 2, Y = ((camera.y % H2) + H2) % H2, c0 = Math.round((vw - S.w) / 2), r = LIGHT_RES;
+  const H2 = STILL_PHONE.h * 2, Y = ((camera.y % H2) + H2) % H2, r = LIGHT_RES;
   // the wall at the screen's density (up to 3, the still's own), resampled well here once (~19 MB a band at 3x on a
   // 375 px phone; phone pages are 2-4 bands)
   const ws = Math.min(Math.max(1, Math.round(devicePixelRatio)), 3);
@@ -379,29 +379,21 @@ function bakePhone() {
     let b = baked.bands[k];
     if (k >= n) { if (b) b.wall.style.display = b.light.style.display = 'none'; continue; }
     if (!b) {
-      b = baked.bands[k] = { wall: el('canvas', 'world-bake'), light: el('canvas', 'world-bake'), wallKey: '', lightKey: '' };
+      b = baked.bands[k] = { wall: el('canvas', 'world-bake'), light: el('canvas', 'world-bake'), wallBase: '', k: 0, lightKey: '' };
       albedo.prepend(b.wall); light.prepend(b.light);   // under the ivy, and under the moving lights
       for (const c of [b.wall, b.light]) Object.assign(c.style, { top: `${k * BAKE_H}px`, height: `${BAKE_H}px` });
     }
     b.wall.style.display = b.light.style.display = '';
     const y0 = k * BAKE_H, y1 = y0 + BAKE_H;
-    // the copies of the still that cross this band, every other one mirrored, as placeWall lays them
-    // (a screen wider than the still, up to the 720 px breakpoint, gets copies either side, mirrored, so no seam shows)
-    const wallKey = `${vw}|${Y}|${ws}|${baked.k}`;
-    if (wallKey !== b.wallKey) {
-      b.wallKey = wallKey;
+    // the wall (drawWall): at once when it is new or its layout changed, and the first time the still is in (never black
+    // on screen); the sharper still arriving later only sharpens what is there, so those bands are redrawn one a frame,
+    // nearest the screen first, rather than all of them in one long frame just as the page starts to be scrolled
+    const base = `${vw}|${Y}|${ws}`;
+    if (base !== b.wallBase || (!b.k && baked.k)) {
+      b.wallBase = base;
       const c = b.wall; c.width = Math.round(vw * ws); c.height = BAKE_H * ws; c.style.width = `${vw}px`;
-      const g = c.getContext('2d');
-      if (baked.still) {
-        g.imageSmoothingQuality = 'high';
-        for (let j = Math.floor((Y + y0) / S.h); j * S.h < Y + y1; j++) {
-          for (let i = Math.floor(-c0 / S.w); c0 + i * S.w < vw; i++) {
-            g.setTransform((i & 1 ? -1 : 1) * ws, 0, 0, (j & 1 ? -1 : 1) * ws, (c0 + i * S.w + (i & 1 ? S.w : 0)) * ws, (j * S.h - Y - y0 + (j & 1 ? S.h : 0)) * ws);
-            g.drawImage(baked.still, 0, 0, S.w, S.h);
-          }
-        }
-      } else { g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height); }
-    }
+      drawWall(b, k);
+    } else if (b.k < baked.k) upgradeWall();
     // the steady light over this band: the fill, the fixtures that reach it, the fade into the dark above the footer
     const lit = pools.filter((p) => p.on && p.py - geo.top + p.ry > y0 && p.py - geo.top - p.ry < y1);
     const fade = h - 340 < y1;
@@ -432,6 +424,38 @@ function bakePhone() {
       }
     }
   }
+}
+// the copies of the still that cross band k, every other one mirrored, as placeWall lays them (a screen wider than the
+// still, up to the 720 px breakpoint, gets copies either side, mirrored, so no seam shows); black until the still is in
+function drawWall(b, k) {
+  const vw = document.documentElement.clientWidth, S = STILL_PHONE, H2 = S.h * 2, Y = ((camera.y % H2) + H2) % H2;
+  const c0 = Math.round((vw - S.w) / 2), y0 = k * BAKE_H, y1 = y0 + BAKE_H, c = b.wall, ws = c.width / vw, g = c.getContext('2d');
+  b.k = baked.k;
+  if (!baked.still) { g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height); return; }
+  g.imageSmoothingQuality = 'high';
+  for (let j = Math.floor((Y + y0) / S.h); j * S.h < Y + y1; j++) {
+    for (let i = Math.floor(-c0 / S.w); c0 + i * S.w < vw; i++) {
+      g.setTransform((i & 1 ? -1 : 1) * ws, 0, 0, (j & 1 ? -1 : 1) * ws, (c0 + i * S.w + (i & 1 ? S.w : 0)) * ws, (j * S.h - Y - y0 + (j & 1 ? S.h : 0)) * ws);
+      g.drawImage(baked.still, 0, 0, S.w, S.h);
+    }
+  }
+}
+let upgrading = false;
+function upgradeWall() {
+  if (upgrading) return;
+  upgrading = true;
+  const step = () => {
+    const stale = baked.bands.map((b, k) => [b, k]).filter(([b]) => b && b.k < baked.k && b.wall.style.display !== 'none');
+    if (!stale.length) { upgrading = false; return; }
+    // (not in the middle of a fling: that frame is the compositor's)
+    if (Math.abs(scrollV) < 20) {
+      const mid = scrollY + innerHeight / 2 - geo.top;
+      const [b, k] = stale.sort((p, q) => Math.abs((p[1] + 0.5) * BAKE_H - mid) - Math.abs((q[1] + 0.5) * BAKE_H - mid))[0];
+      drawWall(b, k);
+    }
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 // phones: the haze, one small canvas stretched down the page (the same stops as the CSS gradient elsewhere)
 function bakeVeil(stops, h) {
@@ -638,8 +662,17 @@ function placeEdges() {
 // Each strand here draws from its own stream (nothing else on the page moves), roots within a few px of an edge and
 // drifts out, never in, with smaller leaves than on desktop, so the text column stays clear.
 const edgeX = (left, R, a = 2, b = 7) => (left ? a + R() * b : geo.vw - a - R() * b);
+// A strand drifting out past its margin took its stem off the screen and left its leaves poking in on their own (a
+// climber swung to x -14, a long hanger's tip to -20): on phones every strand keeps its stem on the screen, running
+// along the edge where it would have left it (a smooth max, so the bend is a curve; strands well inside are unchanged)
+const HUG = 3;
+function hug(pts) {
+  const left = pts[0].x < geo.vw / 2, smax = (u) => (u + Math.hypot(u, 5)) / 2;
+  for (const p of pts) p.x = left ? HUG + smax(p.x - HUG) : geo.vw - HUG - smax(geo.vw - HUG - p.x);
+  return pts;
+}
 function phoneHang(x, y, len, R, opts = {}) {
-  const left = x < geo.vw / 2, pts = hanger(x, y, len, R, { curlK: 0.3, wave: 4, bias: left ? -0.5 : 0.5 });
+  const left = x < geo.vw / 2, pts = hug(hanger(x, y, len, R, { curlK: 0.3, wave: 4, bias: left ? -0.5 : 0.5 }));
   return makeVine(pts, R, { size: 0.5 + 0.1 * R(), width: [2.6, 1], right: !left, kind: 'hanger', gap: 0.75 + 0.4 * R(), ...opts });
 }
 // the top of a page: a cluster in each corner (a long strand and a shorter one, now and then a sprig)
@@ -662,7 +695,7 @@ function phoneGrids(route) {
     if (r.h < 300 || r.y - lastY < 700 || r.y + r.h > geo.bottom - 120 || (geo.live && r.y < geo.liveEnd)) continue;
     lastY = r.y;
     const left = i++ % 2 === 0;
-    out.push(makeVine(climber(edgeX(left, R, 2, 5), r.y + r.h - 20, Math.min(r.h * 0.75, 520), R), R, { size: 0.55, width: [3, 1.1], right: !left, kind: 'climber', gap: 0.9 }));
+    out.push(makeVine(hug(climber(edgeX(left, R, 2, 5), r.y + r.h - 20, Math.min(r.h * 0.75, 520), R)), R, { size: 0.55, width: [3, 1.1], right: !left, kind: 'climber', gap: 0.9 }));
     if (r.h > 900) out.push(phoneHang(edgeX(!left, R), r.y + 10, Math.min(r.h * 0.45, 380), R));
   }
   return out;
@@ -765,7 +798,14 @@ function buildRoom(route, vw, ivySignature) {
     if (r.h > 200) roomPools.push({ x: r.x + r.w / 2, y: r.y - 40, rx: r.w * 0.95, ry: r.h * 0.9, c: OVERHEAD, i: 0.55 });
   }
 
-  if (geo.live && ivy) for (const nodes of ivy.strands) { const pts = carryOn(nodes, R); if (pts) fixedVines.push(makeVine(pts, R, { size: 0.85, width: [4.6, 1.4], leafFrom: 300, kind: 'carry' })); }
+  // (phones: the plate is cropped from a wider frame, so many of its strands run down just off the screen, and carried on
+  // they showed only their leaves poking in; those within a leaf's reach of the screen keep to the edge instead, as
+  // every phone strand does, and the ones further out, never seen, are not made at all)
+  if (geo.live && ivy) for (const nodes of ivy.strands) {
+    let pts = carryOn(nodes, R);
+    if (pts && geo.phone) pts = pts.some((p) => p.x > -70 && p.x < geo.vw + 70) ? hug(pts) : null;
+    if (pts) fixedVines.push(makeVine(pts, R, { size: 0.85, width: [4.6, 1.4], leafFrom: 300, kind: 'carry' }));
+  }
   if (route !== 'index') {
     if (geo.phone) {
       // (phones: tight to the edges and shorter, clear of the heading)
@@ -830,7 +870,8 @@ function addBands(count) {
     if (cy > (page ? 700 : liveEnd + 300) && R() < chance) {
       const left = fam === 1 ? k % 3 !== 0 : fam === 2 ? k % 3 === 0 : (k + route.length) % 2 === 0;
       const e = geo.phone ? [1, 4] : [10, 22];   // phones: hugging the edge, smaller leaves, clear of the text column
-      band.vine = makeVine(climber(left ? e[0] + R() * e[1] : vw - e[0] - R() * e[1], cy, (380 + R() * 420) * lenK, R), R, { size: geo.phone ? 0.52 : 0.75, width: [3.4, 1.2], right: !left, kind: 'climber', gap: [1, 0.85, 0.85, 1.3, 0.7][fam] ?? 1 });
+      const pts = climber(left ? e[0] + R() * e[1] : vw - e[0] - R() * e[1], cy, (380 + R() * 420) * lenK, R);
+      band.vine = makeVine(geo.phone ? hug(pts) : pts, R, { size: geo.phone ? 0.52 : 0.75, width: [3.4, 1.2], right: !left, kind: 'climber', gap: [1, 0.85, 0.85, 1.3, 0.7][fam] ?? 1 });
       vines.push(band.vine);
     }
     // and, on the pages, a strand hanging down the other margin (its own stream: nothing above changes), so a long page
@@ -934,10 +975,13 @@ function moreInBand(k, y0, band, lenK) {
 
 // ------------------------------------------------------------------ fireflies, in page space with a little depth
 // Each one is made once, with the room or its band, and starts dark until the frame loop places it.
-let flies = [], wakeAt = -1;
+let flies = [], wakeAt = -1, chasing = false;   // chasing: a phone firefly is still drifting after the scroll
 function addFly(kind, home, amp, R, extra = {}) {
   const rand = (a, b) => a + (b - a) * R();
   const f = { kind, ...KINDS[kind], home, amp, freq: [rand(0.08, 0.25), rand(0.1, 0.3)], phase: [R() * 6.3, R() * 6.3], period: rand(2.6, 6.5), offset: R() * 10, z: R(), off: { x: 0, y: 0, vx: 0, vy: 0 }, ...extra };
+  // phones: how much of the scroll it drifts down after, and how quickly it catches up (the hero's fx.js: follow, pace)
+  const n = flies.length;
+  Object.assign(f, { follow: f.moth !== undefined ? 0 : 0.6 + 0.35 * (n * 0.618 % 1), pace: 0.35 + 0.5 * (n * 0.382 % 1), pan: null });
   f.el = el('i', 'world-fly', bodies);
   f.el.style.setProperty('--c', rgb(f.c));
   f.el.style.setProperty('--s', (f.size * (0.8 + 0.5 * f.z)).toFixed(2));
@@ -971,6 +1015,16 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
   const light = lamp;
   // the two nearest the cursor drift over to it, gently
   const near = list.map((f, i) => [i, Math.hypot(f.px - pointer.x, f.py - pointer.y)]).filter(([, d]) => d < 320).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([i]) => i);
+  // phones: as over the hero, every firefly drifts down the page after the screen, by its own share of the scroll and at
+  // its own pace, so the ones about you trail along as you scroll and float back into place once you stop (a page
+  // opened part-way down starts them where they would have caught up to). Every one is moved, in view or not, so none
+  // jumps when it comes into view; while any is still catching up the frame loop runs at full rate (see chasing).
+  chasing = false;
+  if (geo.phone && !still) for (const f of list) {
+    const to = sy * f.follow;
+    f.pan = f.pan === null ? to : f.pan + (to - f.pan) * (1 - Math.exp(-dt * f.pace));
+    if (Math.abs(to - f.pan) > 0.5) chasing = true;
+  }
   list.forEach((f, i) => {
     let bx, by;
     if (f.moth !== undefined) {
@@ -980,7 +1034,7 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
       bx = sr.x + sr.w / 2 + Math.cos(a) * f.amp[0] * r * (sr.w / 160 + 0.6) + Math.sin(t * 3.1 + f.moth) * 6;
       by = sr.y + sr.h / 2 + Math.sin(a * 1.3) * f.amp[1] * r - 6 + Math.sin(t * 4.3 + f.moth * 2) * 4;
     } else {
-      const hx = f.home.x * sx, hy = f.home.y;   // its home, spread with the width
+      const hx = f.home.x * sx, hy = f.home.y + (f.pan || 0);   // its home, spread with the width (and on phones, where it has drifted to)
       if (!inView(hy)) { f.lvl = 0; return; }
       const s = (k) => Math.sin(t * f.freq[k] + f.phase[k]) + 0.35 * Math.sin(t * f.freq[k] * 2.9 + f.phase[k] * 1.3);
       bx = hx + f.amp[0] * s(0); by = hy + f.amp[1] * s(1);
@@ -989,20 +1043,14 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
     if (!still) {
       // startled by a fast scroll: a kick that settles back over a few seconds (a slow, well-damped spring)
       if (Math.abs(scrollV) > 3 && !geo.phone) { o.vx += (hash(i + t) - 0.5) * Math.abs(scrollV) * 2.2; o.vy -= scrollV * (0.8 + f.z); }
+      // (phones: a flick runs at thousands of px/s, and that kick, once per frame by speed, threw a firefly and its light
+      // on the wall 600-2700 px; there they follow the screen instead, above)
       let ax = -o.x * 1.1 - o.vx * 1.7, ay = -o.y * 1.1 - o.vy * 1.7;
-      // phones: a flick runs at thousands of px/s, and the kick above (once per frame, by speed) threw a firefly and its
-      // light on the wall 600-2700 px. There it is a push while the page moves, by speed up to ~2400 px/s and the same
-      // at any frame rate: 3-6 px for a slow scroll, 20-35 px for a hard flick
-      if (geo.phone && Math.abs(scrollV) > 3) {
-        const k = Math.min(Math.abs(scrollV), 40) / 40 * 70 * (0.6 + 0.4 * f.z);
-        ay -= Math.sign(scrollV) * k; ax += (hash(i * 7.3) - 0.5) * k;
-      }
       if (near.includes(i) && performance.now() - pointer.at < 4000) {
         const a = t * 0.8 + i, tx = pointer.x + Math.cos(a) * 46 - bx, ty = pointer.y + Math.sin(a) * 30 - 18 - by;
         ax += (tx - o.x) * 1.6; ay += (ty - o.y) * 1.6;
       }
       o.vx += ax * dt; o.vy += ay * dt; o.x += o.vx * dt; o.y += o.vy * dt;
-      if (geo.phone) { o.x = Math.max(-60, Math.min(60, o.x)); o.y = Math.max(-60, Math.min(60, o.y)); }
     }
     f.px = bx + o.x; f.py = by + o.y;
     let lvl;
@@ -1117,9 +1165,9 @@ function frame(now) {
   if (visible !== shown) { shown = visible; document.documentElement.classList.toggle('world-off', !visible); }
   if (!visible) { last = now; lastScroll = sy; return; }
   // 60 fps while something moves quickly (the cursor, growth, a slab striking); ~30 fps otherwise, like the hero.
-  // Scrolling needs nothing from here: the page carries the whole room.
+  // Scrolling needs nothing from here (the page carries the whole room), except on phones the fireflies drifting after it.
   const sprouting = growing.some((v) => v.grow !== null && v.drawn < 1);
-  const busy = now - pointer.at < 1200 || sprouting || !!held || [...slabs.values()].some((s) => s.strike >= 0);
+  const busy = now - pointer.at < 1200 || sprouting || chasing || !!held || [...slabs.values()].some((s) => s.strike >= 0);
   if (busy) lastBusy = now;
   if (now - lastBusy > 1200 && now - last < 1000 / 30 - 3) return;
   if (still && wakeAt >= 0 && clock - wakeAt > 2 && now - lastBusy > 1200) { last = now; lastScroll = sy; return; }   // reduced motion: nothing left to move
