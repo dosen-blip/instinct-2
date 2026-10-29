@@ -204,8 +204,14 @@ function syncOver() {
   const a = over.animate(roomTrack().map((v) => ({ opacity: v })), { duration: INTRO.roomEnd * 1000, fill: 'both', easing: 'linear' });
   a.startTime = introAt;
   introAnims.push(a);
+  a.finished.then(() => settle(a)).catch(() => {});
   if (revealed) a.finish();
 }
+// An opacity animation held at its end (fill: both) keeps its element a group the compositor composes off screen every
+// frame, for nothing once it is at 1: the plate's room (the whole plate, recomposed with every step of the sign's hum)
+// and the strands over it. Once one finishes, its end value is written to the element and the animation let go.
+// (and dropped from the intro's list, so a later skip() does not finish it, and hold it, again)
+function settle(a) { try { a.commitStyles(); a.cancel(); } catch {} introAnims = introAnims.filter((x) => x !== a); }
 document.addEventListener('world:room', () => syncOver());
 function reveal() {
   if (revealed) return;
@@ -239,7 +245,7 @@ function intro(at) {
   introAt = at;
   syncOver();
   for (const x of [a, b, r, d]) x.startTime = at;   // one clock for all of them
-  r.finished.then(() => { timing.done = Math.round(performance.now() - timing.start); imgA.style.display = 'none'; startHum(); }).catch(() => {});
+  r.finished.then(() => { timing.done = Math.round(performance.now() - timing.start); imgA.style.display = 'none'; settle(r); startHum(); }).catch(() => {});
   // the page's reveal on the same clock as the light (an empty animation as a cue), so the two never drift apart
   const cue = room.animate([], { duration: INTRO.reveal * 1000 });
   cue.startTime = at;

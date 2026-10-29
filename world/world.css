@@ -190,6 +190,13 @@ html.world-off :is(.world-vignette, .world-grain) { display: none; }
 @media (max-width: 720px) {
   /* fixed to the screen at the large viewport's height, so the URL bar showing and hiding never resizes it */
   .world-vignette { bottom: auto; height: 100lvh; }
+  /* the flattened wall (world.js composeBand): nothing page-sized is blended on a phone (iOS composes a blended page-high
+     layer off screen, tile by tile, behind a flick). The light and the bodies are plain boxes here, not groups, and what
+     moves blends on its own over the bands: the lights brighten the wall under them, the bodies add */
+  .world-light, .world-bodies { z-index: auto; isolation: auto; mix-blend-mode: normal; }
+  .world-veil, .world-light__fade { display: none; }
+  .world-lamp { mix-blend-mode: color-dodge; will-change: transform, opacity; }
+  .world-bodies .world-fly { mix-blend-mode: plus-lighter; }
   /* the lit slab's bloom: one composited glow whose opacity is the backlight, instead of two large blurred shadows
      repainted with every step of the hum */
   .archive-shell > .archive-actions > a:first-child,
