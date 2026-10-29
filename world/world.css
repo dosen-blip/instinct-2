@@ -31,6 +31,10 @@ body { background: #000; }
 .world-albedo__tile { position: absolute; left: 0; right: 0; height: 1440px; background: center top / 2560px 1440px repeat-x; }
 .world-albedo__tile.is-flipped { transform: scaleY(-1); }   /* mirrored, so consecutive copies have no seam */
 .world-vine { position: absolute; }
+/* phones: the wall and its steady light baked into canvases, one pair per 1440 px of page, and the haze stretched from
+   one small canvas (world.js bakePhone): uploaded once, moved by the compositor, never rasterised while scrolling */
+.world-bake { position: absolute; left: 0; display: block; pointer-events: none; will-change: transform; }
+.world-veil__bake { position: absolute; inset: 0; width: 100%; height: 100%; display: block; will-change: transform; }
 .world-light { isolation: isolate; mix-blend-mode: multiply; }
 .world-lamp { position: absolute; mix-blend-mode: plus-lighter; }
 .world-light__fade { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 340px; background: linear-gradient(#fff, #000); mix-blend-mode: multiply; }   /* the wall falls into the dark above the footer */

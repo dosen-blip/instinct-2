@@ -61,10 +61,13 @@ export async function createHero(container, { params = new URLSearchParams(), fo
   // fireflies or haze, lit by the key light alone) at the page's scale, for the baked wall further down the site
   const stillWpp = params.has('still') ? Number(params.get('still')) || .009045 : 0;
   if (stillWpp) focusY = () => -4;   // the letters go far above the bake, out of its reach
+  // &sdpr=3 renders the still at 3 px per CSS px (default 1); &density=6.3 bakes its wall fields at that many texels per
+  // CSS px (default 1.33, the 2560 still's; the phone hero's plates have 6.3), for the phone wall (lab/world/assets)
+  const stillDpr = Number(params.get('sdpr')) || 1, stillDensity = Number(params.get('density')) || 0;
   // ?capture=300 renders fixed 30fps frames (60Hz simulation) and POSTs them to a local receiver on :4600
   const capture = params.has('capture') ? { frames: Number(params.get('capture')) || 300, fps: 30, sub: 2 } : null;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: !!capture });
-  const baseDpr = stillWpp ? 1 : Math.min(devicePixelRatio, 2);
+  const baseDpr = stillWpp ? stillDpr : Math.min(devicePixelRatio, 2);
   renderer.setPixelRatio(baseDpr);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -305,7 +308,7 @@ export async function createHero(container, { params = new URLSearchParams(), fo
     wall.position.y = domMinY + dom.y / 2;
     // a ?still wider than 2560 px keeps the bake's texel density (the wall's look) by widening the bake with it
     const stillK = stillWpp ? w / 2560 : 1;
-    const bw = Math.round(BAKE_W * stillK), bh = Math.round(bw * dom.y / dom.x);
+    const bw = stillWpp && stillDensity ? Math.round(stillDensity * dom.x / view.wpp) : Math.round(BAKE_W * stillK), bh = Math.round(bw * dom.y / dom.x);
     bakeRT.setSize(bw, bh);
     wallUniforms.uBakeTexel.value.set(1 / bw, 1 / bh);
     shadowRT.setSize(2048, Math.round(2048 * dom.y / dom.x));

@@ -15,6 +15,9 @@
      blur over moving fireflies is recomputed every frame, the costliest thing a phone GPU could be asked for here */
   #app { overflow: clip; }
   .site-header, .site-header.is-scrolled { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(2, 3, 2, 0.88); }
+  /* and it keeps its height when it condenses: it sits in the page's flow, so the 8 px it used to lose moved everything
+     below it against the wall (which belongs to the page and stays put) every time the page left the top */
+  .site-header.is-scrolled { padding: 14px 18px; }
   .site-header.is-open .site-nav__links { background: rgba(2, 3, 2, 0.97); }
 
   /* ---------------------------------------------------------------- the baked hero (mobile-hero.js)

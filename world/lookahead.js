@@ -103,7 +103,8 @@ async function warm() {
   const pages = !(c?.saveData || /2g$/.test(c?.effectiveType || ''));
   // wall-gl (lab/world/wall-gl.js): the hero's two concrete textures, which every other page's GL wall needs, into the
   // cache (the home hero has usually fetched them already), so the next page's wall comes up without the still first
-  const concrete = ['concrete-dark', 'concrete-light'].map((n) => () => fetch(new URL(`../hero-3d/assets/${n}.webp`, import.meta.url), { priority: 'low' }).then((r) => r.blob()).catch(() => {}));
+  // (desktop only: phones have no GL wall, and these 5.5 MB would only compete with the phone wall's own still)
+  const concrete = matchMedia('(max-width: 720px)').matches ? [] : ['concrete-dark', 'concrete-light'].map((n) => () => fetch(new URL(`../hero-3d/assets/${n}.webp`, import.meta.url), { priority: 'low' }).then((r) => r.blob()).catch(() => {}));
   const jobs = [...homeJobs(), ...concrete, ...(pages ? ROUTES.flatMap(pageJobs) : [])];
   window.__warm = { total: jobs.length, done: 0, started: performance.now() };
   const worker = async () => {

@@ -52,7 +52,10 @@ const HEADINGS = '.archive-heading, .archive-section-heading h2, .archive-sectio
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // phones (<=720px) get the world too, scaled to a phone (lab/MOBILE.md); ?noworld leaves a page without it
 const phoneMq = matchMedia('(max-width: 720px)'), NOWORLD = new URLSearchParams(location.search).has('noworld'), NOHERO = new URLSearchParams(location.search).has('nohero');
-const STILL_PHONE = { w: 800, h: 1440 };    // phones: the middle 800 px of the same bake, same scale (assets/wall-phone.webp)
+// phones: the middle 440 CSS px of the same stretch of wall at the same scale, baked as densely as the phone hero's plates
+// (hero.js ?still=.009045&size=800x1440&key=24&sdpr=3&density=6.3, cropped): wall-phone-3x.webp at 3 px per CSS px
+// (q80, as plate C), and wall-phone-1x.webp, the same image at 1x, drawn first while the 3x arrives (see bakePhone)
+const STILL_PHONE = { w: 440, h: 1440 };
 // phones: more ivy and more fireflies, all of the ivy within a few px of the margins (lab/MOBILE.md, second phone pass)
 const PHONE_FLIES = 62000;   // px² of band per firefly (desktop 110000): 6 to a 1000 px band at 375 px
 const PHONE_GRIDS = '.archive-card-grid, .archive-media-grid, .archive-lineup-grid, .archive-artist-grid, .archive-appearances';
@@ -295,14 +298,18 @@ function measure() {
   // the wall: copies of the still down the page, every other one mirrored so there is no seam
   const h = geo.bottom - geo.top;
   Object.assign(albedo.style, { top: `${geo.top}px`, height: `${h}px` });
-  // the room's fill, as at the seam and thinning out down the page (home), or the darker pages' own
-  Object.assign(light.style, { top: `${geo.top}px`, height: `${h}px`, background: geo.live
+  // the room's fill, as at the seam and thinning out down the page (home), or the darker pages' own (phones: baked, see
+  // bakePhone, with the fade above the footer)
+  Object.assign(light.style, { top: `${geo.top}px`, height: `${h}px`, background: geo.phone ? 'none' : geo.live
     ? `linear-gradient(rgb(${rgb(geo.plate ? AMBIENT_PLATE : AMBIENT)}) ${geo.liveEnd - geo.top}px, rgb(${rgb(AMBIENT_FAR)}) ${geo.liveEnd + FAR - geo.top}px)`
     : `rgb(${rgb(pageFill())})` });
+  lightFade.style.display = geo.phone ? 'none' : '';
   Object.assign(bodies.style, { top: `${geo.top}px`, height: `${h}px` });
   // the haze: as at the seam, thinning out down the page, gone into the dark above the footer
   const near = geo.live ? geo.liveEnd - geo.top : 0, far = geo.live ? VEIL_FAR : pageVeil();
-  Object.assign(veil.style, { top: `${geo.top}px`, height: `${h}px`, background: `linear-gradient(${geo.plate ? '#000 0px, ' : ''}rgb(${rgb(geo.live ? (geo.plate ? VEIL_PLATE : VEIL) : far)}) ${near}px, rgb(${rgb(far)}) ${near + (geo.live ? FAR : 0)}px, rgb(${rgb(far)}) ${h - 340}px, #000 ${h}px)` });
+  const veilStops = [...(geo.plate ? [['0,0,0', 0]] : []), [rgb(geo.live ? (geo.plate ? VEIL_PLATE : VEIL) : far), near], [rgb(far), near + (geo.live ? FAR : 0)], [rgb(far), h - 340], ['0,0,0', h]];
+  Object.assign(veil.style, { top: `${geo.top}px`, height: `${h}px`, background: geo.phone ? 'none' : `linear-gradient(${veilStops.map(([c, y]) => `rgb(${c}) ${y}px`).join(', ')})` });
+  if (geo.phone) bakeVeil(veilStops, h);
   geo.h = h;
   if (over) { over.style.height = `${geo.top + 600}px`; overIn.style.top = `${geo.top}px`; }   // phones: the strands over the plate share the wall's coordinates
   placeWall();
@@ -317,6 +324,7 @@ function measure() {
   followEdges(route);
   for (const v of vines) placeVine(v);
   for (const p of pools) placePool(p);
+  if (geo.phone) bakePhone();
 
   // slabs: the lights people press
   const found = new Set(inApp(SLABS));
@@ -344,30 +352,102 @@ function measure() {
 const WALL = { src: asset('./assets/wall-tile.webp'), w: 5120, x0: 1536 };   // x0: where wall.webp's left edge sits in it
 const camera = { x: 0, y: 0 }, wallTiles = [];
 let wallKey = '';
-const phoneTiles = [];
-let phoneKey = '';
-function placePhoneWall() {
-  const vw = document.documentElement.clientWidth, h = geo.h || 0, S = STILL_PHONE, H2 = S.h * 2;
-  const Y = ((camera.y % H2) + H2) % H2, c0 = (vw - S.w) / 2, key = `${vw}|${h}|${Y}`;
-  if (key === phoneKey) return;
-  phoneKey = key; wallKey = '';
-  for (const t of wallTiles) t.style.display = 'none';
-  let k = 0;
-  for (let j = Math.floor(Y / S.h); j * S.h < h + Y; j++, k++) {
-    let t = phoneTiles[k];
-    if (!t) {
-      t = phoneTiles[k] = el('div', 'world-albedo__tile', albedo);
-      albedo.prepend(t);   // under the ivy
-      Object.assign(t.style, { left: 0, top: 0, right: 'auto', width: `${S.w}px`, height: `${S.h}px`, backgroundImage: `url(${asset('./assets/wall-phone.webp')})`, backgroundSize: `${S.w}px ${S.h}px`, backgroundPosition: '0 0', backgroundRepeat: 'no-repeat' });
+// Phones: the wall and its steady light, baked. As page-high layers (a background per copy of the still, the room's fill
+// and every fixture as gradients) the browser rasterised them as the page scrolled, and a flick outran it: the bare wall
+// showed, bright, before its light arrived, then everything popped in. Instead the still and the room's steady light (the
+// fill, every fixture, the fade above the footer) are drawn into canvases, one pair per BAKE_H of page, all of them as
+// soon as the room is laid out: a canvas is uploaded once and only moved by the compositor, so the whole page is ready
+// off screen. The wall at the screen's density up to 3 (see ws), its light at LIGHT_RES of a CSS px (it is smooth);
+// both are drawn in the same frame, and until the still has decoded the wall is black, never unlit. The 1x still comes
+// in first and the 3x one is drawn over it as soon as it has decoded (the same image, so it only sharpens). The
+// fireflies' and the slabs' lights stay elements, added over the baked light in the same multiplied layer.
+const BAKE_H = 1440, LIGHT_RES = 0.25;
+const baked = { still: null, k: 0, bands: [], veil: null, veilKey: '' };
+if (phoneMq.matches) for (const [k, src] of [[1, asset('./assets/wall-phone-1x.webp')], [3, asset('./assets/wall-phone-3x.webp')]]) {
+  // (decoded off the main thread; a page that is not painting, such as a background tab, never finishes decode(), so
+  // after a second it is drawn anyway)
+  load(src).then((i) => Promise.race([i.decode().catch(() => {}), new Promise((r) => setTimeout(r, 1000))]).then(() => i))
+    .then((i) => { if (k > baked.k) { baked.still = i; baked.k = k; if (geo.on) bakePhone(); } }).catch(() => {});
+}
+function bakePhone() {
+  const vw = document.documentElement.clientWidth, h = Math.ceil(geo.h || 0), n = Math.ceil(h / BAKE_H);
+  const S = STILL_PHONE, H2 = S.h * 2, Y = ((camera.y % H2) + H2) % H2, c0 = Math.round((vw - S.w) / 2), r = LIGHT_RES;
+  // the wall at the screen's density (up to 3, the still's own), resampled well here once (~19 MB a band at 3x on a
+  // 375 px phone; phone pages are 2-4 bands)
+  const ws = Math.min(Math.max(1, Math.round(devicePixelRatio)), 3);
+  for (let k = 0; k < Math.max(n, baked.bands.length); k++) {
+    let b = baked.bands[k];
+    if (k >= n) { if (b) b.wall.style.display = b.light.style.display = 'none'; continue; }
+    if (!b) {
+      b = baked.bands[k] = { wall: el('canvas', 'world-bake'), light: el('canvas', 'world-bake'), wallKey: '', lightKey: '' };
+      albedo.prepend(b.wall); light.prepend(b.light);   // under the ivy, and under the moving lights
+      for (const c of [b.wall, b.light]) Object.assign(c.style, { top: `${k * BAKE_H}px`, height: `${BAKE_H}px` });
     }
-    t.style.display = '';
-    t.style.transform = `translate3d(${c0}px, ${j * S.h - Y}px, 0) scale(1, ${j & 1 ? -1 : 1})`;
+    b.wall.style.display = b.light.style.display = '';
+    const y0 = k * BAKE_H, y1 = y0 + BAKE_H;
+    // the copies of the still that cross this band, every other one mirrored, as placeWall lays them
+    // (a screen wider than the still, up to the 720 px breakpoint, gets copies either side, mirrored, so no seam shows)
+    const wallKey = `${vw}|${Y}|${ws}|${baked.k}`;
+    if (wallKey !== b.wallKey) {
+      b.wallKey = wallKey;
+      const c = b.wall; c.width = Math.round(vw * ws); c.height = BAKE_H * ws; c.style.width = `${vw}px`;
+      const g = c.getContext('2d');
+      if (baked.still) {
+        g.imageSmoothingQuality = 'high';
+        for (let j = Math.floor((Y + y0) / S.h); j * S.h < Y + y1; j++) {
+          for (let i = Math.floor(-c0 / S.w); c0 + i * S.w < vw; i++) {
+            g.setTransform((i & 1 ? -1 : 1) * ws, 0, 0, (j & 1 ? -1 : 1) * ws, (c0 + i * S.w + (i & 1 ? S.w : 0)) * ws, (j * S.h - Y - y0 + (j & 1 ? S.h : 0)) * ws);
+            g.drawImage(baked.still, 0, 0, S.w, S.h);
+          }
+        }
+      } else { g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height); }
+    }
+    // the steady light over this band: the fill, the fixtures that reach it, the fade into the dark above the footer
+    const lit = pools.filter((p) => p.on && p.py - geo.top + p.ry > y0 && p.py - geo.top - p.ry < y1);
+    const fade = h - 340 < y1;
+    const lightKey = `${vw}|${geo.live}|${geo.plate}|${geo.liveEnd - geo.top}|${geo.phone}|${fade ? h : ''}|${lit.map((p) => p.key + p.i).join(';')}`;
+    if (lightKey !== b.lightKey) {
+      b.lightKey = lightKey;
+      const c = b.light; c.width = Math.ceil(vw * r); c.height = BAKE_H * r; c.style.width = `${vw}px`;
+      const g = c.getContext('2d');
+      g.setTransform(r, 0, 0, r, 0, -y0 * r);
+      g.globalCompositeOperation = 'source-over';
+      if (geo.live) {
+        const near = geo.liveEnd - geo.top, fill = g.createLinearGradient(0, near, 0, near + FAR);
+        fill.addColorStop(0, `rgb(${rgb(geo.plate ? AMBIENT_PLATE : AMBIENT)})`); fill.addColorStop(1, `rgb(${rgb(AMBIENT_FAR)})`);
+        g.fillStyle = fill;
+      } else g.fillStyle = `rgb(${rgb(pageFill())})`;
+      g.fillRect(0, y0, vw, BAKE_H);
+      g.globalCompositeOperation = 'lighter';   // as the lamps' plus-lighter
+      for (const p of lit) {
+        g.save(); g.translate(p.px, p.py - geo.top); g.scale(p.rx, p.ry);
+        const grad = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+        for (const [d, v] of FALLOFF) grad.addColorStop(d, `rgb(${rgb(p.c, p.i * v)})`);
+        g.fillStyle = grad; g.fillRect(-1, -1, 2, 2); g.restore();
+      }
+      if (fade) {
+        g.globalCompositeOperation = 'multiply';
+        const f = g.createLinearGradient(0, h - 340, 0, h); f.addColorStop(0, '#fff'); f.addColorStop(1, '#000');
+        g.fillStyle = f; g.fillRect(0, h - 340, vw, y1 - (h - 340));
+      }
+    }
   }
-  for (; k < phoneTiles.length; k++) phoneTiles[k].style.display = 'none';
+}
+// phones: the haze, one small canvas stretched down the page (the same stops as the CSS gradient elsewhere)
+function bakeVeil(stops, h) {
+  const key = `${h}|${stops.join(';')}`;
+  if (key === baked.veilKey) return;
+  baked.veilKey = key;
+  if (!baked.veil) { baked.veil = el('canvas', 'world-veil__bake', veil); }
+  const c = baked.veil, rows = Math.min(4096, Math.max(2, Math.ceil(h / 16)));
+  c.width = 1; c.height = rows;
+  const g = c.getContext('2d'), grad = g.createLinearGradient(0, 0, 0, rows);
+  let prev = 0;
+  for (const [col, y] of stops) { prev = Math.max(prev, clamp01(y / h)); grad.addColorStop(prev, `rgb(${col})`); }
+  g.fillStyle = grad; g.fillRect(0, 0, 1, rows);
 }
 function placeWall() {
-  if (geo.phone) return placePhoneWall();
-  if (phoneKey) { phoneKey = ''; for (const t of phoneTiles) t.style.display = 'none'; }
+  if (geo.phone) return;   // baked at the end of measure(), once the fixtures are placed
   const vw = document.documentElement.clientWidth, h = geo.h || 0, H2 = STILL.h * 2;
   const X = ((camera.x % WALL.w) + WALL.w) % WALL.w, Y = ((camera.y % H2) + H2) % H2, c0 = (vw - STILL.w) / 2 - WALL.x0;
   const key = `${vw}|${h}|${X}|${Y}`;
@@ -447,7 +527,7 @@ function placePool(p) {
   if (key === p.key) return;
   p.key = key; p.on = on;
   placeLight(p.el, { x: p.px, y: p.py, rx: p.rx, ry: p.ry });
-  p.el.style.display = on ? '' : 'none';
+  p.el.style.display = on && !geo.phone ? '' : 'none';   // phones: drawn into the baked light instead
 }
 function addPool(p, isRoom) {
   const q = { ...p, el: lightEl(p.c, p.i), room: isRoom, key: '' };
@@ -880,7 +960,8 @@ function hold() {
   return { flies: h.flies.map((f) => ({ body: f.el, light: f.light })), release: h.release };
 }
 const pointer = { x: -1e4, y: -1e4, at: -1e9 };
-addEventListener('pointermove', (e) => { pointer.x = e.clientX + scrollX; pointer.y = e.clientY + scrollY; pointer.at = performance.now(); }, { passive: true });
+// (a mouse only: a finger's touches start scrolls, and two fireflies gathering where a scroll began read as the wall moving)
+addEventListener('pointermove', (e) => { if (e.pointerType !== 'mouse') return; pointer.x = e.clientX + scrollX; pointer.y = e.clientY + scrollY; pointer.at = performance.now(); }, { passive: true });
 
 function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx) {
   const t = still ? 0 : clockT;   // reduced motion: every firefly rests where it is, at its own level
@@ -907,13 +988,21 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
     const o = f.off;
     if (!still) {
       // startled by a fast scroll: a kick that settles back over a few seconds (a slow, well-damped spring)
-      if (Math.abs(scrollV) > 3) { o.vx += (hash(i + t) - 0.5) * Math.abs(scrollV) * 2.2; o.vy -= scrollV * (0.8 + f.z); }
+      if (Math.abs(scrollV) > 3 && !geo.phone) { o.vx += (hash(i + t) - 0.5) * Math.abs(scrollV) * 2.2; o.vy -= scrollV * (0.8 + f.z); }
       let ax = -o.x * 1.1 - o.vx * 1.7, ay = -o.y * 1.1 - o.vy * 1.7;
+      // phones: a flick runs at thousands of px/s, and the kick above (once per frame, by speed) threw a firefly and its
+      // light on the wall 600-2700 px. There it is a push while the page moves, by speed up to ~2400 px/s and the same
+      // at any frame rate: 3-6 px for a slow scroll, 20-35 px for a hard flick
+      if (geo.phone && Math.abs(scrollV) > 3) {
+        const k = Math.min(Math.abs(scrollV), 40) / 40 * 70 * (0.6 + 0.4 * f.z);
+        ay -= Math.sign(scrollV) * k; ax += (hash(i * 7.3) - 0.5) * k;
+      }
       if (near.includes(i) && performance.now() - pointer.at < 4000) {
         const a = t * 0.8 + i, tx = pointer.x + Math.cos(a) * 46 - bx, ty = pointer.y + Math.sin(a) * 30 - 18 - by;
         ax += (tx - o.x) * 1.6; ay += (ty - o.y) * 1.6;
       }
       o.vx += ax * dt; o.vy += ay * dt; o.x += o.vx * dt; o.y += o.vy * dt;
+      if (geo.phone) { o.x = Math.max(-60, Math.min(60, o.x)); o.y = Math.max(-60, Math.min(60, o.y)); }
     }
     f.px = bx + o.x; f.py = by + o.y;
     let lvl;
