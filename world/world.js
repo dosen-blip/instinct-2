@@ -265,7 +265,10 @@ function measure() {
   const app = document.getElementById('app'), route = document.documentElement.dataset.route || 'index';
   // phones included: the home page renders its own phone view (.mobile-view) there, every other page is the same markup
   geo.phone = phoneMq.matches;
-  geo.on = !NOWORLD && !!app.firstElementChild;
+  // (#app empty for a moment, as while a page transition lifts the old page out before the next is rendered: the world
+  // keeps its state rather than switching itself off and back on)
+  if (!NOWORLD && !app.firstElementChild) return false;
+  geo.on = !NOWORLD;
   document.documentElement.classList.toggle('has-world', geo.on);
   if (!geo.on) return false;
   // the live wall: the desktop WebGL hero (it runs on to the end of the preview panel) or, on phones, the hero's baked
@@ -1098,3 +1101,32 @@ if (!new URLSearchParams(location.search).has('nowallgl') && !phoneMq.matches &&
 // ---- end wall-gl hook
 // (round 6) the desktop pages' brighter fill and haze, for the GL tier too (it runs on desktop only; phones keep theirs)
 if (window.__world.tone) Object.assign(window.__world.tone, { AMBIENT_PAGE: AMBIENT_DESK, VEIL_PAGE: VEIL_DESK });
+
+// ---- crossing the phone breakpoint (round 10): every gate on this site (the hero and the pans on desktop, the phone
+// layer and its intro on phones, the GL wall, the leaf atlas, this world's own mode) is decided once, at load. A window
+// resized across 720 px, and left there for 300 ms, starts the whole stack again in the right mode: the page reloads,
+// keeping where the reader was (as a share of the page, since the two layouts differ in length), and skipping the
+// opening it would otherwise play again. No half-state, and never the plain site. (app.js leaves its own breakpoint
+// re-render to this while __worldReinit is set.)
+{
+  const atLoad = phoneMq.matches;
+  let timer = 0;
+  window.__worldReinit = true;
+  phoneMq.addEventListener('change', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (phoneMq.matches === atLoad) return;   // it came back: nothing to do
+      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      try { sessionStorage.setItem('world-reinit', JSON.stringify({ path: location.pathname + location.search, share: scrollY / max })); } catch {}
+      location.reload();
+    }, 300);
+  });
+  let back = null;
+  try { back = JSON.parse(sessionStorage.getItem('world-reinit') || 'null'); sessionStorage.removeItem('world-reinit'); } catch {}
+  if (back && back.path === location.pathname + location.search) {
+    // the opening is skipped (any input does that), and the reader put back where they were
+    if (document.documentElement.classList.contains('intro-pending')) dispatchEvent(new KeyboardEvent('keydown'));
+    const put = () => scrollTo({ top: back.share * Math.max(0, document.documentElement.scrollHeight - innerHeight), behavior: 'instant' });
+    requestAnimationFrame(put); setTimeout(put, 400);
+  }
+}

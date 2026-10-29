@@ -75,16 +75,16 @@ const roomTrack = () => Array.from({ length: Math.round(INTRO.roomEnd * HZ) + 1 
 const host = document.createElement('div');
 host.className = 'home-opening__plate';   // world.js finds the live wall's end by this
 host.setAttribute('aria-hidden', 'true');
-// decoding="sync": the plates must be in the very first paint that shows them. With "async" Chrome leaves an image out
-// of a frame until a later raster has decoded it, and a page that is not producing frames (a hidden or throttled tab,
-// the compositor busy) then shows a black plate under its ivy and fireflies.
+// The plates get their src only once they are downloaded and decoded off the main thread (see boot), so no paint ever
+// waits on them. decoding="sync" then just says "paint them in the frame that shows them" (from the decode cache): with
+// "async" Chrome can leave an image out of a frame, and a page that is not producing frames shows a black plate.
 host.innerHTML = `
   <div class="m-plate__stage">
     <div class="m-plate__dolly">
-      <img class="m-plate__a" alt="" decoding="sync" fetchpriority="high" src="${url('./hero/hero-a.webp')}" width="1290" height="4560">
+      <img class="m-plate__a" alt="" decoding="sync" width="1290" height="4560">
       <div class="m-plate__room">
-        <img class="m-plate__c" alt="" decoding="sync" fetchpriority="high" src="${url('./hero/hero-c.webp')}" width="1290" height="4560">
-        <img class="m-plate__s" alt="" decoding="sync" fetchpriority="high" src="${url('./hero/hero-s.webp')}" width="1290" height="4560">
+        <img class="m-plate__c" alt="" decoding="sync" width="1290" height="4560">
+        <img class="m-plate__s" alt="" decoding="sync" width="1290" height="4560">
       </div>
       <div class="m-plate__flies"></div>
     </div>
@@ -183,6 +183,7 @@ function reveal() {
   if (revealed) return;
   revealed = true;
   timing.reveal = Math.round(performance.now() - timing.start);
+  root.dataset.heroTiming = JSON.stringify(timing);   // readable from outside (a DOM dump, a remote phone)
   root.classList.remove('intro-pending');
   SKIP_EVENTS.forEach((type) => removeEventListener(type, skip));
   setTimeout(() => root.classList.remove('intro'), 2600);
@@ -216,13 +217,6 @@ function intro(at) {
   cue.startTime = at;
   introAnims.push(cue);
   cue.finished.then(reveal).catch(() => {});
-  // The light lives on the animation clock, which only runs while the page is painting frames (a page loaded in a
-  // hidden tab or pane, or a phone that is throttling, can sit at t = 0 for as long as it likes). If that clock has not
-  // got going, go straight to the lit room instead of revealing the page over a black plate; and whatever happens, by
-  // the time the room should be up (wall clock), it is: the intro's animations are finished, never left part way.
-  // (stalled: also without the reveal's CSS fades, which run on the same stopped clock)
-  setTimeout(() => { if (!(document.timeline.currentTime - at >= 150)) { timing.stalled = true; skip(); root.classList.remove('intro'); } }, 700);
-  setTimeout(() => { if (!timing.held) skip(); }, (INTRO.roomEnd + 0.4) * 1000);
 }
 
 // ------------------------------------------------------------------ boot
@@ -237,7 +231,6 @@ if (!phone || params.has('nohero')) {
   addEventListener('resize', scale);
   if (root.classList.contains('intro-pending')) {
     SKIP_EVENTS.forEach((type) => addEventListener(type, skip, { passive: true }));
-    setTimeout(skip, 12000);   // never hold the site hostage (skip finishes the light too: never a black plate)
   }
   const list = buildFlies(flies());
   // the ivy painted on the plate, handed to the world layer in page px so it carries it on down (as site-hero.js does)
@@ -254,31 +247,39 @@ if (!phone || params.has('nohero')) {
     publish();
     addEventListener('resize', () => requestAnimationFrame(publish));
   });
-  // the strike needs only A (31 KB); the room needs C and B (1.2 MB) by INTRO.roomStart. Start on A, and if C and B are
-  // not decoded by the time the room should rise, hold the clock (the sign keeps its last level) until they are.
-  // (decoded, or at least loaded: a page opened in a background tab may not decode until it is shown)
-  const ready = (i) => Promise.race([i.decode(), new Promise((r) => (i.complete ? r() : i.addEventListener('load', r, { once: true })))]).catch(() => {});
-  const decodeA = ready(imgA), decodeRoom = Promise.all([imgS, imgC].map(ready));
-  decodeRoom.then(() => { timing.decoded = Math.round(performance.now() - timing.start); });
-  await Promise.race([decodeA, new Promise((r) => setTimeout(r, 3000))]);
-  timing.decodedA = Math.round(performance.now() - timing.start);
+  // 1. Download and decode all three plates off the main thread, holding the black meanwhile; no clock runs yet.
+  //    (a page opened hidden may never finish decode(): once loaded, it gets 1.5 s, then goes on with the bytes)
+  const SRC = { a: url('./hero/hero-a.webp'), c: url('./hero/hero-c.webp'), s: url('./hero/hero-s.webp') };
+  const prep = (src) => {
+    const i = new Image(); i.decoding = 'async'; i.src = src;
+    const loaded = new Promise((r) => { if (i.complete) r(); else { i.onload = r; i.onerror = r; } });
+    return Promise.race([i.decode(), loaded.then(() => new Promise((r) => setTimeout(r, 1500)))]).catch(() => loaded);
+  };
+  const giveUp = new Promise((r) => setTimeout(r, 15000));   // never hold the site hostage: show what there is
+  await Promise.race([Promise.all(Object.values(SRC).map(prep)), giveUp]);
+  timing.decoded = Math.round(performance.now() - timing.start);
+  imgA.src = SRC.a; imgC.src = SRC.c; imgS.src = SRC.s;
   if (still || !root.classList.contains('intro-pending')) {
-    await decodeRoom;
     imgA.style.display = 'none';
     if (!still) { startHum(); loopAnims.push(...animateFlies(list, list.length, null)); }
     reveal();
   } else {
-    const at = document.timeline.currentTime;
-    intro(at);
-    loopAnims.push(...animateFlies(list, list.length, at));
-    let ready = false;
-    decodeRoom.then(() => { ready = true; });
-    setTimeout(() => {
-      if (ready || revealed) return;
-      timing.held = true;
-      for (const a of introAnims) a.pause();
-      decodeRoom.then(() => { for (const a of introAnims) a.play(); });
-    }, (INTRO.roomStart - 0.3) * 1000);
+    // 2. The clock starts on the second frame the page actually paints with the plates in it. A page that is not
+    //    painting at all (hidden, or a pane not shown) never gets there: if the main thread has been free for 1.5 s with
+    //    no frame painted, the room is shown lit at once, without the reveal's fades (they would wait on that clock too).
+    const ticks = { raf: 0, beats: 0 };
+    const painted = new Promise((r) => { const f = () => (++ticks.raf >= 2 ? r() : requestAnimationFrame(f)); requestAnimationFrame(f); });
+    const stalled = new Promise((r) => { const iv = setInterval(() => { ticks.beats++; if (ticks.raf > 0) clearInterval(iv); else if (ticks.beats >= 6 || document.visibilityState === 'hidden') { clearInterval(iv); r(true); } }, 250); });
+    if (await Promise.race([painted, stalled])) {
+      timing.stalled = true; skip(); root.classList.remove('intro');
+    } else if (!revealed) {
+      const at = document.timeline.currentTime;
+      timing.clock = Math.round(performance.now() - timing.start);
+      intro(at);
+      loopAnims.push(...animateFlies(list, list.length, at));
+      // a hard finish, counted from when the clock really started, well after the room should be up
+      setTimeout(() => { if (!revealed || introAnims.some((a) => a.playState !== 'finished')) skip(); }, (INTRO.roomEnd + 3) * 1000);
+    }
   }
   // nothing loops while the hero is off screen
   new IntersectionObserver(([e]) => { for (const a of loopAnims) e.isIntersecting ? a.play() : a.pause(); }).observe(host.querySelector('.m-plate__stage'));

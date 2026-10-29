@@ -508,7 +508,9 @@
     const page = {'next-event':renderNextEvent,'past-events':renderArchive,artists:renderDirectory,gallery:renderGallery}[route];
     return page && archive ? page() : '';
   };
-  mobileMedia.addEventListener('change',render);
+  // (with the world loaded, crossing the phone breakpoint restarts the whole stack in the right mode, world/world.js;
+  // re-rendering here alone would show the other view without its layers)
+  mobileMedia.addEventListener('change',()=>{if(!window.__worldReinit)render();});
   // Page transitions (world/transitions.js): on Back/Forward the page being left must be held before render()
   // replaces it, so this listener is registered before render's own.
   window.addEventListener('popstate',event=>{if(window.__txPop)window.__txPop(event);});
