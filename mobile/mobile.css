@@ -1,0 +1,94 @@
+/* Local-only (lab/mobile): the hero's world on phones. Loaded after the real stylesheets and lab/world/world.css.
+   Everything here is phone-only (<=720px); wider screens get lab/world as it is. */
+
+/* the baked hero is the phone's (mobile-hero.js); turned past 720px (a phone in landscape) the page is the desktop one */
+.home-opening__plate { display: none; }
+
+@media (max-width: 720px) {
+  .home-opening__plate { display: block; }
+  /* ---------------------------------------------------------------- the page is see-through to the wall, as on desktop */
+  #app, .mobile-view, .mobile-home-hero, .home-opening, .home-definition, .current-artist-page { background: transparent; }
+  .home-opening { isolation: auto; }
+  .home-opening::after { display: none; }                         /* the wall carries on: no darkening at the opening's foot */
+
+  /* the header sticks again (#app clips instead of being a scroll container) and is solid instead of blurred: a backdrop
+     blur over moving fireflies is recomputed every frame, the costliest thing a phone GPU could be asked for here */
+  #app { overflow: clip; }
+  .site-header, .site-header.is-scrolled { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(2, 3, 2, 0.88); }
+  .site-header.is-open .site-nav__links { background: rgba(2, 3, 2, 0.97); }
+
+  /* ---------------------------------------------------------------- the baked hero (mobile-hero.js)
+     On the page, behind the world's vignette and grain (so the hero has the grade every screen has), above its wall.
+     Composed for 430 px wide with the wordmark 440 px down; the wordmark sits at 46% of the small viewport height (svh
+     never changes with the URL bar, so nothing jumps), and wider screens scale the plate up to cover (--k). */
+  .home-opening__plate {
+    --k: 1;
+    --top: calc(46svh - 440px * var(--k));
+    position: absolute; left: 0; right: 0; top: 0; z-index: 0;
+    height: calc(var(--top) + 1520px * var(--k));
+    overflow: hidden; pointer-events: none;
+  }
+  .m-plate__stage {
+    position: absolute; left: 50%; top: var(--top); width: 430px; height: 1520px;
+    transform: translateX(-50%) scale(var(--k)); transform-origin: 50% 0;
+  }
+  .m-plate__dolly { position: absolute; inset: 0; transform-origin: 215px 474px; }   /* the frame's centre: where the dolly aims */
+  .m-plate__room { position: absolute; inset: 0; }
+  .m-plate__room img, .m-plate__a { position: absolute; left: 0; display: block; width: 430px; max-width: none; }
+  /* the room, sign off; its last 420 px fade into the world's wall (world.js OVERLAP), which runs on under it */
+  .m-plate__c { top: 0; height: 1520px; }   /* its fade into the world's wall is in the image's alpha (no CSS mask) */
+  /* the sign's light (B over C), and the sign alone (A, the strike): the window where they differ, feathered */
+  /* the sign's light, added: alone during the strike (A, under the room), and on the lit room (S, inside it). Both
+     cover the whole plate, so nothing has an edge to show while the light comes up. */
+  .m-plate__a, .m-plate__s { top: 0; height: 1520px; }
+  .m-plate__s { mix-blend-mode: plus-lighter; }
+  html:not(.intro) .m-plate__a { display: none; }
+  html.intro-pending :is(.m-plate__room, .m-plate__a, .m-fly, .world-over) { opacity: 0; }   /* .world-over: world.js's ivy over the plate */   /* black until the plates are decoded */
+
+  /* its fireflies: the world's bodies, each with its light on the wall, added */
+  .m-fly { position: absolute; width: 0; height: 0; }
+  .m-fly .world-fly, .m-fly__light { mix-blend-mode: plus-lighter; opacity: 0.5; }
+  .m-fly__light {
+    position: absolute; left: 0; top: 0; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(var(--c), 0.16), rgba(var(--c), 0.05) 45%, rgba(var(--c), 0));
+    will-change: transform, opacity;
+  }
+
+
+  /* ---------------------------------------------------------------- the home opening over the plate */
+  .mobile-home-hero { height: calc(100svh - 59px); min-height: 520px; }
+  .mobile-home-hero > img, .mobile-home-hero .hero-energy { display: none; }
+  .mobile-home-welcome {
+    left: 0; right: 0; width: auto; top: calc(46svh - 59px - 92px);
+    color: rgba(var(--sign-rgb), 0.62); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
+  }
+  .home-definition { padding-top: 32px; }
+  .home-definition__text { color: rgba(var(--sign-rgb), 0.84); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 2px 14px rgba(0, 0, 0, 0.85); }
+  .home-definition__label { text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9); }
+
+  /* ---------------------------------------------------------------- the phone home's sections, in the world's palette */
+  .mobile-home { --home-green: var(--accent); --home-line: var(--line); }
+  .mobile-section-label, .mobile-home-crew h2, .mobile-home-about h2, .mobile-home-about p { text-shadow: 0 1px 12px rgba(0, 0, 0, 0.8); }
+  /* the film on a screen mounted on the wall (as desktop's preview panel), casting its shadow down and to the right */
+  .mobile-home-video {
+    border: 1px solid rgba(var(--sign-rgb), 0.12); border-radius: 6px; padding: 0; background: #050705;
+    box-shadow: 0 0 0 5px #0b0d0a, 0 0 0 6px rgba(255, 255, 255, 0.05), 12px 20px 26px rgba(0, 0, 0, 0.62);
+  }
+  /* the crew photo is a print on the wall */
+  .mobile-home-crew > div { border: 0; border-radius: 2px; padding: 0; box-shadow: 10px 18px 26px rgba(0, 0, 0, 0.6); }
+  .mobile-home-crew img { filter: brightness(var(--lit, 0.9)) saturate(0.92); }
+
+
+  /* ---------------------------------------------------------------- the intro (as lab/hero-3d/site-hero.css)
+     Everything but the plate waits in the dark. The page can still be scrolled: any touch or scroll skips the intro. */
+  html.intro-pending, html.intro-pending body { background: #000; }
+  html.intro-pending .site-header { opacity: 0; transform: translateY(-14px); pointer-events: none; }
+  html.intro-pending .home-definition, html.intro-pending .mobile-home-welcome { opacity: 0; transform: translateY(14px); }
+  html.intro-pending .home-opening ~ *, html.intro-pending .site-footer { opacity: 0; }
+  html.intro .site-header {
+    transition: opacity 1.3s cubic-bezier(.45, 0, .25, 1), transform 1.3s cubic-bezier(.33, .45, .2, 1), padding 220ms ease, background 220ms ease, border-color 220ms ease;
+  }
+  html.intro .home-definition, html.intro .mobile-home-welcome { transition: opacity 1.4s cubic-bezier(.45, 0, .25, 1) .45s, transform 1.4s cubic-bezier(.33, .45, .2, 1) .45s; }
+  html.intro .home-opening ~ *, html.intro .site-footer { transition: opacity 1.4s cubic-bezier(.45, 0, .25, 1) .8s; }
+}

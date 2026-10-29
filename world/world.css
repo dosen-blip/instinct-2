@@ -1,0 +1,205 @@
+/* Local-only: every page of the site rebuilt in the hero's world (see lab/SITE-EXPLORATION.md).
+   Loaded after the real stylesheets by the lab copies of the pages only (lab/site), so the live site is untouched. */
+
+/* ------------------------------------------------------------------ palette: purple is retired
+   The world's colours come from the hero: moss on concrete, the sign's warm white, firefly lime. The brand green stays
+   the one accent. The old purple tokens are pointed at it so nothing purple survives anywhere. */
+:root {
+  --sign: #fff1de;                         /* the backlit wordmark (hero uGlowColor) */
+  --sign-rgb: 255, 241, 222;
+  --moss: #8fae6a;
+  --line: rgba(143, 174, 106, 0.16);       /* hairlines: damp moss, not purple */
+  --green: var(--accent);
+  --green-hot: var(--accent);
+  --green-soft: var(--accent-soft);
+  --purple: var(--accent);
+  --purple-hot: var(--accent);
+  --purple-deep: #1f8f50;
+  --seat: 14px 22px 32px rgba(0, 0, 0, 0.55);   /* what anything mounted on the wall casts: down and right, like the ivy */
+}
+
+/* the wall is drawn behind the whole page (world.js), and on the home page by the hero's canvas too; the page itself
+   is see-through */
+body { background: #000; }
+#app { position: relative; z-index: 1; background: transparent; }
+
+/* world.js layers, back to front, under #app. Everything belonging to the wall is positioned on the page, so the browser
+   scrolls it with the content: the wall still and the ivy; the light, every lamp summed (plus-lighter) over the room's
+   fill and multiplied over the wall; the haze; the fireflies' bodies. Only the vignette and the grain are fixed to the
+   screen, as in the hero's grade. */
+.world-albedo, .world-light, .world-veil, .world-bodies { position: absolute; left: 0; right: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.world-albedo__tile { position: absolute; left: 0; right: 0; height: 1440px; background: center top / 2560px 1440px repeat-x; }
+.world-albedo__tile.is-flipped { transform: scaleY(-1); }   /* mirrored, so consecutive copies have no seam */
+.world-vine { position: absolute; }
+.world-light { isolation: isolate; mix-blend-mode: multiply; }
+.world-lamp { position: absolute; mix-blend-mode: plus-lighter; }
+.world-light__fade { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 340px; background: linear-gradient(#fff, #000); mix-blend-mode: multiply; }   /* the wall falls into the dark above the footer */
+.world-vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-size: 100% 100%; mix-blend-mode: multiply; }
+.world-veil { mix-blend-mode: plus-lighter; }
+.world-bodies { mix-blend-mode: plus-lighter; }
+.world-fly {
+  position: absolute; left: 0; top: 0;
+  width: calc(72px * var(--s, 1)); height: calc(72px * var(--s, 1));
+  margin: calc(-36px * var(--s, 1)) 0 0 calc(-36px * var(--s, 1));
+  border-radius: 50%;
+  /* the hot body, then its glow in the room's haze */
+  background: radial-gradient(circle closest-side, rgba(255, 255, 240, 0.95) 0 5%, rgba(var(--c), 0.55) 8%, rgba(var(--c), 0.16) 24%, rgba(var(--c), 0) 62%);
+  will-change: transform, opacity;
+}
+/* grain as in the hero's grade: overlay on the dark wall scales with its brightness */
+.world-grain { position: fixed; inset: -128px; z-index: 0; pointer-events: none; background-size: 256px; mix-blend-mode: overlay; opacity: 0.08; will-change: transform; }
+html:not(.has-world) :is(.world-albedo, .world-light, .world-vignette, .world-veil, .world-bodies, .world-grain),
+html.world-off :is(.world-vignette, .world-grain) { display: none; }
+
+.section-kicker,
+.about-grid figcaption { color: var(--accent); }
+.section-kicker span { background: var(--accent-line); }
+.green-line, .green-rule { height: 2px; background: var(--accent); box-shadow: none; }   /* nothing glows without a source */
+.site-footer { border-top-color: var(--line); background: #000; }
+.site-footer > div a { color: var(--accent); }
+
+/* ------------------------------------------------------------------ home: the live wall (hero canvas) carries on down */
+/* hairlines across the wall would cut it in two */
+.home-opening .section-border,
+.preview-panel.section-border,
+.archive-home-spotlight.section-border,
+.about-section.section-border { border-bottom: 0; }
+.preview-panel::after { display: none; }
+.preview-panel h2 { text-shadow: 0 2px 30px rgba(0, 0, 0, 0.6); }
+/* the film plays on a screen mounted on the wall: a dark bezel, and a shadow cast down and to the right like the leaves' */
+.preview-panel__media {
+  border: 1px solid rgba(var(--sign-rgb), 0.12);
+  border-radius: 6px;
+  background: #050705;
+  box-shadow: 0 0 0 6px #0b0d0a, 0 0 0 7px rgba(255, 255, 255, 0.05), 22px 34px 46px rgba(0, 0, 0, 0.62);
+}
+.archive-home-spotlight,
+.about-section { background: none; }
+
+/* ------------------------------------------------------------------ headings and copy over the wall */
+.archive-heading h1,
+.archive-shell h2,
+.archive-home-spotlight h2,
+.about-grid h2 { text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55); }
+.archive-intro, .archive-event-intro, .archive-bio p, .about-grid p { text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7); }
+/* a strand of ivy grows along this edge instead of the hairline */
+.world-vine-edge.is-top { border-top-color: transparent; }
+.world-vine-edge.is-bottom { border-bottom-color: transparent; }
+
+/* ------------------------------------------------------------------ cards and prints, mounted on the wall
+   Dark panels with a damp hairline, casting a shadow on the wall; a firefly passing close catches the edge (--rim). */
+.archive-card, .archive-lineup-card, .archive-appearance, .archive-empty, .archive-qa-grid article, .archive-poster, .archive-details {
+  background: #070907;
+  box-shadow: var(--seat), 0 0 22px rgba(var(--rim-rgb, 200, 255, 106), var(--rim, 0));
+}
+.archive-qa-grid article { border-top-color: var(--accent-line); }
+.archive-artist-image, .archive-media-image { background: #0a0d09; box-shadow: var(--seat), 0 0 22px rgba(var(--rim-rgb, 200, 255, 106), var(--rim, 0)); }
+.archive-badge { background: rgba(4, 6, 4, 0.88); }
+.archive-search input, .archive-filters select { background: #070907; }
+/* photographs and posters take the wall's light (--lit, from world.js) */
+:is(.archive-card-image, .archive-media-image, .archive-lineup-image, .archive-poster, .archive-spotlight-poster, .archive-artist-hero figure) img { filter: brightness(var(--lit, 0.9)); }
+.archive-artist-card img { filter: brightness(var(--lit, 0.9)) saturate(0.8); }
+.archive-artist-card:hover img { filter: brightness(calc(var(--lit, 0.9) + 0.08)) saturate(1); }
+/* the crew photo is a print on the wall too */
+.about-grid figure img {
+  border: 0;
+  border-radius: 2px;
+  filter: brightness(var(--lit, 0.9)) saturate(0.92);
+  box-shadow: 16px 26px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(var(--rim-rgb, 200, 255, 106), var(--rim, 0));
+}
+
+/* ------------------------------------------------------------------ the lit-slab button
+   The wordmark's material at button size: a small backlit resin panel set into the wall. --glow is the backlight
+   (world.js: a slow hum, and a strike-on flicker on hover); the panel also lights the wall around it from the same value.
+   Each page's primary action is one, and so is the gallery filter that is switched on. */
+.archive-shell > .archive-actions > a:first-child,
+.archive-artist-hero .archive-actions:first-of-type > a:first-child,
+.button,
+.archive-filters button[aria-pressed="true"] {
+  --glow: 0.62;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 3px;
+  color: #12160f;
+  font: 700 12px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background:
+    /* grime and algae caught in the resin */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .42  0 0 0 0 .36  0 0 0 0 .22  0 0 0 -1.6 1.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='90'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .04' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 .6  0 0 0 0 .52  0 0 0 0 .36  0 0 0 -2 1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E"),
+    /* light through a slab of uneven thickness: thin middle burns white, thicker edges absorb towards amber */
+    radial-gradient(120% 160% at 50% 42%,
+      rgb(calc(175 + var(--glow) * 80) calc(170 + var(--glow) * 80) calc(158 + var(--glow) * 82)) 0%,
+      rgb(calc(150 + var(--glow) * 95) calc(138 + var(--glow) * 92) calc(112 + var(--glow) * 86)) 55%,
+      rgb(calc(100 + var(--glow) * 90) calc(82 + var(--glow) * 80) calc(54 + var(--glow) * 60)) 100%);
+  background-size: 220px 80px, 300px 90px, 100% 100%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),                       /* the glossy resin skin catching the room */
+    inset 0 -8px 14px rgba(110, 76, 34, 0.32),                     /* tea-brown pooling low in the slab */
+    0 0 0 3px #090b08,                                             /* the opening it sits in, cut into the wall */
+    0 0 0 4px rgba(255, 255, 255, 0.05),
+    0 0 calc(10px + var(--glow) * 34px) rgba(var(--sign-rgb), calc(var(--glow) * 0.5)),   /* bloom */
+    0 0 calc(30px + var(--glow) * 60px) rgba(var(--sign-rgb), calc(var(--glow) * 0.16));
+  transition: none;
+}
+.archive-filters button[aria-pressed="true"] { min-height: 48px; padding: 0 24px; }
+:is(.archive-shell > .archive-actions > a:first-child, .archive-artist-hero .archive-actions:first-of-type > a:first-child, .button):focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+
+/* the switches it shares a plate with: dark until pressed */
+.archive-filters button[aria-pressed="false"] {
+  min-height: 48px;
+  border: 0;
+  border-radius: 3px;
+  background: #0b0d0a;
+  color: rgba(var(--sign-rgb), 0.62);
+  font: 700 12px/1 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -6px 12px rgba(0, 0, 0, 0.5), 0 0 0 3px #060705, 0 0 0 4px rgba(255, 255, 255, 0.04);
+}
+.archive-filters button[aria-pressed="false"]:hover { color: var(--sign); }
+.archive-filters [role="group"] { gap: 14px; }
+
+/* secondary actions: plain mono labels, a stem of light green draws in underneath on hover */
+:is(.archive-shell > .archive-actions, .archive-artist-hero .archive-actions:first-of-type) > a:not(:first-child) {
+  color: rgba(var(--sign-rgb), 0.82);
+  font: 12px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: linear-gradient(90deg, #4c6a35, var(--accent)) 0 100% / 0 1px no-repeat;
+  padding: 10px 0;
+  transition: background-size 420ms cubic-bezier(0.2, 0.7, 0.2, 1), color 200ms;
+}
+:is(.archive-shell > .archive-actions, .archive-artist-hero .archive-actions:first-of-type) > a:not(:first-child):is(:hover, :focus-visible) { color: var(--sign); background-size: 100% 1px; }
+.archive-shell > .archive-actions,
+.archive-artist-hero .archive-actions:first-of-type { gap: 20px 32px; margin-top: 30px; }
+
+/* ------------------------------------------------------------------ phones (<=720px): lab/MOBILE.md */
+@media (max-width: 720px) {
+  /* fixed to the screen at the large viewport's height, so the URL bar showing and hiding never resizes it */
+  .world-vignette { bottom: auto; height: 100lvh; }
+  /* the lit slab's bloom: one composited glow whose opacity is the backlight, instead of two large blurred shadows
+     repainted with every step of the hum */
+  .archive-shell > .archive-actions > a:first-child,
+  .archive-artist-hero .archive-actions:first-of-type > a:first-child,
+  .button,
+  .archive-filters button[aria-pressed="true"] {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -8px 14px rgba(110, 76, 34, 0.32), 0 0 0 3px #090b08, 0 0 0 4px rgba(255, 255, 255, 0.05);
+  }
+  :is(.archive-shell > .archive-actions > a:first-child, .archive-artist-hero .archive-actions:first-of-type > a:first-child, .button, .archive-filters button[aria-pressed="true"])::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    box-shadow: 0 0 40px rgba(var(--sign-rgb), 0.5), 0 0 84px rgba(var(--sign-rgb), 0.16);
+    opacity: var(--glow); will-change: opacity;
+  }
+  /* touch: the secondary links get a 44 px target */
+  :is(.archive-shell > .archive-actions, .archive-artist-hero .archive-actions:first-of-type) > a:not(:first-child) { padding: 16px 0; }
+  .archive-shell > .archive-actions { gap: 8px 28px; }
+}

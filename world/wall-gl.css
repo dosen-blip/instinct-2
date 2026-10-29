@@ -1,0 +1,8 @@
+/* Local-only (lab/world/wall-gl.js): the GL wall and ivy, lit, in their own layer just above world.js's light layer
+   (under the veil, the fireflies, the vignette and the grain). Once it has faded in, what it replaces is hidden: the
+   CSS still and ivy (albedo), the light layer, and in a pan the held copy of the page being left (the GL tier draws
+   both pages as one surface). */
+.world-wallgl-host { position: absolute; left: 0; right: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.world-wallgl { position: absolute; left: 0; top: 0; pointer-events: none; will-change: transform; }
+html.wall-gl :is(.world-albedo, .world-light, .tx-old--back) { visibility: hidden; }
+html:not(.has-world) .world-wallgl-host { display: none; }

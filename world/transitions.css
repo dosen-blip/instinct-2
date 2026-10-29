@@ -1,0 +1,58 @@
+/* Local-only prototype (see lab/TRANSITIONS.md): "one wall" page transitions, with transitions.js. */
+
+/* the next page waits one screen over while the camera pans to it: never a sideways scrollbar */
+html { overflow-x: hidden; }
+/* the page's width never changes under a move: while the page being left is lifted out of #app (for a frame or two the
+   document is empty, so a classic scrollbar would vanish and the page widen by its width), the gutter stays. Without
+   this, the camera and the GL wall were set for the wider page, then corrected a moment after the move (the "vines
+   teleport a few seconds after loading" bug). */
+html { overflow-y: scroll; scrollbar-gutter: stable; }   /* (the gutter alone was not kept in the pane's Chromium: the bar itself stays) */
+
+/* the page being left, held still on the screen while it slides off. Each part sits in the stack where its live
+   counterpart does: the wall and its lights under the vignette, the haze and fireflies added over it, the content
+   at the content's level. */
+.tx-old { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; will-change: transform; }
+.tx-old--back { isolation: isolate; background: #000; }       /* its lights multiply over its own wall only */
+.tx-old--air { mix-blend-mode: plus-lighter; }                 /* its haze and fireflies still add */
+.tx-old--page { z-index: 1; }
+.tx-old__page { position: absolute; left: 0; top: 0; width: 100%; }
+.tx-old__app { position: relative; overflow: hidden; min-height: 100vh; }
+html.tx-panning :is(.world-albedo, .world-light, .world-veil, .world-bodies, #app) { will-change: transform; }
+
+/* the lights-dip, where a pan can't be done: the room goes dark, the next document's lights come up */
+html.tx-dipping body::after,
+html.tx-arriving body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: #000;
+  pointer-events: none;
+}
+html.tx-dipping body::after { animation: tx-lights-down 200ms cubic-bezier(0.5, 0, 0.75, 0) both; }
+html.tx-arriving body::after { animation: tx-lights-up 520ms 60ms cubic-bezier(0.2, 0.6, 0.3, 1) both; }
+@keyframes tx-lights-down { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tx-lights-up { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) {
+  html.tx-dipping body::after, html.tx-arriving body::after { display: none; }
+}
+
+/* where the two pages meet, the lamps give way to the room's fill (transitions.js feather()) */
+.tx-feather { position: absolute; top: 0; bottom: 0; z-index: 0; width: max(220px, 22vw); pointer-events: none; }
+.tx-feather.is-left { left: 0; }
+.tx-feather.is-right { right: 0; }
+
+/* motion blur (transitions.js startBlur): the wall layers stop clipping at their sides while it runs, so the smear at
+   the seam takes in more wall, not nothing; the page being left is painted over the arriving one and clips itself */
+html.tx-blurring .world-albedo { overflow: visible; }
+/* the held wall overlaps the arriving one by 12 px on both sides: the arriving layers' first few px (composited at a
+   fractional offset each frame) showed as a bright hairline at the seam with only 2 px. Near the seam both pages show
+   the same wall under the same fill (the feather), so the overlap itself cannot be seen. */
+.tx-old.tx-old--back { left: -12px; right: -12px; }
+.tx-old--back > .tx-old__page { left: 12px; width: calc(100% - 24px); }   /* the page itself where it was */
+.tx-old--back .world-albedo { overflow: visible; }                        /* its wall runs on into the overlap */
+.tx-old--back .world-light { box-shadow: -32px 0 0 0 var(--tx-fill, #000), 32px 0 0 0 var(--tx-fill, #000); }   /* and its fill, past the clip (an edge on the clip line showed as a hairline) */
+
+/* the shared header, pinned while the page below it pans (transitions.js pinHeader) */
+.tx-header { position: fixed; left: 0; top: 0; z-index: 3; pointer-events: none; }
+.tx-header > .site-header { position: relative; top: 0; }

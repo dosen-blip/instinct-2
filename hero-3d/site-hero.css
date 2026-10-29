@@ -1,0 +1,36 @@
+/* Local-only: the WebGL hero inside the real site, plus the opening sequence. */
+
+/* the scene replaces the static artwork. Its canvas sits on the page behind everything in #app (site-hero.js places it
+   where each frame belongs, overhanging the screen); it fades out over the baked wall below (--live-end) */
+.home-opening__scene {
+  position: absolute; left: 0; right: 0; top: 0; z-index: -1; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--live-end, 300vh) - 320px), transparent var(--live-end, 300vh));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--live-end, 300vh) - 320px), transparent var(--live-end, 300vh));
+}
+.home-opening__scene.is-off { visibility: hidden; }
+.home-opening.has-3d .home-hero__image,
+.home-opening.has-3d .hero-energy { display: none; }
+/* the wall carries on below the opening, so the opening no longer darkens towards its own bottom edge */
+.home-opening.has-3d { background: transparent; }
+.home-opening.has-3d::after { display: none; }
+
+/* intro: everything but the scene waits in the dark (any input, scrolling included, skips it). The page keeps its
+   vertical scrollbar the whole time: with classic, non-overlay scrollbars, hiding it during the intro narrowed the page
+   by the bar's width at the reveal, which reflowed the header and text mid-fade. (scrollbar-gutter is ignored on a root
+   with overflow: hidden, so the bar stays and site-hero.js treats a scroll as a skip instead.) */
+html.intro-pending { overflow: hidden scroll; background: #000; }
+html.intro-pending body { background: #000; }
+html.intro #app { background-image: none; }   /* the page's faint top tint would break the opening black */
+html.intro-pending .site-header { opacity: 0; transform: translateY(-14px); pointer-events: none; }
+html.intro-pending .home-definition { opacity: 0; transform: translateY(14px); }
+html.intro-pending .home-opening ~ *,
+html.intro-pending .site-footer { opacity: 0; }
+
+/* the order things arrive in, starting under the tail of the room light (hero INTRO.reveal): header, then the
+   definition, then the rest. The fades start and end with zero slope and the slide starts gently, so nothing pops in. */
+html.intro .site-header {
+  transition: opacity 1.1s cubic-bezier(.45, 0, .25, 1), transform 1.1s cubic-bezier(.33, .45, .2, 1), padding 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+html.intro .home-definition { transition: opacity 1.15s cubic-bezier(.45, 0, .25, 1) .35s, transform 1.15s cubic-bezier(.33, .45, .2, 1) .35s; }
+html.intro .home-opening ~ *,
+html.intro .site-footer { transition: opacity 1.15s cubic-bezier(.45, 0, .25, 1) .6s; }

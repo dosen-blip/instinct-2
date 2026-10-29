@@ -62,7 +62,35 @@
     const cleanupViewer = setupViewer();
     const cleanupFilters = setupFilters(route);
     const cleanupGlow = setupHeroGlow();
-    cleanupPage = () => { cleanupGlow(); cleanupViewer(); cleanupNav(); cleanupFilters(); };
+    const cleanupLookahead = setupLookahead();
+    cleanupPage = () => { cleanupLookahead(); cleanupGlow(); cleanupViewer(); cleanupNav(); cleanupFilters(); };
+  }
+  // Lazy images are fetched by the browser only ~1250px ahead and decoded when first painted, so a fast fling or a jump
+  // can show them blank for a few frames (longer on a slow network). Every lazy image within 2.5 screens of the view is
+  // fetched now and decoded off the main thread (img.decode()), so it is ready before it scrolls in. The observer only
+  // fires when an image crosses that band, never per scroll frame, and each image is handled once.
+  let watchImages = () => {};
+  function setupLookahead() {
+    if (!('IntersectionObserver' in window)) return () => {};
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const img = entry.target;
+        observer.unobserve(img);
+        img.loading = 'eager';
+        img.decode().catch(() => {});
+      }
+    }, {rootMargin: '250% 0px'});
+    const start = () => {
+      watchImages = () => document.querySelectorAll('#app img[loading="lazy"]').forEach(img => observer.observe(img));
+      watchImages();
+    };
+    // While a page intro plays (html.intro-pending) nothing below can be seen or scrolled, so don't compete with it.
+    const root = document.documentElement;
+    const intro = new MutationObserver(() => { if (!root.classList.contains('intro-pending')) { intro.disconnect(); start(); } });
+    if (root.classList.contains('intro-pending')) intro.observe(root, {attributes: true, attributeFilter: ['class']});
+    else start();
+    return () => { intro.disconnect(); observer.disconnect(); watchImages = () => {}; };
   }
   function setupHeroGlow() {
     const hero = document.querySelector('.home-hero, .mobile-home-hero');
@@ -158,14 +186,26 @@
     toggle.addEventListener('click', () => {const open = header.classList.toggle('is-open');toggle.setAttribute('aria-expanded',String(open));});
     const escape = e => {if(e.key === 'Escape' && header.classList.contains('is-open')){close();toggle.focus();}};
     header.addEventListener('keydown', escape);
-    const onScroll = () => header.classList.toggle('is-scrolled',window.scrollY > 24);
+    // Condensing shortens the header by ~24px and the browser's scroll anchoring then moves scrollY back by as much,
+    // which used to undo the condense on the next scroll event: near the top the header flipped ~40 times a second.
+    // It condenses past 24px as before, but expands again only at the very top, so the two states can't feed back.
+    let scrolled = false;
+    const onScroll = () => {
+      const next = scrolled ? window.scrollY > 0 : window.scrollY > 24;
+      if (next !== scrolled) { scrolled = next; header.classList.toggle('is-scrolled', scrolled); }
+    };
     onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
     return () => {window.removeEventListener('scroll',onScroll);header.removeEventListener('keydown',escape);};
   }
   function eventCard(event) {
     const media = archive.mediaFor(event.id);
     const label = event.past ? (media.length ? `${media.filter(m=>m.type==='photo').length} photos` : 'Event details') : 'Upcoming';
-    return `<a class="archive-card" href="${routeFor(event.id)}"><div class="archive-card-image">${imageTag(asset(event.cover),`${event.title} — ${event.posters.includes(event.cover) ? 'event poster' : 'event photograph'}`,{sizes:'(max-width: 720px) calc(100vw - 40px), (max-width: 1050px) 45vw, 390px'})}<span class="archive-badge">${esc(label)}</span></div><div class="archive-card-copy"><p>${eventDate(event)}</p><h3>${esc(event.title)}</h3><p>${esc(event.venue)}</p></div></a>`;
+    // A poster is contained in the 4:3 frame, so a portrait one is drawn at only (3/4 x its aspect) of the card's width.
+    const poster = event.posters.includes(event.cover);
+    const record = imageManifest[event.cover];
+    const fill = poster && record ? Math.min(1, .75 * record.width / record.height) : 1;
+    const cardSizes = fill < 1 ? `(max-width: 720px) calc((100vw - 40px) * ${fill.toFixed(3)}), (max-width: 1050px) calc(45vw * ${fill.toFixed(3)}), ${Math.ceil(390 * fill)}px` : '(max-width: 720px) calc(100vw - 40px), (max-width: 1050px) 45vw, 390px';
+    return `<a class="archive-card" href="${routeFor(event.id)}"><div class="archive-card-image">${imageTag(asset(event.cover),`${event.title} — ${poster ? 'event poster' : 'event photograph'}`,{sizes:cardSizes})}<span class="archive-badge">${esc(label)}</span></div><div class="archive-card-copy"><p>${eventDate(event)}</p><h3>${esc(event.title)}</h3><p>${esc(event.venue)}</p></div></a>`;
   }
   function renderArchive() {
     const years = [...new Set(archive.pastEvents.map(event=>event.date.slice(0,4)))];
@@ -307,6 +347,7 @@
         const items=galleryItems(selection);
         document.querySelectorAll('[data-type]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.type===selection.type)));
         document.getElementById('gallery-results').innerHTML=galleryResults(items,selection,limits);
+        watchImages();
         document.getElementById('gallery-count').textContent=`${items.length} ${items.length===1?'item':'items'}`;
         const params=new URLSearchParams();if(selection.event)params.set('event',selection.event);if(selection.type)params.set('type',selection.type);
         history.replaceState(null,'',`./gallery.html${params.size?'?'+params:''}`);
@@ -358,8 +399,12 @@
     dialog.addEventListener('close',onClose);dialog.addEventListener('keydown',onKey);dialog.addEventListener('click',onBackdrop);
     return()=>{if(dialog.open)dialog.close();onClose();document.getElementById('app').removeEventListener('click',open);previous.removeEventListener('click',prevClick);next.removeEventListener('click',nextClick);close.removeEventListener('click',closeClick);dialog.removeEventListener('close',onClose);dialog.removeEventListener('keydown',onKey);dialog.removeEventListener('click',onBackdrop);};
   }
-  function homePreviewMedia(posterName,alt) {
-    return `<video autoplay muted loop playsinline preload="metadata" poster="${url(asset(posterName))}" aria-label="${esc(alt)}"><source src="./assets/home-preview.mp4" type="video/mp4">${imageTag(asset(posterName),alt,{sizes:'(max-width:720px) 342px, 420px'})}</video>`;
+  // On a phone the home film is played by mobile/mobile.js once the intro is over and it is near the screen (it is
+  // 9.4 MB), so the phone home renders it without autoplay or preload. (phoneAtLoad: mobile.js decides at load too.)
+  const phoneAtLoad = mobileMedia.matches;
+  function homePreviewMedia(posterName,alt,phone=false) {
+    const deferred = phone && phoneAtLoad;
+    return `<video ${deferred?'':'autoplay '}muted loop playsinline preload="${deferred?'none':'metadata'}" poster="${url(asset(posterName))}" aria-label="${esc(alt)}"><source src="./assets/home-preview.mp4" type="video/mp4">${imageTag(asset(posterName),alt,{sizes:'(max-width:720px) 342px, 420px'})}</video>`;
   }
   function siteFooter() {
     return `<footer class="site-footer"><div class="site-footer__inner"><a class="site-footer__brand" href="${routes.home}">Instinct Groove</a><nav class="archive-footer-links" aria-label="Footer navigation">${textLink(routes.events,'Past Events')}${textLink(routes.artists,'Artists')}${textLink(routes.gallery,'Gallery')}</nav><div class="site-footer__contacts"><a href="${url(links.instagram)}" target="_blank" rel="noreferrer">@Instinct.groove</a><a href="${url(links.email)}">Info@instinctgroove.net</a></div><p>Ottawa's Minimal Tech &amp; House Experience</p></div></footer>`;
@@ -430,7 +475,7 @@
         <section class="mobile-home-section mobile-home-preview">
           <div class="mobile-section-label"><span></span>Inside Instinct</div>
           <div class="mobile-home-video">
-            ${homePreviewMedia('mobile-home-preview', 'Event preview')}
+            ${homePreviewMedia('mobile-home-preview', 'Event preview', true)}
           </div>
         </section>
         ${nextSpotlight()}
@@ -457,7 +502,16 @@
   }
 
 
+  // The markup another page would render, for a look-ahead that wants to know which images that page shows first. It is
+  // read as inert text (a <template>), never inserted, so nothing in it loads.
+  window.INSTINCT_PAGE_MARKUP = route => {
+    const page = {'next-event':renderNextEvent,'past-events':renderArchive,artists:renderDirectory,gallery:renderGallery}[route];
+    return page && archive ? page() : '';
+  };
   mobileMedia.addEventListener('change',render);
+  // Page transitions (world/transitions.js): on Back/Forward the page being left must be held before render()
+  // replaces it, so this listener is registered before render's own.
+  window.addEventListener('popstate',event=>{if(window.__txPop)window.__txPop(event);});
   window.addEventListener('popstate',render);
   function refreshStatus(){const fresh=window.INSTINCT_ARCHIVE.create(content);if(fresh.pastEvents.map(event=>event.id).join('|')!==statusKey)render();}
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshStatus();});
