@@ -7,6 +7,21 @@
   const phone = matchMedia('(max-width: 720px)').matches;
   root.classList.toggle('is-phone', phone);
   if (!phone) return;
+  // Sample the small viewport once per width. Address-bar/keyboard height changes must not move the hero, the
+  // definition, or everything below them midway through a fling. A real rotation/width change gets a new sample.
+  let layoutWidth = 0;
+  const sizePhone = () => {
+    const width = document.documentElement.clientWidth;
+    if (width === layoutWidth) return;
+    layoutWidth = width;
+    const probe = document.createElement('div');
+    probe.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;height:100svh;width:0;';
+    document.body.append(probe);
+    root.style.setProperty('--phone-height', `${probe.getBoundingClientRect().height || innerHeight}px`);
+    probe.remove();
+  };
+  sizePhone();
+  addEventListener('resize', sizePhone, { passive: true });
   const app = document.getElementById('app');
   const decorate = () => {
     const view = app.querySelector('.with-mobile > .mobile-view');

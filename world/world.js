@@ -84,9 +84,11 @@ const el = (tag, className, parent) => { const e = document.createElement(tag); 
 const inApp = (sel) => document.getElementById('app').querySelectorAll(sel);
 const pageRect = (e) => { const r = e.getBoundingClientRect(); return { x: r.left + scrollX, y: r.top + scrollY, w: r.width, h: r.height }; };
 
-const [atlas, atlasMeta] = await Promise.all([
+// Start the phone wall alongside the leaf atlas, not after it. The first bake already has its base texture.
+const [atlas, atlasMeta, phoneWall] = await Promise.all([
   load(asset(phoneMq.matches ? './assets/leaf-atlas-phone.webp' : '../hero-3d/assets/leaf-atlas.webp')),
   fetch(asset('../hero-3d/assets/leaf-atlas.json')).then((r) => r.json()),
+  phoneMq.matches ? load(asset('./assets/wall-phone-1x.webp')).catch(() => null) : null,
 ]);
 
 const albedo = el('div', 'world-albedo');
@@ -138,6 +140,8 @@ let vineId = 0;
 // kind: what sort of strand it is (hanger, climber, divider, carry, edge-hanger, edge-climber), so the page transitions
 // know how it hangs (it swings about its root, lib/world/transitions.js); gap and leaf scale its leaves' spacing and size
 function makeVine(pts, R, { size = 1, width = [4.2, 1.4], leafFrom = 0, grows = false, right = false, kind = 'strand', gap = 1, leaf = 1 } = {}) {
+  // Phone decoration is painted once. Growing it would continually upload the wall canvas while scrolling.
+  if (geo.phone) grows = false;
   pts[0].s = 0;
   for (let i = 1; i < pts.length; i++) pts[i].s = pts[i - 1].s + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
   const len = pts[pts.length - 1].s, leaves = [];
@@ -160,7 +164,7 @@ function makeVine(pts, R, { size = 1, width = [4.2, 1.4], leafFrom = 0, grows = 
   const pad = 80 * size, xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
   const box = { x: Math.min(...xs) - pad, y: Math.min(...ys) - pad };
   box.w = Math.max(...xs) + pad - box.x; box.h = Math.max(...ys) + pad - box.y;
-  const canvas = el('canvas', 'world-vine', albedo), dpr = Math.min(devicePixelRatio, 2);
+  const canvas = el('canvas', 'world-vine', albedo), dpr = Math.min(devicePixelRatio, geo.phone ? 1.5 : 2);
   if (geo.phone) canvas.style.display = 'none';   // phones: drawn into the wall's bands (composeBand), not shown itself
   Object.assign(canvas.style, { width: `${box.w}px`, height: `${box.h}px` });
   canvas.width = Math.round(box.w * dpr); canvas.height = Math.round(box.h * dpr);
@@ -329,6 +333,7 @@ function measure() {
   for (const v of vines) placeVine(v);
   for (const p of pools) placePool(p);
   if (geo.phone) bakePhone();
+  if (geo.phone) placePhoneFlies();
 
   // slabs: the lights people press
   const found = new Set(inApp(SLABS));
@@ -356,20 +361,12 @@ function measure() {
 const WALL = { src: asset('./assets/wall-tile.webp'), w: 5120, x0: 1536 };   // x0: where wall.webp's left edge sits in it
 const camera = { x: 0, y: 0 }, wallTiles = [];
 let wallKey = '';
-// Phones: the whole steady wall flattened into opaque canvases. On a phone every page-high layer blended over another
-// (the light multiplied over the wall, the haze and the fireflies' bodies added) has to be composed off screen as a whole,
-// and iOS fills those in tile by tile as the page scrolls: a flick outran them, so the bare wall showed pale for up to
-// two seconds before its light arrived, and composing them every frame held everything under 12 fps. Instead each BAKE_H
-// of page is one canvas holding what those layers made of it (composeBand): the still and the ivy on it, times the
-// room's steady light (the fill, every fixture, the fade above the footer), plus the haze. Nothing page-sized is
-// blended: the bands are plain pictures the compositor moves, all drawn as soon as the room is laid out, so the whole
-// page is ready off screen. What moves stays elements, each blended on its own over the bands (world.css, phones): the
-// fireflies' and the slabs' lights brighten the wall under them (color-dodge, see tuneLamp), the fireflies' bodies add.
-// The wall at the screen's density up to 3 (less on a very long page: BAKE_PX), the light at LIGHT_RES (it is smooth);
-// black until the still has decoded, never unlit; the 1x still first, then the 3x one, a band a frame (upgradeWall).
-const BAKE_H = 1440, LIGHT_RES = 0.25, BAKE_PX = 40e6;   // BAKE_PX: device px of band canvas at most (~160 MB)
-const baked = { still: null, k: 0, bands: [], veil: null, veilKey: '' };
-if (phoneMq.matches) for (const [k, src] of [[1, asset('./assets/wall-phone-1x.webp')], [3, asset('./assets/wall-phone-3x.webp')]]) {
+// Phones: static, opaque wall bands, with ivy, lighting and haze painted together. Small backing stores and no
+// forced layer promotion keep long pages within a phone's texture budget. Fireflies animate independently; neither
+// their motion nor scrolling redraws these canvases. The sharper source upgrades each band only while scrolling is idle.
+const BAKE_H = 720, LIGHT_RES = 0.25, BAKE_PX = 12e6;   // target <=48 MB, with a 1x minimum for very long pages
+const baked = { still: phoneWall, k: phoneWall ? 1 : 0, bands: [], veil: null, veilKey: '' };
+if (phoneMq.matches && devicePixelRatio > 1) for (const [k, src] of [[3, asset('./assets/wall-phone-3x.webp')]]) {
   // (decoded off the main thread; a page that is not painting, such as a background tab, never finishes decode(), so
   // after a second it is drawn anyway)
   load(src).then((i) => Promise.race([i.decode().catch(() => {}), new Promise((r) => setTimeout(r, 1000))]).then(() => i))
@@ -378,11 +375,14 @@ if (phoneMq.matches) for (const [k, src] of [[1, asset('./assets/wall-phone-1x.w
 function bakePhone() {
   const vw = document.documentElement.clientWidth, h = Math.ceil(geo.h || 0), n = Math.ceil(h / BAKE_H);
   const H2 = STILL_PHONE.h * 2, Y = ((camera.y % H2) + H2) % H2, r = LIGHT_RES;
-  let ws = Math.min(Math.max(1, Math.round(devicePixelRatio)), 3);
+  let ws = Math.min(devicePixelRatio || 1, 1.5);
   while (ws > 1 && vw * ws * n * BAKE_H * ws > BAKE_PX) ws -= 0.5;
   for (let k = 0; k < Math.max(n, baked.bands.length); k++) {
     let b = baked.bands[k];
-    if (k >= n) { if (b) b.wall.style.display = 'none'; continue; }
+    if (k >= n) {
+      if (b) { b.wall.remove(); b.wall.width = b.wall.height = b.light.width = b.light.height = 0; }
+      continue;
+    }
     if (!b) {
       // (its light is only drawn from: it is not on the page)
       b = baked.bands[k] = { wall: el('canvas', 'world-bake'), light: document.createElement('canvas'), wallBase: '', k: 0, lightKey: '', key: '' };
@@ -434,6 +434,7 @@ function bakePhone() {
     if (full || (!b.k && baked.k)) composeBand(b, k);
     else if (b.k < baked.k) upgradeWall();
   }
+  baked.bands.length = n;
 }
 const onBand = (v, y0, y1) => !v.hero && v.top !== undefined && v.top < y1 && v.top + v.box.h > y0;
 // Band k as the layers made it, in the band's own px (the room's px from its top, less k * BAKE_H), or only rect of it
@@ -468,6 +469,8 @@ function rebakeAt(rect) {
   baked.bands.forEach((b, k) => { if (b?.vw && b.wall.style.display !== 'none' && rect.y < (k + 1) * BAKE_H && rect.y + rect.h > k * BAKE_H) composeBand(b, k, rect); });
 }
 let upgrading = false;
+let phoneScrolledAt = -Infinity;
+if (phoneMq.matches) addEventListener('scroll', () => { phoneScrolledAt = performance.now(); }, { passive: true });
 function upgradeWall() {
   if (upgrading) return;
   upgrading = true;
@@ -475,7 +478,7 @@ function upgradeWall() {
     const stale = baked.bands.map((b, k) => [b, k]).filter(([b]) => b && b.k < baked.k && b.wall.style.display !== 'none');
     if (!stale.length) { upgrading = false; return; }
     // (not in the middle of a fling: that frame is the compositor's)
-    if (Math.abs(scrollV) < 20) {
+    if (performance.now() - phoneScrolledAt > 200) {
       const mid = scrollY + innerHeight / 2 - geo.top;
       const [b, k] = stale.sort((p, q) => Math.abs((p[1] + 0.5) * BAKE_H - mid) - Math.abs((q[1] + 0.5) * BAKE_H - mid))[0];
       composeBand(b, k);
@@ -821,7 +824,7 @@ function buildRoom(route, vw, ivySignature) {
   const grown = room?.route === route ? growing.map((v) => v.grow) : [];
   for (const v of vines) { trace('vine:remove', { grows: v.grows, y: Math.round(v.pts[0].y) }); v.canvas.remove(); }
   for (const p of pools) p.el.remove();
-  for (const f of flies) { f.el.remove(); f.light.remove(); }
+  for (const f of flies) { phoneFlyObserver?.unobserve(f.el); f.phoneAnims?.forEach(a => a.cancel()); f.el.remove(); f.light.remove(); }
   for (const v of growing) v.edgeEl?.classList.remove('world-vine-edge', 'is-top', 'is-bottom');
   vines = []; fixedVines = []; growing = []; roomPools = []; pools = []; bandList = []; flies = []; edgeVines = []; edgeFlies = [];
   room = { route, live: geo.live, ivy: ivySignature, w: innerWidth, vw, top: geo.top, liveEnd: geo.liveEnd };
@@ -912,7 +915,7 @@ function buildRoom(route, vw, ivySignature) {
   for (const p of roomPools) addPool(p, true);
   // the moths, which find the slab in view
   const M = rng(seedOf(route) + 3);
-  for (let i = 0; i < 3; i++) addFly('moth', null, [50 + M() * 45, 18 + M() * 18], M, { moth: i });
+  if (!geo.phone) for (let i = 0; i < 3; i++) addFly('moth', null, [50 + M() * 45, 18 + M() * 18], M, { moth: i });
 }
 
 // Each band down the page: a fixture overhead (alternating sides), a strand of ivy up one edge, and its fireflies.
@@ -1040,6 +1043,50 @@ function moreInBand(k, y0, band, lenK) {
 // ------------------------------------------------------------------ fireflies, in page space with a little depth
 // Each one is made once, with the room or its band, and starts dark until the frame loop places it.
 let flies = [], wakeAt = -1, chasing = false;   // chasing: a phone firefly is still drifting after the scroll
+// A phone's scroll is handled by the browser compositor. Its fireflies must live on that same clock, instead of
+// chasing scrollY from requestAnimationFrame (which can lag behind a native fling). Only transform and opacity change;
+// the wall's lighting stays baked. IntersectionObserver pauses distant animations without per-scroll DOM work.
+const phoneFlyAnimations = new WeakMap();
+const phoneFlyObserver = phoneMq.matches ? new IntersectionObserver(entries => {
+  for (const entry of entries) for (const a of phoneFlyAnimations.get(entry.target) || []) {
+    if (entry.isIntersecting && !document.hidden) a.play(); else a.pause();
+  }
+}, { rootMargin: '600px 0px' }) : null;
+function placePhoneFlies() {
+  for (const f of flies) {
+    if (!f.home) continue;
+    f.el.style.left = `${f.home.x * geo.sx}px`;
+    f.el.style.top = `${f.home.y - geo.top}px`;
+    if (f.phoneAnims) continue;
+    f.el.style.opacity = '0.5';
+    if (still) { f.phoneAnims = []; continue; }
+    const seconds = 60, path = [];
+    // Whole cycles, including the harmonic, give a continuous position and velocity across the loop boundary.
+    const cycles = f.freq.map(v => Math.max(1, Math.round(v * seconds / (2 * Math.PI))));
+    for (let k = 0; k <= seconds * 4; k++) {
+      const t = k / (seconds * 4) * Math.PI * 2;
+      const p = f.amp.map((a, i) => a * (Math.sin(t * cycles[i] + f.phase[i]) + 0.35 * Math.sin(t * cycles[i] * 3 + f.phase[i] * 1.3)));
+      path.push({ transform: `translate3d(${p[0].toFixed(2)}px, ${p[1].toFixed(2)}px, 0)` });
+    }
+    const drift = f.el.animate(path, { duration: seconds * 1000, iterations: Infinity, easing: 'linear' });
+    const pulse = f.el.animate([{opacity:0.2}, {opacity:0.8}, {opacity:0.2}], {
+      duration: f.period * 1000, iterations: Infinity, easing: 'ease-in-out', iterationStart: f.offset % 1
+    });
+    f.phoneAnims = [drift, pulse];
+    f.phoneAnims.forEach(a => a.pause());
+    phoneFlyAnimations.set(f.el, f.phoneAnims);
+    phoneFlyObserver.observe(f.el);
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!phoneFlyObserver) return;
+  for (const f of flies) {
+    f.phoneAnims?.forEach(a => a.pause());
+    // Re-observe on return so only animations near the viewport resume.
+    phoneFlyObserver.unobserve(f.el);
+    if (!document.hidden) phoneFlyObserver.observe(f.el);
+  }
+});
 function addFly(kind, home, amp, R, extra = {}) {
   const rand = (a, b) => a + (b - a) * R();
   const f = { kind, ...KINDS[kind], home, amp, freq: [rand(0.08, 0.25), rand(0.1, 0.3)], phase: [R() * 6.3, R() * 6.3], period: rand(2.6, 6.5), offset: R() * 10, z: R(), off: { x: 0, y: 0, vx: 0, vy: 0 }, ...extra };
@@ -1220,13 +1267,18 @@ function resize() {
   for (let y = 0; y < img.height; y++) for (let x = 0; x < img.width; x++) {
     const u = (x + 0.5) / img.width, w = 1 - (y + 0.5) / img.height, cx = u - 0.5, cy = (w - 0.5) * 1.2;
     const v = sm(1, 0.22, Math.hypot(cx, cy)) * (0.62 + 0.38 * sm(-0.05, 0.45, w)), k = (y * img.width + x) * 4;
-    img.data[k] = img.data[k + 1] = img.data[k + 2] = Math.round(v ** 0.6 * 255); img.data[k + 3] = 255;
+    const shade = Math.round(v ** 0.6 * 255);
+    // Black with alpha is equivalent to multiply by grey, without a backdrop blend surface. If a tile is late,
+    // it can only darken the existing page; an opaque white/grey shading bitmap can never be exposed on phones.
+    img.data[k] = img.data[k + 1] = img.data[k + 2] = geo.phone || phoneMq.matches ? 0 : shade;
+    img.data[k + 3] = geo.phone || phoneMq.matches ? 255 - shade : 255;
   }
   g.putImageData(img, 0, 0);
   vignette.style.backgroundImage = `url(${c.toDataURL()})`;
   measure();
 }
 function frame(now) {
+  if (geo.phone) return;   // phone wall is static; fireflies run through compositor animations above
   requestAnimationFrame(frame);
   const sy = scrollY, H = innerHeight;
   const visible = geo.on && sy + H > (geo.plate ? 0 : geo.top) && sy < geo.bottom + 40;
@@ -1271,7 +1323,7 @@ function frame(now) {
 }
 
 resize();
-let sizeKey = `${innerWidth}x${innerHeight}`;
+let sizeKey = geo.phone ? `${innerWidth}` : `${innerWidth}x${innerHeight}`;
 addEventListener('resize', () => {
   const key = geo.phone ? `${innerWidth}` : `${innerWidth}x${innerHeight}`;
   if (key !== sizeKey) { sizeKey = key; resize(); }

@@ -5,6 +5,14 @@
 .home-opening__plate { display: none; }
 
 @media (max-width: 720px) {
+  /* Decorative layers must never become scroll anchors or extend the document's scrollable bounds. */
+  .world-albedo, .world-bodies, .world-over, .home-opening__plate { overflow-anchor: none; }
+  .world-albedo, .world-bodies { overflow: clip; }
+  .world-bake { will-change: auto; }
+  /* The vignette is black + alpha on phones. No screen-sized multiply/overlay surfaces during native scrolling. */
+  .world-vignette { mix-blend-mode: normal; }
+  .world-grain, .world-light { display: none; }
+  .world-bodies .world-fly, .m-fly .world-fly, .m-fly__light { mix-blend-mode: normal; }
   .home-opening__plate { display: block; }
   /* ---------------------------------------------------------------- the page is see-through to the wall, as on desktop */
   #app, .mobile-view, .mobile-home-hero, .home-opening, .home-definition, .current-artist-page { background: transparent; }
@@ -18,6 +26,8 @@
   /* and it keeps its height when it condenses: it sits in the page's flow, so the 8 px it used to lose moved everything
      below it against the wall (which belongs to the page and stays put) every time the page left the top */
   .site-header.is-scrolled { padding: 14px 18px; }
+  .site-header.is-scrolled .site-brand__mark { width: 26px; height: 26px; }
+  .site-header.is-scrolled .site-brand__name { font-size: 16px; }
   .site-header.is-open .site-nav__links { background: rgba(2, 3, 2, 0.97); }
 
   /* ---------------------------------------------------------------- the baked hero (mobile-hero.js)
@@ -26,7 +36,7 @@
      never changes with the URL bar, so nothing jumps), and wider screens scale the plate up to cover (--k). */
   .home-opening__plate {
     --k: 1;
-    --top: calc(46svh - 440px * var(--k));
+    --top: calc(var(--phone-height, 100svh) * .46 - 440px * var(--k));
     position: absolute; left: 0; right: 0; top: 0; z-index: 0;
     height: calc(var(--top) + 1520px * var(--k));
     overflow: hidden; pointer-events: none;
@@ -37,6 +47,7 @@
   }
   .m-plate__dolly { position: absolute; inset: 0; transform-origin: 215px 474px; }   /* the frame's centre: where the dolly aims */
   .m-plate__room { position: absolute; inset: 0; }
+  .m-plate__finished { position: absolute; inset: 0; width: 430px; height: 1520px; }
   .m-plate__room img, .m-plate__a { position: absolute; left: 0; display: block; width: 430px; max-width: none; }
   /* the room, sign off; its last 420 px fade into the world's wall (world.js OVERLAP), which runs on under it */
   .m-plate__c { top: 0; height: 1520px; }   /* its fade into the world's wall is in the image's alpha (no CSS mask) */
@@ -51,7 +62,7 @@
   /* its fireflies: the world's bodies, each with its light on the wall, added */
   .m-fly, .m-fly__drift { position: absolute; width: 0; height: 0; }
   .m-fly__drift { left: 0; top: 0; }
-  .m-fly .world-fly, .m-fly__light { mix-blend-mode: plus-lighter; opacity: 0.5; }
+  .m-fly .world-fly, .m-fly__light { mix-blend-mode: normal; opacity: 0.5; }
   .m-fly__light {
     position: absolute; left: 0; top: 0; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%;
     background: radial-gradient(closest-side, rgba(var(--c), 0.16), rgba(var(--c), 0.05) 45%, rgba(var(--c), 0));
@@ -60,10 +71,10 @@
 
 
   /* ---------------------------------------------------------------- the home opening over the plate */
-  .mobile-home-hero { height: calc(100svh - 59px); min-height: 520px; }
+  .mobile-home-hero { height: calc(var(--phone-height, 100svh) - 59px); min-height: 520px; }
   .mobile-home-hero > img, .mobile-home-hero .hero-energy { display: none; }
   .mobile-home-welcome {
-    left: 0; right: 0; width: auto; top: calc(46svh - 59px - 92px);
+    left: 0; right: 0; width: auto; top: calc(var(--phone-height, 100svh) * .46 - 59px - 92px);
     color: rgba(var(--sign-rgb), 0.62); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9);
   }
