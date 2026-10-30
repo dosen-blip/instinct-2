@@ -813,9 +813,23 @@ function heroStrands() {
     // toned once, in the canvas itself (no filter layer to composite every frame): its pixels darkened in place
     const g = v.g; g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-atop';
     g.fillStyle = `rgba(0,0,0,${1 - HERO_TONE})`; g.fillRect(0, 0, v.canvas.width, v.canvas.height); g.restore();
+    // (round 21) alive: each sways about its root, its tip 6-12 px either way, over 3.5-6.5 s and out of step with the
+    // others; a compositor animation of its own small canvas (nothing redrawn), stopped while the hero is off screen
+    if (!still) {
+      const h = hash(v.id * 3.17), tip = 6 + 6 * h, deg = Math.atan2(tip, Math.max(60, v.len)) * 180 / Math.PI;
+      const ox = v.pts[0].x - v.box.x, oy = v.pts[0].y - v.box.y, period = 3500 + 3000 * hash(v.id * 7.9);
+      v.canvas.style.transformOrigin = `${ox}px ${oy}px`;
+      v.sway = v.canvas.animate([{ transform: `rotate(${-deg}deg)` }, { transform: `rotate(${deg}deg)` }],
+        { duration: period, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out', delay: -period * hash(v.id * 1.3) * 2 });
+    }
+  }
+  if (!overSeen && over) {
+    overSeen = new IntersectionObserver(([e]) => { for (const v of vines) if (v.sway) e.isIntersecting ? v.sway.play() : v.sway.pause(); });
+    overSeen.observe(over);
   }
   return out;
 }
+let overSeen = null;   // the strands over the hero sway only while it is on screen
 
 function buildRoom(route, vw, ivySignature) {
   const R = rng(seedOf(route)), ivy = window.__heroIvy;

@@ -48,6 +48,7 @@
   .m-plate__dolly { position: absolute; inset: 0; transform-origin: 215px 474px; }   /* the frame's centre: where the dolly aims */
   .m-plate__room { position: absolute; inset: 0; }
   .m-plate__finished { position: absolute; inset: 0; width: 430px; height: 1520px; }
+  .m-plate__hum { position: absolute; left: 0; width: 430px; height: 460px; will-change: opacity; }   /* the sign's hum (mobile-hero.js HUM) */
   .m-plate__room img, .m-plate__a { position: absolute; left: 0; display: block; width: 430px; max-width: none; }
   /* the room, sign off; its last 420 px fade into the world's wall (world.js OVERLAP), which runs on under it */
   .m-plate__c { top: 0; height: 1520px; }   /* its fade into the world's wall is in the image's alpha (no CSS mask) */

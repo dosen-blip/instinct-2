@@ -7,8 +7,9 @@
 // Light adds, so the hero's own intro is reproduced by opacity alone, on the compositor (Web Animations, no per-frame
 // script): black; the sign strikes (A at the hero's Flicker boot); the room comes up (C+S over A at the hero's room
 // curve) while the camera settles (the plate scales from the dolly's 16/14.6 to 1); the header, the definition and the
-// page follow at INTRO.reveal. After that C+S becomes one static canvas and the decoded plates are released: nothing on
-// the plate moves once the intro is over.
+// page follow at INTRO.reveal. After that C+S becomes one static canvas and the decoded plates are released, except a
+// window about the sign, where the sign hums and now and then stutters or dips (the hero's Flicker, a 40 s loop) by the
+// opacity of one small layer: see settlePlate (round 21).
 //
 // The plate is positioned on the page (like the desktop canvas), behind the world's vignette and grain, so the hero gets
 // the same grade as every other screen of the site. It fades into the world's baked wall over its last 420 px (world.js
@@ -55,6 +56,18 @@ function flickerTrack(t0, t1, events = []) {
     if (t >= t0 - 1e-9 && n % (240 / HZ) === 0) out.push(+value.toFixed(4));
   }
   return out;
+}
+// the hum after the intro: a loop whose events are drawn once per visit (the hero draws them with Math.random too)
+function humTrack(loop = 40) {
+  const R = rng(Math.floor(Math.random() * 1e9)), events = [];
+  for (let t = 2 + R() * 4; t < loop - 1.5; t += 2.5 + R() * 6) {
+    const r = R(), type = r < 0.55 ? 'stutter' : r < 0.88 ? 'dip' : 'out';
+    const dur = type === 'stutter' ? 0.15 + R() * 0.7 : type === 'dip' ? 0.25 + R() * 0.5 : 0.08 + R() * 0.35;
+    events.push({ type, start: 3.4 + t, dur });
+    t += dur;
+  }
+  // sampled from the steady hum on, then shifted to start at 0; the loop seam is the hum's own slow sine, nearly flat
+  return flickerTrack(3.4, 3.4 + loop, events);
 }
 const roomTrack = () => Array.from({ length: Math.round(INTRO.roomEnd * HZ) + 1 }, (_, i) => +smoother(INTRO.roomStart, INTRO.roomEnd, i / HZ).toFixed(4));
 
@@ -120,22 +133,63 @@ function reveal() {
   setTimeout(() => root.classList.remove('intro'), 2600);
   document.dispatchEvent(new CustomEvent('hero:revealed'));
 }
+// The sign's light (plate S) falls almost all between plate rows 320 and 640 (measured: 90% of it above 642, and under
+// 2 levels anywhere outside 240-700); the hum's window takes 240-700, feathered over its first and last 60 px.
+const HUM = { y0: 240, y1: 700, feather: 60 };
+const humMask = (g, h) => {   // the window's alpha down its height, as a gradient to draw through
+  const m = g.createLinearGradient(0, 0, 0, h), f = HUM.feather / (HUM.y1 - HUM.y0);
+  m.addColorStop(0, 'rgba(0,0,0,0)'); m.addColorStop(f, '#000'); m.addColorStop(1 - f, '#000'); m.addColorStop(1, 'rgba(0,0,0,0)');
+  return m;
+};
+let hum = null;
 function settlePlate() {
   // Keep the sign lit after the intro, then flatten its two large image layers once. A looping light blended over
   // a 4560px-tall plate kept that entire surface live even while the phone was trying to scroll past it.
+  // (round 21) The sign hums again, in a window about it only, with no blending at all: the plate is C with S at .95
+  // everywhere but the window, where S fades out over the feather; over it, a layer of the window as C + S with the
+  // feather in its alpha, at the hum's level. Opacity v over C gives C + v S, as S added at v did: one small layer.
   if (!plateReady || plateSettled) return;
   plateSettled = true;
-  Promise.all([imgC.decode(), imgS.decode()]).then(() => {
+  // (decode() never settles in a page that is not painting, such as one opened in the background: after a second the
+  // images, already loaded, are drawn anyway)
+  Promise.race([Promise.all([imgC.decode(), imgS.decode()]), new Promise((r) => setTimeout(r, 1000))]).then(() => {
     const c = document.createElement('canvas'), density = Math.min(devicePixelRatio || 1, 1.5);
     c.width = Math.round(PLATE.w * density); c.height = Math.round(PLATE.h * density);
     c.className = 'm-plate__finished';
     const g = c.getContext('2d');
     g.drawImage(imgC, 0, 0, c.width, c.height);
+    // the sign's light, less what the window will carry (S drawn into its own canvas, the window's feather cut from it)
+    const s = document.createElement('canvas'); s.width = c.width; s.height = c.height;
+    const gs = s.getContext('2d');
+    gs.drawImage(imgS, 0, 0, s.width, s.height);
+    if (!still) {
+      gs.globalCompositeOperation = 'destination-out';
+      gs.setTransform(density, 0, 0, density, 0, HUM.y0 * density);
+      gs.fillStyle = humMask(gs, HUM.y1 - HUM.y0); gs.fillRect(0, 0, PLATE.w, HUM.y1 - HUM.y0);
+    }
     g.globalCompositeOperation = 'lighter'; g.globalAlpha = 0.95;
-    g.drawImage(imgS, 0, 0, c.width, c.height);
+    g.drawImage(s, 0, 0);
+    s.width = s.height = 0;
+    const kids = [c];
+    if (!still) {
+      const w = document.createElement('canvas'), wh = HUM.y1 - HUM.y0;
+      w.width = c.width; w.height = Math.round(wh * density);
+      w.className = 'm-plate__hum';
+      w.style.top = `${HUM.y0}px`;
+      const gw = w.getContext('2d'), sy = HUM.y0 * (imgC.naturalHeight / PLATE.h), sh = wh * (imgC.naturalHeight / PLATE.h);
+      gw.drawImage(imgC, 0, sy, imgC.naturalWidth, sh, 0, 0, w.width, w.height);
+      gw.globalCompositeOperation = 'lighter';
+      gw.drawImage(imgS, 0, sy, imgS.naturalWidth, sh, 0, 0, w.width, w.height);
+      gw.globalCompositeOperation = 'destination-in';
+      gw.setTransform(density, 0, 0, density, 0, 0);
+      gw.fillStyle = humMask(gw, wh); gw.fillRect(0, 0, PLATE.w, wh);
+      kids.push(w);
+      const track = humTrack();
+      hum = w.animate(track.map((v) => ({ opacity: v })), { duration: (track.length - 1) / HZ * 1000, iterations: Infinity, easing: 'linear' });
+    }
     // Release finished animation groups and decoded plate references once the final canvas is ready.
     for (const a of [...introAnims]) if (a.playState === 'finished') settle(a);
-    room.replaceChildren(c);
+    room.replaceChildren(...kids);
     for (const img of [imgA, imgC, imgS]) { img.removeAttribute('src'); img.remove(); }
   }).catch(() => { plateSettled = false; });
 }
@@ -164,7 +218,7 @@ function intro(at) {
 }
 
 // ------------------------------------------------------------------ boot
-window.__mobileHero = { host, timing, anims: () => [...introAnims], skip };
+window.__mobileHero = { host, timing, anims: () => [...introAnims, ...(hum ? [hum] : [])], skip };
 if (!phone || params.has('nohero')) {
   root.classList.remove('intro', 'intro-pending');
 } else {
@@ -230,4 +284,6 @@ if (!phone || params.has('nohero')) {
       setTimeout(() => { if (!revealed || introAnims.some((a) => a.playState !== 'finished')) skip(); }, (INTRO.roomEnd + 3) * 1000);
     }
   }
+  // the hum stops while the hero is off screen
+  new IntersectionObserver(([e]) => { if (hum) e.isIntersecting ? hum.play() : hum.pause(); }).observe(host.querySelector('.m-plate__stage'));
 }
