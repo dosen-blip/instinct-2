@@ -58,6 +58,10 @@ const phoneMq = matchMedia('(max-width: 720px)'), NOWORLD = new URLSearchParams(
 // (q80, as plate C), and wall-phone-1x.webp, the same image at 1x, drawn first while the 3x arrives (see bakePhone)
 const STILL_PHONE = { w: 440, h: 1440 };
 // phones: more ivy and more fireflies, all of the ivy within a few px of the margins (lab/MOBILE.md, second phone pass)
+// (round 19, the clients: fewer fireflies, each brighter) every firefly with a home is kept or not by a fixed hash of
+// where it lives (FLY_KEEP of them, so nothing else on the wall moves), and the ones kept carry FLY_GAIN of the light
+const FLY_KEEP = 0.7, FLY_GAIN = 1.35;
+const keepFly = (home) => !home || hash(home.x * 0.0137 + home.y * 0.00731) < FLY_KEEP;
 const PHONE_FLIES = 45000;   // px² of band per firefly (desktop 110000): 8 to a 1000 px band at 375 px (round 18: was 6)
 const PHONE_GRIDS = '.archive-card-grid, .archive-media-grid, .archive-lineup-grid, .archive-artist-grid, .archive-appearances';
 const HERO_TONE = 0.8;       // the strands hung over the phone hero's plate, toned to the plate's own lit ivy
@@ -140,6 +144,8 @@ let vineId = 0;
 // kind: what sort of strand it is (hanger, climber, divider, carry, edge-hanger, edge-climber), so the page transitions
 // know how it hangs (it swings about its root, lib/world/transitions.js); gap and leaf scale its leaves' spacing and size
 function makeVine(pts, R, { size = 1, width = [4.2, 1.4], leafFrom = 0, grows = false, right = false, kind = 'strand', gap = 1, leaf = 1 } = {}) {
+  // phones: drawn fully grown, as part of the static wall (growing it redrew the wall's bands as the page loaded)
+  if (geo.phone) grows = false;
   pts[0].s = 0;
   for (let i = 1; i < pts.length; i++) pts[i].s = pts[i - 1].s + Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y);
   const len = pts[pts.length - 1].s, leaves = [];
@@ -223,8 +229,6 @@ function drawVine(v, p) {
     g.restore();
   }
   if (clip) g.restore();
-  // phones: a growing strand is part of the flattened wall, so the stretch that changed is redone there
-  if (geo.phone && v.grows && v.top !== undefined) rebakeAt(clip ? { x: clip.x - v.box.x + v.left, y: clip.y - v.box.y + v.top, w: clip.w, h: clip.h } : { x: v.left, y: v.top, w: v.box.w, h: v.box.h });
 }
 // strand shapes, all in page px, root first
 function divider(y, fromRight, R) {   // along a section edge, in from one side of the page
@@ -331,7 +335,6 @@ function measure() {
   for (const v of vines) placeVine(v);
   for (const p of pools) placePool(p);
   if (geo.phone) bakePhone();
-  if (geo.phone) { placePhoneFlies(); kickGrow(); }
 
   // slabs: the lights people press
   const found = new Set(inApp(SLABS));
@@ -372,6 +375,9 @@ if (phoneMq.matches && devicePixelRatio > 1) for (const [k, src] of [[3, asset('
 }
 function bakePhone() {
   const vw = document.documentElement.clientWidth, h = Math.ceil(geo.h || 0), n = Math.ceil(h / BAKE_H);
+  // (a hidden window, a background tab or a prerender can report no width at all: nothing to bake until it has one,
+  // and a canvas with no width cannot be drawn from)
+  if (vw < 1 || h < 1) return;
   const H2 = STILL_PHONE.h * 2, Y = ((camera.y % H2) + H2) % H2, r = LIGHT_RES;
   let ws = Math.min(devicePixelRatio || 1, 1.5);
   while (ws > 1 && vw * ws * n * BAKE_H * ws > BAKE_PX) ws -= 0.5;
@@ -435,16 +441,15 @@ function bakePhone() {
   baked.bands.length = n;
 }
 const onBand = (v, y0, y1) => !v.hero && v.top !== undefined && v.top < y1 && v.top + v.box.h > y0;
-// Band k as the layers made it, in the band's own px (the room's px from its top, less k * BAKE_H), or only rect of it
-// (a strand growing: see drawVine): the still's copies (every other one mirrored, as placeWall lays them; a screen wider
-// than the still, up to the 720 px breakpoint, gets copies either side), the ivy, times the light, plus the haze.
-function composeBand(b, k, rect = null) {
+// Band k as the layers made it, in the band's own px (the room's px from its top, less k * BAKE_H): the still's copies
+// (every other one mirrored, as placeWall lays them; a screen wider than the still, up to the 720 px breakpoint, gets
+// copies either side), the ivy, times the light, plus the haze.
+function composeBand(b, k) {
   const c = b.wall, vw = b.vw, ws = c.width / vw, S = STILL_PHONE, H2 = S.h * 2, Y = ((camera.y % H2) + H2) % H2;
   const c0 = Math.round((vw - S.w) / 2), y0 = k * BAKE_H, y1 = y0 + BAKE_H, g = c.getContext('2d');
-  if (!rect) b.k = baked.k;
+  b.k = baked.k;
   g.save();
   g.setTransform(ws, 0, 0, ws, 0, -y0 * ws);
-  if (rect) { g.beginPath(); g.rect(rect.x, rect.y, rect.w, rect.h); g.clip(); }
   g.globalCompositeOperation = 'source-over';
   if (baked.still) {
     g.imageSmoothingQuality = 'high';
@@ -456,15 +461,11 @@ function composeBand(b, k, rect = null) {
     }
     g.setTransform(ws, 0, 0, ws, 0, -y0 * ws);
   } else { g.fillStyle = '#000'; g.fillRect(0, y0, vw, BAKE_H); }
-  for (const v of vines) if (onBand(v, y0, y1) && (!rect || (v.top < rect.y + rect.h && v.top + v.box.h > rect.y))) g.drawImage(v.canvas, v.left, v.top, v.box.w, v.box.h);
+  for (const v of vines) if (onBand(v, y0, y1)) g.drawImage(v.canvas, v.left, v.top, v.box.w, v.box.h);
   g.globalCompositeOperation = 'multiply';
   g.drawImage(b.light, 0, y0, b.light.width / LIGHT_RES, BAKE_H);
   if (baked.veil) { g.globalCompositeOperation = 'lighter'; g.drawImage(baked.veil, 0, 0, vw, geo.h); }
   g.restore();
-}
-// a growing strand's changed stretch, in the room's px, redone in the bands it crosses
-function rebakeAt(rect) {
-  baked.bands.forEach((b, k) => { if (b?.vw && b.wall.style.display !== 'none' && rect.y < (k + 1) * BAKE_H && rect.y + rect.h > k * BAKE_H) composeBand(b, k, rect); });
 }
 let upgrading = false;
 let phoneScrolledAt = -Infinity;
@@ -571,33 +572,6 @@ function setGrowth(progress = []) {
     trace('vine:set', { y: Math.round(v.edgeY), p: +p.toFixed(3) });
   });
 }
-
-// Phones have no frame loop (it is off there: see frame), so their growing strands get their own short run: one starts
-// once the page has been still for a moment with its edge in view, grows on its own requestAnimationFrame run, and is
-// held where it is (its clock paused) while the page scrolls, so a scroll never redraws anything. Each step redraws only
-// the stretch that changed, into the wall's band (drawVine, rebakeAt). The run ends when nothing is left to grow in view.
-let growRaf = 0, growLast = 0, growIdle = 0;
-function growStep(now) {
-  growRaf = 0;
-  const dt = Math.min((now - growLast) / 1000, 1 / 20), sy = scrollY, H = innerHeight;
-  growLast = now; clock += dt;
-  const scrolling = now - phoneScrolledAt < 160;
-  let more = false;
-  for (const v of growing) {
-    if (v.grow === null) {
-      if (scrolling || !(v.edgeY > sy - 100 && v.edgeY < sy + H * 0.85)) continue;
-      v.grow = clock + 0.4; trace('vine:grow', { y: v.edgeY });
-    } else if (scrolling && clock - v.grow < 3.2) v.grow += dt;
-    drawVine(v, Math.max(0, growthOf(v)));
-    if (v.drawn < 1) more = true;
-  }
-  if (more) growRaf = requestAnimationFrame(growStep);
-}
-function kickGrow() {
-  if (!geo.phone || !phoneMq.matches || !phoneFlyObserver || growRaf || !growing.some((v) => v.drawn < 1)) return;
-  growLast = performance.now(); growRaf = requestAnimationFrame(growStep);
-}
-if (phoneMq.matches) addEventListener('scroll', () => { clearTimeout(growIdle); growIdle = setTimeout(kickGrow, 200); }, { passive: true });
 
 function edgeCandidates(route) {
   return route === 'index'
@@ -725,7 +699,7 @@ function edgeItems(k) {
       const F = rng(Math.imul(b + 77, 6151) ^ Math.imul(s + 31, 3571));
       if (F() < 0.7) {
         const fy = s * EDGE_BAND + EDGE_BAND * F() - Y;
-        if (fy >= y0 && fy < y1 && fy > 80) { addFly(F() < 0.3 ? 'orb' : 'blink', { x: ox + (F() - 0.5) * 180, y: fy }, [30 + F() * 50, 25 + F() * 40], F); edgeFlies.push(flies[flies.length - 1]); }
+        if (fy >= y0 && fy < y1 && fy > 80) { const f = addFly(F() < 0.3 ? 'orb' : 'blink', { x: ox + (F() - 0.5) * 180, y: fy }, [30 + F() * 50, 25 + F() * 40], F); if (f) edgeFlies.push(f); }
       }
     }
   }
@@ -849,7 +823,7 @@ function buildRoom(route, vw, ivySignature) {
   const grown = room?.route === route ? growing.map((v) => v.grow) : [];
   for (const v of vines) { trace('vine:remove', { grows: v.grows, y: Math.round(v.pts[0].y) }); v.canvas.remove(); }
   for (const p of pools) p.el.remove();
-  for (const f of flies) { phoneFlyObserver?.unobserve(f.el); f.phoneAnims?.forEach(a => a.cancel()); f.wrap?.remove(); f.el.remove(); f.light.remove(); }
+  for (const f of flies) { f.el.remove(); f.light.remove(); }
   for (const v of growing) v.edgeEl?.classList.remove('world-vine-edge', 'is-top', 'is-bottom');
   vines = []; fixedVines = []; growing = []; roomPools = []; pools = []; bandList = []; flies = []; edgeVines = []; edgeFlies = [];
   room = { route, live: geo.live, ivy: ivySignature, w: innerWidth, vw, top: geo.top, liveEnd: geo.liveEnd };
@@ -1067,77 +1041,13 @@ function moreInBand(k, y0, band, lenK) {
 
 // ------------------------------------------------------------------ fireflies, in page space with a little depth
 // Each one is made once, with the room or its band, and starts dark until the frame loop places it.
-let flies = [], wakeAt = -1, chasing = false;   // chasing: a phone firefly is still drifting after the scroll
-// A phone's scroll is handled by the browser compositor. Its fireflies must live on that same clock, instead of
-// chasing scrollY from requestAnimationFrame (which can lag behind a native fling). Only transform and opacity change;
-// the wall's lighting stays baked. IntersectionObserver pauses distant animations without per-scroll DOM work.
-const phoneFlyAnimations = new WeakMap();
-const phoneFlyObserver = phoneMq.matches ? new IntersectionObserver(entries => {
-  for (const entry of entries) for (const a of phoneFlyAnimations.get(entry.target) || []) {
-    if (entry.isIntersecting && !document.hidden) a.play(); else a.pause();
-  }
-}, { rootMargin: '600px 0px' }) : null;
-// Each also hangs in a wrapper that follows the scroll as over the hero (fx.js follow, pace): from when it comes into
-// view it drifts down after the screen by its own share of the scroll (.6-.95), up to FOLLOW screens, then lets go and
-// scrolls away (so they stay spread down the page; each stays in view a little longer). The scroll only sets where it is
-// going, a few times a second (phoneFollow); the compositor eases it there (a CSS transition, as long as its pace makes
-// it), so neither a fling nor a busy main thread can make one step. Nothing has moved at load.
-function placePhoneFlies() {
-  if (!phoneFlyObserver) return;   // (a page opened wide and narrowed past 720 px: it reloads as a phone page in a moment)
-  for (const f of flies) {
-    if (!f.home) continue;
-    if (!f.wrap) {
-      f.wrap = el('i', 'world-fly__follow', bodies); f.wrap.append(f.el);
-      followTo(f);
-      if (!still) requestAnimationFrame(() => { f.wrap.style.transition = `transform ${(2.4 / f.pace).toFixed(2)}s cubic-bezier(.25, .6, .35, 1)`; });
-    }
-    f.wrap.style.left = `${f.home.x * geo.sx}px`;
-    f.wrap.style.top = `${f.home.y - geo.top}px`;
-    if (f.phoneAnims) continue;
-    f.el.style.opacity = '0.5';
-    if (still) { f.phoneAnims = []; continue; }
-    const seconds = 60, path = [];
-    // Whole cycles, including the harmonic, give a continuous position and velocity across the loop boundary.
-    const cycles = f.freq.map(v => Math.max(1, Math.round(v * seconds / (2 * Math.PI))));
-    for (let k = 0; k <= seconds * 4; k++) {
-      const t = k / (seconds * 4) * Math.PI * 2;
-      const p = f.amp.map((a, i) => a * (Math.sin(t * cycles[i] + f.phase[i]) + 0.35 * Math.sin(t * cycles[i] * 3 + f.phase[i] * 1.3)));
-      path.push({ transform: `translate3d(${p[0].toFixed(2)}px, ${p[1].toFixed(2)}px, 0)` });
-    }
-    const drift = f.el.animate(path, { duration: seconds * 1000, iterations: Infinity, easing: 'linear' });
-    const pulse = f.el.animate([{opacity:0.2}, {opacity:0.8}, {opacity:0.2}], {
-      duration: f.period * 1000, iterations: Infinity, easing: 'ease-in-out', iterationStart: f.offset % 1
-    });
-    f.phoneAnims = [drift, pulse];
-    f.phoneAnims.forEach(a => a.pause());
-    phoneFlyAnimations.set(f.el, f.phoneAnims);
-    phoneFlyObserver.observe(f.el);
-  }
-}
-const FOLLOW = 0.7;
-function followTo(f) {
-  const H = innerHeight, from = Math.max(0, f.home.y - H);
-  const y = still ? 0 : Math.round(Math.min(FOLLOW * H, Math.max(0, (scrollY - from) * f.follow)));
-  if (y !== f.panSet) { f.panSet = y; f.wrap.style.transform = `translate3d(0, ${y}px, 0)`; }
-}
-let followTimer = 0;
-function phoneFollow() { followTimer = 0; for (const f of flies) if (f.wrap) followTo(f); }
-if (phoneMq.matches && !still) addEventListener('scroll', () => { if (!followTimer) followTimer = setTimeout(phoneFollow, 90); }, { passive: true });
-document.addEventListener('visibilitychange', () => {
-  if (!phoneFlyObserver) return;
-  for (const f of flies) {
-    f.phoneAnims?.forEach(a => a.pause());
-    // Re-observe on return so only animations near the viewport resume.
-    phoneFlyObserver.unobserve(f.el);
-    if (!document.hidden) phoneFlyObserver.observe(f.el);
-  }
-});
+let flies = [], wakeAt = -1;
 function addFly(kind, home, amp, R, extra = {}) {
   const rand = (a, b) => a + (b - a) * R();
   const f = { kind, ...KINDS[kind], home, amp, freq: [rand(0.08, 0.25), rand(0.1, 0.3)], phase: [R() * 6.3, R() * 6.3], period: rand(2.6, 6.5), offset: R() * 10, z: R(), off: { x: 0, y: 0, vx: 0, vy: 0 }, ...extra };
-  // phones: how much of the scroll it drifts down after, and how quickly it catches up (the hero's fx.js: follow, pace)
-  const n = flies.length;
-  Object.assign(f, { follow: f.moth !== undefined ? 0 : 0.6 + 0.35 * (n * 0.618 % 1), pace: 0.35 + 0.5 * (n * 0.382 % 1), pan: null });
+  // (round 20) phones have none at all: every version with fireflies on them stuttered on a real phone
+  if (geo.phone || !keepFly(home)) return null;   // (its draws are taken all the same, so what follows in its stream is unchanged)
+  f.power *= f.moth === undefined ? FLY_GAIN : 1;
   f.el = el('i', 'world-fly', bodies);
   f.el.style.setProperty('--c', rgb(f.c));
   f.el.style.setProperty('--s', (f.size * (0.8 + 0.5 * f.z)).toFixed(2));
@@ -1148,6 +1058,7 @@ function addFly(kind, home, amp, R, extra = {}) {
   if (geo.phone) f.light.style.display = 'none';
   f.shown = false; f.lvl = 0;
   flies.push(f);
+  return f;
 }
 // A page transition holds the room being left on screen while it slides away: its fireflies are handed over (so the
 // next room does not remove them) and kept flying where they were, at the depth the page was left at, until released.
@@ -1172,16 +1083,6 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
   const light = lamp;
   // the two nearest the cursor drift over to it, gently
   const near = list.map((f, i) => [i, Math.hypot(f.px - pointer.x, f.py - pointer.y)]).filter(([, d]) => d < 320).sort((a, b) => a[1] - b[1]).slice(0, 2).map(([i]) => i);
-  // phones: as over the hero, every firefly drifts down the page after the screen, by its own share of the scroll and at
-  // its own pace, so the ones about you trail along as you scroll and float back into place once you stop (a page
-  // opened part-way down starts them where they would have caught up to). Every one is moved, in view or not, so none
-  // jumps when it comes into view; while any is still catching up the frame loop runs at full rate (see chasing).
-  chasing = false;
-  if (geo.phone && !still) for (const f of list) {
-    const to = sy * f.follow;
-    f.pan = f.pan === null ? to : f.pan + (to - f.pan) * (1 - Math.exp(-dt * f.pace));
-    if (Math.abs(to - f.pan) > 0.5) chasing = true;
-  }
   list.forEach((f, i) => {
     let bx, by;
     if (f.moth !== undefined) {
@@ -1191,7 +1092,7 @@ function updateFlies(clockT, dt, sy, H, scrollV, lamp, list = flies, sx = geo.sx
       bx = sr.x + sr.w / 2 + Math.cos(a) * f.amp[0] * r * (sr.w / 160 + 0.6) + Math.sin(t * 3.1 + f.moth) * 6;
       by = sr.y + sr.h / 2 + Math.sin(a * 1.3) * f.amp[1] * r - 6 + Math.sin(t * 4.3 + f.moth * 2) * 4;
     } else {
-      const hx = f.home.x * sx, hy = f.home.y + (f.pan || 0);   // its home, spread with the width (and on phones, where it has drifted to)
+      const hx = f.home.x * sx, hy = f.home.y;   // its home, spread with the width
       if (!inView(hy)) { f.lvl = 0; return; }
       const s = (k) => Math.sin(t * f.freq[k] + f.phase[k]) + 0.35 * Math.sin(t * f.freq[k] * 2.9 + f.phase[k] * 1.3);
       bx = hx + f.amp[0] * s(0); by = hy + f.amp[1] * s(1);
@@ -1330,9 +1231,9 @@ function frame(now) {
   if (visible !== shown) { shown = visible; document.documentElement.classList.toggle('world-off', !visible); }
   if (!visible) { last = now; lastScroll = sy; return; }
   // 60 fps while something moves quickly (the cursor, growth, a slab striking); ~30 fps otherwise, like the hero.
-  // Scrolling needs nothing from here (the page carries the whole room), except on phones the fireflies drifting after it.
+  // Scrolling needs nothing from here: the page carries the whole room.
   const sprouting = growing.some((v) => v.grow !== null && v.drawn < 1);
-  const busy = now - pointer.at < 1200 || sprouting || chasing || !!held || [...slabs.values()].some((s) => s.strike >= 0);
+  const busy = now - pointer.at < 1200 || sprouting || !!held || [...slabs.values()].some((s) => s.strike >= 0);
   if (busy) lastBusy = now;
   if (now - lastBusy > 1200 && now - last < 1000 / 30 - 3) return;
   if (still && wakeAt >= 0 && clock - wakeAt > 2 && now - lastBusy > 1200) { last = now; lastScroll = sy; return; }   // reduced motion: nothing left to move

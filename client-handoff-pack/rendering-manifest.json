@@ -19,7 +19,7 @@
     "hero-3d/assets/leaf-atlas.webp": "f86dd509411db7e7631468ac8d2526d5e3cd2226305a1702c13f5336ce589c4d",
     "hero-3d/assets/octopus.svg": "b2691fe1ddd9475cdb89c4886548efd65c0cea419afcda123c8a7652c51fd25f",
     "hero-3d/assets/wordmark.svg": "f57220642469938fd03d2aa5aae3df46c5a2515374d5183e1b2ff1e4b643be6e",
-    "hero-3d/fx.js": "bf0896f1a286da4f6b8a08ab6bdc32788b08a4c9633ae94aedeb86b069444846",
+    "hero-3d/fx.js": "12888c46a4a4b73c07dc57477bc2a43a830fd0643ea9e1b3cde52b8ff0a9e616",
     "hero-3d/hero.js": "4df99663674c3b90b408885b7ca4727a3b1de43b03d53284b906df2765fce21c",
     "hero-3d/shaders.js": "bdf28bf1fd67b5bdc373acae00aae380e63d7996ff87ff199b0f50b886674e30",
     "hero-3d/site-hero.css": "db319d656d681f72c24ec6deb0cef09cee1ccda7002d6226c74bfd49c58ffa0a",
@@ -31,8 +31,8 @@
     "mobile/hero/hero-c.webp": "8ebd02dac9c0d5fa2b3d0a8f4e21ca23c4c5987ec1571ccbd92945d6dea5db11",
     "mobile/hero/hero-ivy.json": "9128b076c456db87f7025c3551083c5870684e89f613ddd42a9570bd0008cc3c",
     "mobile/hero/hero-s.webp": "e8f799f9609f5e998453bc69ee73df0f4ac278664ec1f486428a85f3ceeacc3a",
-    "mobile/mobile-hero.js": "f3ad7a8d755e23ff1a9d0e6ee999e8bfb7883d2b8803ea17a74360ee41b10b53",
-    "mobile/mobile.css": "e7a6fbf9cb627cdf6a83abe5498d8c1a012ec447fccbebc02087ec2129e2945d",
+    "mobile/mobile-hero.js": "e2da2c497378ca457b4739c520ddd2d82f32758f375ee13c64493db20983d577",
+    "mobile/mobile.css": "49b504511e4bc1fb90f42def7db1930573adb20b2dde0476392cbea31bad09c3",
     "mobile/mobile.js": "a8cb4988c7ed0af7bb994b658d494618486e809b833272bc356de2255b12a437",
     "world/assets/leaf-atlas-phone.webp": "252731f8d58f3e2ba6eba5f54794280b7c77c6e827e72344ca66c2c2c222815f",
     "world/assets/wall-phone-1x.webp": "54d1d00a32200524f38b1ba43677dfcd750c21edd790be12b09e930824bd0b09",
@@ -43,11 +43,11 @@
     "world/transitions.js": "3724be03d58d800cbf8cbec44a924fcd039a08699c6a892932c13838f316254f",
     "world/wall-gl.css": "2ef677fa114f34364d5fbde23efe6d8972590a15d8b0a2d1f72126facbe21b6e",
     "world/wall-gl.js": "b68abf8c33522c36bec7ef516c58bf21e8d789cd5fcb0c30dcea21c38aa4f4a5",
-    "world/world.css": "a541fc972da8e24477fec820d4a2c54ee07a956503ae61cda2422349b3683e1b",
-    "world/world.js": "7ac69cde2f0510d35a78e9bd55f8688971852776b3085047867f8407525229f7"
+    "world/world.css": "8eb3730ed6c8821d67815f18d936c3860f9ed5fb49c19a82e331a7207f16af96",
+    "world/world.js": "0f4da3a91bfa4e3ae4ad3401ca7a94998f87cf5073f936cef48a9b57a5e2c468"
   },
   "worldBlock": {
-    "home": "6fff586a79254678919d0d8d18fe91269e68f06ca9812d3c08b6f045e45c59bf",
-    "subpage": "62728b59ffd3b3ebe0ff6724c13eba4bcbda595d08fae82d06ce25f375f483bd"
+    "home": "645cc4488dbf12e479e24e56f8057d9fda45a23a5b9f854570154489240cba11",
+    "subpage": "32017dcda21a5c2b8628e92bcc1391804c34dd6e1b8ea7ebd7109d28d8e530ce"
   }
 }

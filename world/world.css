@@ -47,7 +47,7 @@ body { background: #000; }
   margin: calc(-36px * var(--s, 1)) 0 0 calc(-36px * var(--s, 1));
   border-radius: 50%;
   /* the hot body, then its glow in the room's haze */
-  background: radial-gradient(circle closest-side, rgba(255, 255, 240, 0.95) 0 5%, rgba(var(--c), 0.55) 8%, rgba(var(--c), 0.16) 24%, rgba(var(--c), 0) 62%);
+  background: radial-gradient(circle closest-side, rgba(255, 255, 240, 0.95) 0 5%, rgba(var(--c), 0.72) 8%, rgba(var(--c), 0.22) 24%, rgba(var(--c), 0) 62%);   /* (round 19: brighter glow, as there are fewer) */
   will-change: transform, opacity;
 }
 /* grain as in the hero's grade: overlay on the dark wall scales with its brightness */
@@ -197,7 +197,6 @@ html.world-off :is(.world-vignette, .world-grain) { display: none; }
   .world-veil, .world-light__fade { display: none; }
   .world-lamp { mix-blend-mode: color-dodge; will-change: transform, opacity; }
   .world-bodies .world-fly { mix-blend-mode: plus-lighter; }
-  .world-fly__follow { position: absolute; width: 0; height: 0; }   /* its scroll-follow (world.js placePhoneFlies) */
   /* the lit slab's bloom: one composited glow whose opacity is the backlight, instead of two large blurred shadows
      repainted with every step of the hum */
   .archive-shell > .archive-actions > a:first-child,

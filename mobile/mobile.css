@@ -11,8 +11,8 @@
   .world-bake { will-change: auto; }
   /* The vignette is black + alpha on phones. No screen-sized multiply/overlay surfaces during native scrolling. */
   .world-vignette { mix-blend-mode: normal; }
-  .world-grain, .world-light { display: none; }
-  .world-bodies .world-fly, .m-fly .world-fly, .m-fly__light { mix-blend-mode: normal; }
+  /* (round 20) and no fireflies on phones at all (world.js addFly, mobile-hero.js): their layer goes too */
+  .world-grain, .world-light, .world-bodies { display: none; }
   .home-opening__plate { display: block; }
   /* ---------------------------------------------------------------- the page is see-through to the wall, as on desktop */
   #app, .mobile-view, .mobile-home-hero, .home-opening, .home-definition, .current-artist-page { background: transparent; }
@@ -57,17 +57,7 @@
   .m-plate__a, .m-plate__s { top: 0; height: 1520px; }
   .m-plate__s { mix-blend-mode: plus-lighter; }
   html:not(.intro) .m-plate__a { display: none; }
-  html.intro-pending :is(.m-plate__room, .m-plate__a, .m-fly, .world-over) { opacity: 0; }   /* .world-over: world.js's ivy over the plate */   /* black until the plates are decoded */
-
-  /* its fireflies: the world's bodies, each with its light on the wall, added */
-  .m-fly, .m-fly__drift { position: absolute; width: 0; height: 0; }
-  .m-fly__drift { left: 0; top: 0; }
-  .m-fly .world-fly, .m-fly__light { mix-blend-mode: normal; opacity: 0.5; }
-  .m-fly__light {
-    position: absolute; left: 0; top: 0; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(var(--c), 0.16), rgba(var(--c), 0.05) 45%, rgba(var(--c), 0));
-    will-change: transform, opacity;
-  }
+  html.intro-pending :is(.m-plate__room, .m-plate__a, .world-over) { opacity: 0; }   /* .world-over: world.js's ivy over the plate */   /* black until the plates are decoded */
 
 
   /* ---------------------------------------------------------------- the home opening over the plate */

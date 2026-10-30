@@ -7,8 +7,8 @@
 // Light adds, so the hero's own intro is reproduced by opacity alone, on the compositor (Web Animations, no per-frame
 // script): black; the sign strikes (A at the hero's Flicker boot); the room comes up (C+S over A at the hero's room
 // curve) while the camera settles (the plate scales from the dolly's 16/14.6 to 1); the header, the definition and the
-// page follow at INTRO.reveal. After that C+S becomes one static canvas and the decoded plates are released. Fireflies
-// drift and blink using precomputed transform/opacity animations, with no JavaScript scroll follower or live wall blend.
+// page follow at INTRO.reveal. After that C+S becomes one static canvas and the decoded plates are released: nothing on
+// the plate moves once the intro is over.
 //
 // The plate is positioned on the page (like the desktop canvas), behind the world's vignette and grain, so the hero gets
 // the same grade as every other screen of the site. It fades into the world's baked wall over its last 420 px (world.js
@@ -73,11 +73,10 @@ host.innerHTML = `
         <img class="m-plate__c" alt="" decoding="sync" width="1290" height="4560">
         <img class="m-plate__s" alt="" decoding="sync" width="1290" height="4560">
       </div>
-      <div class="m-plate__flies"></div>
     </div>
   </div>`;
 const [imgA, imgC, imgS] = ['a', 'c', 's'].map((k) => host.querySelector(`.m-plate__${k}`));
-const room = host.querySelector('.m-plate__room'), dolly = host.querySelector('.m-plate__dolly'), fliesEl = host.querySelector('.m-plate__flies');
+const room = host.querySelector('.m-plate__room'), dolly = host.querySelector('.m-plate__dolly');
 
 // below the world's vignette and grain, above its wall and light: right after .world-light once world.js has built it
 function seat() {
@@ -90,99 +89,10 @@ function scale() {
   host.style.setProperty('--k', Math.max(1, document.documentElement.clientWidth / PLATE.w).toFixed(4));
 }
 
-// ------------------------------------------------------------------ fireflies over the hero (the hero's 24, thinned)
-function flies() {
-  const R = rng(91), rand = (a, b) => a + (b - a) * R(), halfW = 260, halfH = 474;   // compose px (520 x 948 frame)
-  const list = [];
-  const per = { moth: 3, blink: 6, orb: 5 };   // 14 (the hero has 24)
-  const KINDS = { blink: { c: '184,255,71', s: 1 }, orb: { c: '140,255,184', s: 1.5 }, moth: { c: '255,219,140', s: 0.8 } };
-  for (const kind of ['moth', 'blink', 'orb']) for (let i = 0; i < per[kind]; i++) {
-    let x, y, ax, ay;
-    if (kind === 'moth') { x = 260 + rand(-0.45, 0.45) * 322; y = PLATE.wordmarkY - rand(-0.6, 0.9) * 60; ax = rand(0.25, 0.6); ay = rand(0.12, 0.3); }
-    else if (kind === 'blink') { x = 260 + rand(-0.2, 1) * halfW * (R() < 0.7 ? 1 : -1); y = halfH - rand(-0.95, 0.8) * halfH; ax = rand(0.4, 1.2); ay = rand(0.25, 0.6); }
-    else { x = 260 + rand(-0.95, 0.95) * halfW; y = halfH - rand(-0.8, 0.85) * halfH; ax = rand(0.4, 1.2); ay = rand(0.25, 0.6); }
-    // frequencies rounded to whole cycles per loop, so the 60 s path loops seamlessly
-    const LOOP = 60, f = (a, b) => Math.max(1, Math.round(rand(a, b) * (kind === 'moth' ? 1.3 : 1) * LOOP / (2 * Math.PI))) * 2 * Math.PI / LOOP;
-    list.push({ kind, ...KINDS[kind], x: x - PLATE.crop, y, ax: ax / PLATE.wpp, ay: ay / PLATE.wpp, fx: f(0.08, 0.25), fy: f(0.1, 0.3), px: R() * 6.3, py: R() * 6.3, period: rand(2.6, 6.5), offset: R() * 10, z: R(), LOOP });
-  }
-  return list;
-}
-function buildFlies(list) {
-  return list.map((f, i) => {
-    const wake = document.createElement('i'); wake.className = 'm-fly';
-    const body = document.createElement('i'); body.className = 'world-fly';
-    const glow = document.createElement('i'); glow.className = 'm-fly__light';
-    body.style.setProperty('--c', f.c); body.style.setProperty('--s', (f.s * (0.8 + 0.5 * f.z)).toFixed(2));
-    glow.style.setProperty('--c', f.c);
-    const drift = document.createElement('i'); drift.className = 'm-fly__drift';   // fixed origin for compositor-only drift
-    wake.append(glow, body); drift.append(wake);
-    fliesEl.append(drift);
-    wake.style.left = `${f.x.toFixed(1)}px`; wake.style.top = `${f.y.toFixed(1)}px`;
-    return { ...f, i, wake, body, glow, drift };
-  });
-}
-// Fireflies stay in page space. Their independent transform/opacity animations continue smoothly during a native
-// fling; no requestAnimationFrame scroll follower can trail the browser's compositor and then jump to catch up.
-// Over that, as over the desktop hero (fx.js follow, pace) and as the world's fireflies below (world.js
-// placePhoneFlies): each drifts down after the scroll by its own share of it (.6-.95), up to .7 of a screen, so the ones
-// in view trail along and float back once the page stops; the moths keep to the sign. The scroll only sets where each is going, a few times
-// a second; the compositor eases it there (a CSS transition on its wrapper, as long as its pace makes it). One drifting
-// into the plate's fade fades with it rather than being cut off at the plate's edge.
-function followFlies(list) {
-  const k = () => Number(host.style.getPropertyValue('--k')) || 1;
-  const fl = list.filter((f) => f.kind !== 'moth').map((f) => ({ f, follow: 0.6 + 0.35 * (f.i * 0.618 % 1), pace: 0.35 + 0.5 * (f.i * 0.382 % 1), y: null }));
-  let timer = 0;
-  const set = () => {
-    timer = 0;
-    for (const d of fl) {
-      const y = Math.round(Math.min(0.7 * innerHeight, scrollY * d.follow) / k());   // stage px
-      if (y === d.y) continue;
-      d.y = y;
-      d.f.drift.style.transform = `translate3d(0, ${y}px, 0)`;
-      d.f.drift.style.opacity = Math.min(1, Math.max(0, (PLATE.h - 120 - d.f.y - y) / 320)).toFixed(3);
-    }
-  };
-  set();
-  requestAnimationFrame(() => {
-    for (const d of fl) { const t = `${(2.4 / d.pace).toFixed(2)}s cubic-bezier(.25, .6, .35, 1)`; d.f.drift.style.transition = `transform ${t}, opacity ${t}`; }
-  });
-  addEventListener('scroll', () => { if (!timer) timer = setTimeout(set, 90); }, { passive: true });
-}
-function animateFlies(list, n, at) {
-  const anims = [];
-  for (const f of list) {
-    // drift: the hero's two sines per axis, 4 keyframes a second over the loop (slow enough for linear steps)
-    const path = [];
-    for (let k = 0; k <= f.LOOP * 4; k++) {
-      const t = k / 4, s = (fr, ph) => Math.sin(t * fr + ph) + 0.35 * Math.sin(t * fr * 3 + ph * 1.3);
-      path.push({ transform: `translate3d(${(f.ax * s(f.fx, f.px)).toFixed(1)}px, ${(f.ay * s(f.fy, f.py)).toFixed(1)}px, 0)` });
-    }
-    // blink: its level over one period (a soft swell), or a slow breathing for orbs and moths
-    const level = [], P = f.kind === 'blink' ? f.period : f.kind === 'orb' ? 2 * Math.PI / 0.6 : 2 * Math.PI / 0.9;
-    for (let k = 0; k <= Math.round(P * HZ); k++) {
-      const t = k / HZ;
-      const v = f.kind === 'blink' ? 0.12 + 0.88 * Math.exp(-(((t + f.offset) % f.period - 0.8) ** 2) / 0.09)
-        : f.kind === 'moth' ? 0.6 + 0.25 * Math.sin(t * 0.9 + f.i * 3) : 0.45 + 0.35 * Math.sin(t * 0.6 + f.offset);
-      level.push({ opacity: +v.toFixed(3) });
-    }
-    const o = { iterations: Infinity, easing: 'linear' };
-    anims.push(f.body.animate(path, { ...o, duration: f.LOOP * 1000, iterationStart: (f.offset / f.LOOP) % 1 }));
-    anims.push(f.glow.animate(path, { ...o, duration: f.LOOP * 1000, iterationStart: (f.offset / f.LOOP) % 1 }));
-    anims.push(f.body.animate(level, { ...o, duration: P * 1000, composite: 'replace' }));
-    anims.push(f.glow.animate(level, { ...o, duration: P * 1000 }));
-    // they wake one by one as the room comes up (hero: (room - i / N * .45) / .55, smoothstepped)
-    if (at !== null) {
-      const wake = roomTrack().map((r) => { const w = Math.min(1, Math.max(0, (r - f.i / n * 0.45) / 0.55)); return { opacity: +(w * w * (3 - 2 * w)).toFixed(4) }; });
-      const a = f.wake.animate(wake, { duration: INTRO.roomEnd * 1000, fill: 'both', easing: 'linear' });
-      a.startTime = at;
-      introAnims.push(a);
-    }
-  }
-  return anims;
-}
+// (round 20: the hero's fireflies are gone on phones; every version with them stuttered on a real phone)
 
 // ------------------------------------------------------------------ intro
-let introAnims = [], loopAnims = [], revealed = false, introAt = null, plateReady = false, plateSettled = false;
+let introAnims = [], revealed = false, introAt = null, plateReady = false, plateSettled = false;
 // the extra ivy the world layer hangs over the plate (.world-over) comes up with the room's light, on the same clock
 function syncOver() {
   const over = document.querySelector('.world-over');
@@ -254,7 +164,7 @@ function intro(at) {
 }
 
 // ------------------------------------------------------------------ boot
-window.__mobileHero = { host, timing, anims: () => [...introAnims, ...loopAnims], skip };
+window.__mobileHero = { host, timing, anims: () => [...introAnims], skip };
 if (!phone || params.has('nohero')) {
   root.classList.remove('intro', 'intro-pending');
 } else {
@@ -266,8 +176,6 @@ if (!phone || params.has('nohero')) {
   if (root.classList.contains('intro-pending')) {
     SKIP_EVENTS.forEach((type) => addEventListener(type, skip, { passive: true }));
   }
-  const list = buildFlies(flies());
-  if (!still) followFlies(list);
   // the ivy painted on the plate, handed to the world layer in page px so it carries it on down (as site-hero.js does)
   fetch(url('./hero/hero-ivy.json')).then((r) => r.json()).then((ivy) => {
     const publish = () => {
@@ -304,7 +212,6 @@ if (!phone || params.has('nohero')) {
   if (still || !root.classList.contains('intro-pending')) {
     imgA.style.display = 'none';
     settlePlate();
-    if (!still) loopAnims.push(...animateFlies(list, list.length, null));
     reveal();
   } else {
     // 2. The clock starts on the second frame the page actually paints with the plates in it. A page that is not
@@ -319,11 +226,8 @@ if (!phone || params.has('nohero')) {
       const at = document.timeline.currentTime;
       timing.clock = Math.round(performance.now() - timing.start);
       intro(at);
-      loopAnims.push(...animateFlies(list, list.length, at));
       // a hard finish, counted from when the clock really started, well after the room should be up
       setTimeout(() => { if (!revealed || introAnims.some((a) => a.playState !== 'finished')) skip(); }, (INTRO.roomEnd + 3) * 1000);
     }
   }
-  // nothing loops while the hero is off screen
-  new IntersectionObserver(([e]) => { for (const a of loopAnims) e.isIntersecting ? a.play() : a.pause(); }).observe(host.querySelector('.m-plate__stage'));
 }

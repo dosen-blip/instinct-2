@@ -75,6 +75,9 @@ export class Fireflies {
     // when the camera travels down the wall most of them drift along after it, each at its own pace; moths stay at the sign
     // (derived without the generator so the layout above stays exactly as it was)
     this.flies.forEach((f, i) => { f.follow = f.kind === 'moth' ? 0 : .6 + .35 * (i * .618 % 1); f.pace = .35 + .5 * (i * .382 % 1); f.pan = 0; });
+    // (round 19, the clients: fewer fireflies, each brighter) about 3 in 10 of the ones about the wall are left dark, and
+    // the rest carry 1.35 of the light, as on the rest of the site (world.js FLY_KEEP, FLY_GAIN); the moths stay as they are
+    this.flies.forEach((f, i) => { f.gain = f.kind === 'moth' ? 1 : i * .618 % 1 < .3 ? 0 : 1.35; });
     this.points.geometry.attributes.aSize.array.set(this.flies.map((f) => f.size));
     this.points.geometry.attributes.aSize.needsUpdate = true;
   }
@@ -99,6 +102,7 @@ export class Fireflies {
       else lvl = .45 + .35 * Math.sin(t * .6 + f.offset);
       const wake = Math.min(1, Math.max(0, (room - i / NFF * .45) / .55));
       lvl *= wake * wake * (3 - 2 * wake);   // they wake one by one as the room comes up, each easing in and out of it
+      lvl *= f.gain;
       pos.setXYZ(i, px, py, pz);
       col.setXYZ(i, f.color.r * lvl, f.color.g * lvl, f.color.b * lvl);
       this.U.uFF.value[i].set(px, py, pz, lvl * f.power);
