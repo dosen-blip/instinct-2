@@ -196,7 +196,7 @@ html.world-off :is(.world-vignette, .world-grain) { display: none; }
   .world-light, .world-bodies { z-index: auto; isolation: auto; mix-blend-mode: normal; }
   .world-veil, .world-light__fade { display: none; }
   .world-lamp { mix-blend-mode: color-dodge; will-change: transform, opacity; }
-  .world-bodies .world-fly { mix-blend-mode: plus-lighter; }
+  .world-bodies .world-fly { mix-blend-mode: normal; }   /* (round 22: a few plain dots over the bands; their light is baked) */
   /* the lit slab's bloom: one composited glow whose opacity is the backlight, instead of two large blurred shadows
      repainted with every step of the hum */
   .archive-shell > .archive-actions > a:first-child,

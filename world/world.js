@@ -62,7 +62,8 @@ const STILL_PHONE = { w: 440, h: 1440 };
 // where it lives (FLY_KEEP of them, so nothing else on the wall moves), and the ones kept carry FLY_GAIN of the light
 const FLY_KEEP = 0.7, FLY_GAIN = 1.35;
 const keepFly = (home) => !home || hash(home.x * 0.0137 + home.y * 0.00731) < FLY_KEEP;
-const PHONE_FLIES = 45000;   // px² of band per firefly (desktop 110000): 8 to a 1000 px band at 375 px (round 18: was 6)
+// (round 22) phones: about 3 to a 1000 px band at 375 px before FLY_KEEP, so 1-2 a screen; see placePhoneFlies
+const PHONE_FLIES = 125000;   // px² of band per firefly (desktop 110000)
 const PHONE_GRIDS = '.archive-card-grid, .archive-media-grid, .archive-lineup-grid, .archive-artist-grid, .archive-appearances';
 const HERO_TONE = 0.8;       // the strands hung over the phone hero's plate, toned to the plate's own lit ivy
 let over = null, overIn = null;   // phones: the layer over the hero's plate (under the vignette and grain) those strands hang in
@@ -334,7 +335,7 @@ function measure() {
   followEdges(route);
   for (const v of vines) placeVine(v);
   for (const p of pools) placePool(p);
-  if (geo.phone) bakePhone();
+  if (geo.phone) { bakePhone(); placePhoneFlies(); }
 
   // slabs: the lights people press
   const found = new Set(inApp(SLABS));
@@ -404,7 +405,9 @@ function bakePhone() {
     // the steady light over this band: the fill, the fixtures that reach it, the fade into the dark above the footer
     const lit = pools.filter((p) => p.on && p.py - geo.top + p.ry > y0 && p.py - geo.top - p.ry < y1);
     const fade = h - 340 < y1;
-    const lightKey = `${vw}|${geo.live}|${geo.plate}|${geo.liveEnd - geo.top}|${geo.phone}|${fade ? h : ''}|${lit.map((p) => p.key + p.i).join(';')}`;
+    // (and the fireflies' own light, baked: see placePhoneFlies)
+    const glow = flies.filter((f) => f.home && Math.abs(f.home.y - geo.top - (y0 + y1) / 2) < BAKE_H / 2 + FLY_REACH);
+    const lightKey = `${vw}|${geo.live}|${geo.plate}|${geo.liveEnd - geo.top}|${geo.phone}|${fade ? h : ''}|${lit.map((p) => p.key + p.i).join(';')}|${glow.map((f) => `${Math.round(f.home.x * geo.sx)},${Math.round(f.home.y)}`).join(';')}`;
     if (lightKey !== b.lightKey) {
       b.lightKey = lightKey; full = true;
       const c = b.light; c.width = Math.ceil(vw * r); c.height = BAKE_H * r;
@@ -422,6 +425,12 @@ function bakePhone() {
         g.save(); g.translate(p.px, p.py - geo.top); g.scale(p.rx, p.ry);
         const grad = g.createRadialGradient(0, 0, 0, 0, 0, 1);
         for (const [d, v] of FALLOFF) grad.addColorStop(d, `rgb(${rgb(p.c, p.i * v)})`);
+        g.fillStyle = grad; g.fillRect(-1, -1, 2, 2); g.restore();
+      }
+      for (const f of glow) {
+        g.save(); g.translate(f.home.x * geo.sx, f.home.y - geo.top); g.scale(FLY_REACH, FLY_REACH);
+        const grad = g.createRadialGradient(0, 0, 0, 0, 0, 1);
+        for (const [d, v] of FALLOFF) grad.addColorStop(d, `rgb(${rgb(f.c, f.power * 0.42 * FLY_LEVEL * v)})`);
         g.fillStyle = grad; g.fillRect(-1, -1, 2, 2); g.restore();
       }
       if (fade) {
@@ -837,7 +846,7 @@ function buildRoom(route, vw, ivySignature) {
   const grown = room?.route === route ? growing.map((v) => v.grow) : [];
   for (const v of vines) { trace('vine:remove', { grows: v.grows, y: Math.round(v.pts[0].y) }); v.canvas.remove(); }
   for (const p of pools) p.el.remove();
-  for (const f of flies) { f.el.remove(); f.light.remove(); }
+  for (const f of flies) { phoneFlySeen?.unobserve(f.el); f.el.phoneAnims?.forEach((a) => a.cancel()); f.el.remove(); f.light.remove(); }
   for (const v of growing) v.edgeEl?.classList.remove('world-vine-edge', 'is-top', 'is-bottom');
   vines = []; fixedVines = []; growing = []; roomPools = []; pools = []; bandList = []; flies = []; edgeVines = []; edgeFlies = [];
   room = { route, live: geo.live, ivy: ivySignature, w: innerWidth, vw, top: geo.top, liveEnd: geo.liveEnd };
@@ -1056,11 +1065,47 @@ function moreInBand(k, y0, band, lenK) {
 // ------------------------------------------------------------------ fireflies, in page space with a little depth
 // Each one is made once, with the room or its band, and starts dark until the frame loop places it.
 let flies = [], wakeAt = -1;
+// Phones (round 22). Every firefly that moved about the page, or followed it, or lit the wall live, cost a phone its
+// smoothness: they were the only thing on the page changing every frame (lights inside page-high blended layers, then
+// script-driven moves, then dozens of animated layers). Here they are few (PHONE_FLIES, then FLY_KEEP: 1-2 a screen),
+// each at a fixed spot, hovering within about a centimetre of it (FLY_HOVER px, a 60 s loop of whole cycles) and
+// blinking, both compositor animations of one small plain element, paused while it is off screen. Their light on the
+// wall does not move at all: it is drawn into the wall's bands with the fixtures (bakePhone), at FLY_LEVEL of its peak,
+// about what it gives on average; next to its 150 px reach the hover is too small for the light to be seen lagging.
+const FLY_REACH = 150, FLY_LEVEL = 0.5, FLY_HOVER = 20;
+const phoneFlySeen = phoneMq.matches ? new IntersectionObserver((entries) => {
+  for (const e of entries) for (const a of e.target.phoneAnims || []) e.isIntersecting ? a.play() : a.pause();
+}, { rootMargin: '300px 0px' }) : null;
+function placePhoneFlies() {
+  if (!phoneFlySeen) return;   // (a page opened wide and narrowed past 720 px: it reloads as a phone page in a moment)
+  for (const f of flies) {
+    if (!f.home) continue;
+    f.el.style.left = `${f.home.x * geo.sx}px`;
+    f.el.style.top = `${f.home.y - geo.top}px`;
+    if (f.el.phoneAnims) continue;
+    f.el.style.opacity = '0.65';
+    f.el.phoneAnims = [];
+    if (still) continue;
+    const seconds = 60, path = [], A = [FLY_HOVER, FLY_HOVER * 0.75].map((a) => a * (0.8 + 0.4 * f.z));
+    // whole cycles, the harmonic included, so the loop's end meets its start in place and in speed
+    const cycles = f.freq.map((v) => Math.max(1, Math.round(v * seconds / (2 * Math.PI))));
+    for (let k = 0; k <= seconds * 4; k++) {
+      const t = k / (seconds * 4) * Math.PI * 2;
+      const p = A.map((a, i) => a * (Math.sin(t * cycles[i] + f.phase[i]) + 0.35 * Math.sin(t * cycles[i] * 3 + f.phase[i] * 1.3)) / 1.35);
+      path.push({ transform: `translate3d(${p[0].toFixed(2)}px, ${p[1].toFixed(2)}px, 0)` });
+    }
+    f.el.phoneAnims = [
+      f.el.animate(path, { duration: seconds * 1000, iterations: Infinity, easing: 'linear' }),
+      f.el.animate([{ opacity: 0.27 }, { opacity: 1 }, { opacity: 0.27 }], { duration: f.period * 1000, iterations: Infinity, easing: 'ease-in-out', iterationStart: f.offset % 1 }),
+    ];
+    for (const a of f.el.phoneAnims) a.pause();
+    phoneFlySeen.observe(f.el);
+  }
+}
 function addFly(kind, home, amp, R, extra = {}) {
   const rand = (a, b) => a + (b - a) * R();
   const f = { kind, ...KINDS[kind], home, amp, freq: [rand(0.08, 0.25), rand(0.1, 0.3)], phase: [R() * 6.3, R() * 6.3], period: rand(2.6, 6.5), offset: R() * 10, z: R(), off: { x: 0, y: 0, vx: 0, vy: 0 }, ...extra };
-  // (round 20) phones have none at all: every version with fireflies on them stuttered on a real phone
-  if (geo.phone || !keepFly(home)) return null;   // (its draws are taken all the same, so what follows in its stream is unchanged)
+  if (!keepFly(home)) return null;   // (its draws are taken all the same, so what follows in its stream is unchanged)
   f.power *= f.moth === undefined ? FLY_GAIN : 1;
   f.el = el('i', 'world-fly', bodies);
   f.el.style.setProperty('--c', rgb(f.c));

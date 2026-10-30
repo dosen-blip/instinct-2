@@ -11,8 +11,7 @@
   .world-bake { will-change: auto; }
   /* The vignette is black + alpha on phones. No screen-sized multiply/overlay surfaces during native scrolling. */
   .world-vignette { mix-blend-mode: normal; }
-  /* (round 20) and no fireflies on phones at all (world.js addFly, mobile-hero.js): their layer goes too */
-  .world-grain, .world-light, .world-bodies { display: none; }
+  .world-grain, .world-light { display: none; }
   .home-opening__plate { display: block; }
   /* ---------------------------------------------------------------- the page is see-through to the wall, as on desktop */
   #app, .mobile-view, .mobile-home-hero, .home-opening, .home-definition, .current-artist-page { background: transparent; }
