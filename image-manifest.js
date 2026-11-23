@@ -2682,5 +2682,22 @@ window.INSTINCT_IMAGES = {
         "height": 1982
       }
     ]
+  },
+  "inside-instinct-preview-poster": {
+    "src": "./assets/inside-instinct-preview-poster.webp",
+    "width": 540,
+    "height": 960,
+    "candidates": [
+      {
+        "src": "./assets/inside-instinct-preview-poster-480.webp",
+        "width": 480,
+        "height": 853
+      },
+      {
+        "src": "./assets/inside-instinct-preview-poster.webp",
+        "width": 540,
+        "height": 960
+      }
+    ]
   }
 };

@@ -1035,6 +1035,31 @@
     ]
   },
   {
+    "name": "inside-instinct-preview-poster",
+    "originalBytes": 325918,
+    "optimizedBytes": 49714,
+    "original": {
+      "width": 540,
+      "height": 960
+    },
+    "fallback": {
+      "width": 540,
+      "height": 960
+    },
+    "qualityChecks": [
+      {
+        "file": "inside-instinct-preview-poster-480.webp",
+        "quality": 90,
+        "psnr": 50.42
+      },
+      {
+        "file": "inside-instinct-preview-poster.webp",
+        "quality": 90,
+        "psnr": 50.61
+      }
+    ]
+  },
+  {
     "name": "instinct-anniversary-poster",
     "originalBytes": 1454890,
     "optimizedBytes": 1117392,

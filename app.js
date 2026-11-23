@@ -399,12 +399,13 @@
     dialog.addEventListener('close',onClose);dialog.addEventListener('keydown',onKey);dialog.addEventListener('click',onBackdrop);
     return()=>{if(dialog.open)dialog.close();onClose();document.getElementById('app').removeEventListener('click',open);previous.removeEventListener('click',prevClick);next.removeEventListener('click',nextClick);close.removeEventListener('click',closeClick);dialog.removeEventListener('close',onClose);dialog.removeEventListener('keydown',onKey);dialog.removeEventListener('click',onBackdrop);};
   }
-  // On a phone the home film is played by mobile/mobile.js once the intro is over and it is near the screen (it is
-  // 9.4 MB), so the phone home renders it without autoplay or preload. (phoneAtLoad: mobile.js decides at load too.)
+  // On a phone the home film is played by mobile/mobile.js once the intro is over and it is near the screen,
+  // so the phone home renders it without autoplay or preload. (phoneAtLoad: mobile.js decides at load too.)
   const phoneAtLoad = mobileMedia.matches;
   function homePreviewMedia(posterName,alt,phone=false) {
+    posterName = 'inside-instinct-preview-poster';
     const deferred = phone && phoneAtLoad;
-    return `<video ${deferred?'':'autoplay '}muted loop playsinline preload="${deferred?'none':'metadata'}" poster="${url(asset(posterName))}" aria-label="${esc(alt)}"><source src="./assets/home-preview.mp4" type="video/mp4">${imageTag(asset(posterName),alt,{sizes:'(max-width:720px) 342px, 420px'})}</video>`;
+    return `<video ${deferred?'':'autoplay '}muted loop playsinline preload="${deferred?'none':'metadata'}" poster="${url(asset(posterName))}" aria-label="${esc(alt)}"><source src="./assets/inside-instinct-preview.mp4" type="video/mp4">${imageTag(asset(posterName),alt,{sizes:'(max-width:720px) 342px, 420px'})}</video>`;
   }
   function siteFooter() {
     return `<footer class="site-footer"><div class="site-footer__inner"><a class="site-footer__brand" href="${routes.home}">Instinct Groove</a><nav class="archive-footer-links" aria-label="Footer navigation">${textLink(routes.events,'Past Events')}${textLink(routes.artists,'Artists')}${textLink(routes.gallery,'Gallery')}</nav><div class="site-footer__contacts"><a href="${url(links.instagram)}" target="_blank" rel="noreferrer">@Instinct.groove</a><a href="${url(links.email)}">Info@instinctgroove.net</a></div><p>Ottawa's Minimal Tech &amp; House Experience</p></div></footer>`;
@@ -430,7 +431,7 @@
             <div class="preview-panel__inner">
               <h2><span>Inside</span> Instinct</h2>
               <div class="preview-panel__media">
-                ${homePreviewMedia('home-preview', 'Event preview atmosphere')}
+                ${homePreviewMedia('inside-instinct-preview-poster', 'Instinct anniversary dance floor video')}
               </div>
             </div>
           </section>
