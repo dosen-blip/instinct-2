@@ -1046,9 +1046,9 @@ window.INSTINCT_CONTENT = {
       "id": "balla",
       "name": "BALLA",
       "bio": [],
-      "portrait": "block-party-artist-niko-balla",
-      "alt": "Niko Couture and BALLA standing together in an elevator",
-      "imageCaption": "From the NIKO COUTURE B2B BALLA appearance",
+      "portrait": "balla-portrait",
+      "alt": "BALLA at the decks, the crowd behind",
+      "imageCaption": "BALLA at Instinct",
       "accent": "#f2c56b",
       "socials": [
         {
@@ -1084,9 +1084,9 @@ window.INSTINCT_CONTENT = {
       "id": "seb-b",
       "name": "Seb B",
       "bio": [],
-      "portrait": "mobile-mcp-artist-seb-balla-photo",
-      "alt": "Seb B b2b Balla artist portrait",
-      "imageCaption": "From the Seb B b2b Balla appearance",
+      "portrait": "seb-b-portrait",
+      "alt": "Seb B mixing in headphones under red light",
+      "imageCaption": "Seb B at Instinct",
       "accent": "#32e07a",
       "socials": [
         {

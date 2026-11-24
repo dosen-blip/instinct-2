@@ -2699,5 +2699,59 @@ window.INSTINCT_IMAGES = {
         "height": 960
       }
     ]
+  },
+  "balla-portrait": {
+    "src": "./assets/balla-portrait.webp",
+    "width": 1688,
+    "height": 1856,
+    "candidates": [
+      {
+        "src": "./assets/balla-portrait-480.webp",
+        "width": 480,
+        "height": 528
+      },
+      {
+        "src": "./assets/balla-portrait-960.webp",
+        "width": 960,
+        "height": 1056
+      },
+      {
+        "src": "./assets/balla-portrait-1440.webp",
+        "width": 1440,
+        "height": 1583
+      },
+      {
+        "src": "./assets/balla-portrait.webp",
+        "width": 1688,
+        "height": 1856
+      }
+    ]
+  },
+  "seb-b-portrait": {
+    "src": "./assets/seb-b-portrait.webp",
+    "width": 1868,
+    "height": 2000,
+    "candidates": [
+      {
+        "src": "./assets/seb-b-portrait-480.webp",
+        "width": 480,
+        "height": 514
+      },
+      {
+        "src": "./assets/seb-b-portrait-960.webp",
+        "width": 960,
+        "height": 1028
+      },
+      {
+        "src": "./assets/seb-b-portrait-1440.webp",
+        "width": 1440,
+        "height": 1542
+      },
+      {
+        "src": "./assets/seb-b-portrait.webp",
+        "width": 1868,
+        "height": 2000
+      }
+    ]
   }
 };

@@ -95,6 +95,41 @@
     ]
   },
   {
+    "name": "balla-portrait",
+    "originalBytes": 490226,
+    "optimizedBytes": 530258,
+    "original": {
+      "width": 1688,
+      "height": 1856
+    },
+    "fallback": {
+      "width": 1688,
+      "height": 1856
+    },
+    "qualityChecks": [
+      {
+        "file": "balla-portrait-480.webp",
+        "quality": 85,
+        "psnr": 44.63
+      },
+      {
+        "file": "balla-portrait-960.webp",
+        "quality": 85,
+        "psnr": 44.68
+      },
+      {
+        "file": "balla-portrait-1440.webp",
+        "quality": 85,
+        "psnr": 44.32
+      },
+      {
+        "file": "balla-portrait.webp",
+        "quality": 85,
+        "psnr": 44.42
+      }
+    ]
+  },
+  {
     "name": "block-party-artist-artur-exists",
     "originalBytes": 295469,
     "optimizedBytes": 267542,
@@ -2116,6 +2151,41 @@
         "file": "next-ty.webp",
         "quality": 85,
         "psnr": 45.78
+      }
+    ]
+  },
+  {
+    "name": "seb-b-portrait",
+    "originalBytes": 441955,
+    "optimizedBytes": 242436,
+    "original": {
+      "width": 1868,
+      "height": 2000
+    },
+    "fallback": {
+      "width": 1868,
+      "height": 2000
+    },
+    "qualityChecks": [
+      {
+        "file": "seb-b-portrait-480.webp",
+        "quality": 85,
+        "psnr": 45.51
+      },
+      {
+        "file": "seb-b-portrait-960.webp",
+        "quality": 85,
+        "psnr": 46.27
+      },
+      {
+        "file": "seb-b-portrait-1440.webp",
+        "quality": 85,
+        "psnr": 46.7
+      },
+      {
+        "file": "seb-b-portrait.webp",
+        "quality": 85,
+        "psnr": 46.3
       }
     ]
   },
