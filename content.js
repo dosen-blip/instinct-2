@@ -453,6 +453,33 @@ window.INSTINCT_CONTENT = {
         "https://www.instagram.com/instinct.groove/ (bio: VOL. 7 SEPTEMBER 11TH)"
       ]
     },
+    "vol-8": {
+      "id": "vol-8",
+      "title": "Vol. 8",
+      "date": "2026-12-04",
+      "displayDate": "Friday, December 4th, 2026",
+      "venue": "City At Night",
+      "address": "222 Slater Street, Ottawa",
+      "hours": "10 PM–2:30 AM",
+      "endsAt": "2026-12-05T02:30:00-05:00",
+      "cover": "vol8-poster",
+      "posters": ["vol8-poster"],
+      "intro": "Instinct returns to City At Night for Vol. 8. From the opening groove to the last record, Grottoli, Sokotta and Alex Jimenez take us through the night.",
+      "lineup": [
+        { "artistIds": ["grottoli"], "profileId": "grottoli", "label": "Grottoli", "time": "10:00 PM–11:30 PM", "role": "Opener" },
+        { "artistIds": ["sokotta"], "profileId": "sokotta", "label": "Sokotta", "time": "11:30 PM–1:00 AM" },
+        { "artistIds": ["alex-jimenez"], "profileId": "alex-jimenez", "label": "Alex Jimenez", "time": "1:00 AM–2:30 AM", "role": "Closer" }
+      ],
+      "mediaIds": [],
+      "announcements": [],
+      "ticketUrl": "https://simpli.events/e/instinct-vol-8",
+      "ticketLabel": "DEC 4 TICKETS",
+      "sources": [
+        "User-supplied Vol. 8 lineup and set times, November 25, 2026",
+        "https://simpli.events/e/instinct-vol-8",
+        "https://drive.google.com/drive/folders/1-X-24bVYZbuM2I6uIw1_JTNdkpLXF-aE"
+      ]
+    },
     "instinct-anniversary": {
       "id": "instinct-anniversary",
       "title": "Instinct Anniversary",
@@ -501,6 +528,72 @@ window.INSTINCT_CONTENT = {
     }
   },
   "artists": {
+    "grottoli": {
+      "id": "grottoli",
+      "name": "Grottoli",
+      "bio": [],
+      "portrait": "grottoli-portrait",
+      "alt": "Grottoli performing behind the decks in sunglasses under blue club lighting",
+      "accent": "#32e07a",
+      "socials": [],
+      "qas": [
+        { "question": "First show?", "answer": "Skrillex: Mothership Tour 2012. I have Blackberry camera footage of the spaceship going up. After the show I googled “pioneer dj equipment”." },
+        { "question": "First festival?", "answer": "ESCAPADE 2013. I was 16. I signed up as a Volunteer so I could get in. I was checking tickets for a couple of hours before I realized I could stand in the crowd all day. Wolfgang Gartner, Benny Benasi and Steve Angello on a small main stage. It was life changing. Sorry about that escapade." },
+        { "question": "First gig?", "answer": "Bluesfest 2014 at The DJ Fort. I was 17. Applied through the local artist application and got accepted. I played a bunch of Big Room House, Melbourne Bounce and Electro. It was a country music day too." }
+      ],
+      "sources": [
+        "User-supplied INSTINCT AMA for Grottoli, November 25, 2026",
+        "User-supplied Vol. 8 lineup, November 25, 2026",
+        "https://drive.google.com/drive/folders/1m8Y8gWYySwKCFeUnPTGvkqShlmJFfPnd"
+      ]
+    },
+    "sokotta": {
+      "id": "sokotta",
+      "name": "Sokotta",
+      "bio": [
+        "Sokotta is a house and techno music producer based in Ottawa. His raw passion for electronic music began in 2013 when he first discovered electronic music, and quickly fell in love. He began experimenting within electro house and carved out his own style of groovy underground, bass-heavy groove—rooted in house and techno, with a flair for intricate ear candy, female vocal textures, and a low-end that he affectionately dubs “mature wubs.”",
+        "Sokotta spends most of his free time in the studio, refining his unique sound, and playing his music in clubs and festivals across Canada—including Escapade EMF, The Womp, Summerdaze as well as Black Rabbit Campout.",
+        "Sokotta’s releases have been met with a warm reception by the dance music community. Labels such as Rock Bottom Records and Street Tracks have each signed and promoted his work, solidifying his reputation within the electronic underground scene. Some of his breakout tracks include “Wanna” (Extended Mix), which was featured on the Litterbox 15 compilation (Box of Cats), earning attention from labels and electronic music communities alike."
+      ],
+      "portrait": "sokotta-portrait",
+      "alt": "Sokotta seated and smiling against a grey studio backdrop",
+      "accent": "#32e07a",
+      "socials": [
+        { "label": "Instagram", "href": "https://www.instagram.com/sokottamusic" },
+        { "label": "SoundCloud", "href": "https://soundcloud.com/sokottamusic" },
+        { "label": "Spotify", "href": "https://spotify.link/Ren64qa6EXb" },
+        { "label": "Beatport", "href": "https://www.beatport.com/artist/sokotta/676822" }
+      ],
+      "qas": [
+        { "question": "How did you get started in music?", "answer": "Started playing guitar as a teenager, mostly Metallica on an acoustic. Master of Puppets goes hard on acoustic. Around 2010, I got into Chase & Status and deadmau5. Then I saw Nicky Romero in Ottawa, and I was hooked. Electronic music became a huge part of my life, especially at the gym. In 2017, I started producing, and the obsession took off." },
+        { "question": "Where did the name Sokotta come from?", "answer": "I came across the Swedish word Gökotta, which means waking up early to listen to birds sing. Pretty fitting for rave culture when you’re still partying as the birds wake up. Swapped the G for an S from Shrum, and Sokotta was born. Funny enough, my wife’s name is Robin, birds are living dinosaurs, and I love dinosaurs. It all ties together." },
+        { "question": "What does “Mature Wubs” mean?", "answer": "Deep, sexy basslines with a heavy, gritty low end, influenced by drum and bass and jungle. Bass you can really feel, with a solid groove, without always needing to be in your face." }
+      ],
+      "sources": [
+        "https://docs.google.com/document/d/1jThvIw5LUPvgfF371aqy9hczSOLIURTGHWExizA7qEM/edit",
+        "https://docs.google.com/document/d/1W-vnk8-3M-jfA_J2GgY_Voq-8l6FHehtR0XeLFJG1DM/edit",
+        "https://docs.google.com/document/d/15hHy0v09P1I1nCdp8J-gY6IISoh8P0E2ZgsLNm6OJTg/edit",
+        "https://drive.google.com/drive/folders/10DuP-B5rXsCfwnTq1UgaAKiPvjCSrszy"
+      ]
+    },
+    "alex-jimenez": {
+      "id": "alex-jimenez",
+      "name": "Alex Jimenez",
+      "bio": [
+        "Ottawa based DJ Alex Jimenez is driven by an obsession with music discovery and the craft of DJing. Rooted in underground house, his sets blend hypnotic grooves, long, seamless mixes, and sudden shifts in energy, creating journeys that connect with the dancefloor and keep people lost in the music.",
+        "From a residency at Raindance Hostel in Nicaragua to festivals such as Escapade, Alex has shared the stage with house music legends Derrick Carter and Victor Calderone. His approach is simple: dig deeper, trust the music, and let the dancefloor tell the story."
+      ],
+      "portrait": "alex-jimenez-portrait",
+      "alt": "Alex Jimenez DJing at City At Night beneath vertical pink and blue lights",
+      "accent": "#32e07a",
+      "socials": [],
+      "qas": [
+        { "question": "What was your first rave?", "answer": "The first rave I ever attended was Deep Therapy when I was 17, and to this day, it was the coolest warehouse party I’ve been to in Ottawa. It was an unforgettable experience!" },
+        { "question": "What was your first gig?", "answer": "Aside from playing house parties for friends, my first actual gig was in Nicaragua. I went there on vacation, and one of the hostels I stayed at posted on Instagram looking for volunteer DJs. I quickly put together a mix, sent it to them, and they got back to me almost immediately. I ended up becoming their resident DJ for a month." },
+        { "question": "What’s the longest set you played?", "answer": "When I was DJing in Ometepe, Nicaragua, the parties hosted by the hostel ran from 3 PM to midnight, followed by an afterparty that went until everyone left. One night, I had to open the main party from 3–5:30 PM and then close out the afterparty from midnight to 6 AM. In total, I played 8.5 hours in one day." }
+      ],
+      "sources": ["User-supplied Alex Jimenez bio, Q&A and portrait screenshots, November 25, 2026"]
+    },
     "snooko": {
       "id": "snooko",
       "name": "Snooko",

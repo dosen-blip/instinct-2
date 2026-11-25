@@ -98,6 +98,10 @@
 .archive-play { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 12px 20px; background: var(--accent); color: #000; font: 700 12px/1.5 var(--font-mono); white-space: nowrap; }
 .archive-event-meta { font: 13px/1.9 var(--font-mono); color: var(--muted); }
 .archive-event .archive-heading { padding-bottom: 8px; }
+.archive-event--vol8 .archive-heading { border-bottom: 2px solid #ce407a; padding-bottom: 24px; margin-bottom: 24px; }
+.archive-event--vol8 .archive-lineup-card { border-top: 2px solid #ce407a; }
+.archive-event--vol8 .archive-poster img { height: auto; }
+.archive-lineup-image img[src*="sokotta-portrait"], .archive-artist-image img[src*="sokotta-portrait"] { object-position: center 12%; }
 .archive-event-intro { max-width: 850px; font-size: 19px; line-height: 1.8; color: var(--muted); margin: 32px 0 48px; }
 .archive-announcement-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 64px; align-items: center; }
 .archive-announcement-grid figure { margin: 0; }

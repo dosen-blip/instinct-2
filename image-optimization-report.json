@@ -1,5 +1,40 @@
 [
   {
+    "name": "alex-jimenez-portrait",
+    "originalBytes": 3714584,
+    "optimizedBytes": 414300,
+    "original": {
+      "width": 1508,
+      "height": 1254
+    },
+    "fallback": {
+      "width": 1508,
+      "height": 1254
+    },
+    "qualityChecks": [
+      {
+        "file": "alex-jimenez-portrait-480.webp",
+        "quality": 85,
+        "psnr": 42.82
+      },
+      {
+        "file": "alex-jimenez-portrait-960.webp",
+        "quality": 85,
+        "psnr": 43.28
+      },
+      {
+        "file": "alex-jimenez-portrait-1440.webp",
+        "quality": 85,
+        "psnr": 43.71
+      },
+      {
+        "file": "alex-jimenez-portrait.webp",
+        "quality": 85,
+        "psnr": 42.67
+      }
+    ]
+  },
+  {
     "name": "artist-caploch",
     "originalBytes": 7316402,
     "optimizedBytes": 403070,
@@ -856,6 +891,36 @@
         "file": "featured-drink-sex-on-the-beach.webp",
         "quality": 90,
         "psnr": 49.83
+      }
+    ]
+  },
+  {
+    "name": "grottoli-portrait",
+    "originalBytes": 227160,
+    "optimizedBytes": 400978,
+    "original": {
+      "width": 1001,
+      "height": 1001
+    },
+    "fallback": {
+      "width": 1001,
+      "height": 1001
+    },
+    "qualityChecks": [
+      {
+        "file": "grottoli-portrait-480.webp",
+        "quality": 85,
+        "psnr": 41.57
+      },
+      {
+        "file": "grottoli-portrait-960.webp",
+        "quality": 85,
+        "psnr": 41.89
+      },
+      {
+        "file": "grottoli-portrait.webp",
+        "quality": 85,
+        "psnr": 42.07
       }
     ]
   },
@@ -2350,6 +2415,36 @@
     ]
   },
   {
+    "name": "sokotta-portrait",
+    "originalBytes": 589371,
+    "optimizedBytes": 324812,
+    "original": {
+      "width": 1362,
+      "height": 2048
+    },
+    "fallback": {
+      "width": 1362,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "sokotta-portrait-480.webp",
+        "quality": 85,
+        "psnr": 43.82
+      },
+      {
+        "file": "sokotta-portrait-960.webp",
+        "quality": 85,
+        "psnr": 43.86
+      },
+      {
+        "file": "sokotta-portrait.webp",
+        "quality": 85,
+        "psnr": 43.64
+      }
+    ]
+  },
+  {
     "name": "ty-band",
     "originalBytes": 7881194,
     "optimizedBytes": 702448,
@@ -3546,6 +3641,41 @@
         "file": "vol6-photo7.webp",
         "quality": 85,
         "psnr": 44.72
+      }
+    ]
+  },
+  {
+    "name": "vol8-poster",
+    "originalBytes": 1471710,
+    "optimizedBytes": 1096288,
+    "original": {
+      "width": 2160,
+      "height": 2700
+    },
+    "fallback": {
+      "width": 1638,
+      "height": 2048
+    },
+    "qualityChecks": [
+      {
+        "file": "vol8-poster-480.webp",
+        "quality": 90,
+        "psnr": 44.93
+      },
+      {
+        "file": "vol8-poster-960.webp",
+        "quality": 90,
+        "psnr": 45.14
+      },
+      {
+        "file": "vol8-poster-1440.webp",
+        "quality": 90,
+        "psnr": 45.56
+      },
+      {
+        "file": "vol8-poster.webp",
+        "quality": 90,
+        "psnr": 46
       }
     ]
   }

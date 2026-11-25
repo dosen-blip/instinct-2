@@ -2753,5 +2753,103 @@ window.INSTINCT_IMAGES = {
         "height": 2000
       }
     ]
+  },
+  "vol8-poster": {
+    "src": "./assets/vol8-poster.webp",
+    "width": 1638,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/vol8-poster-480.webp",
+        "width": 480,
+        "height": 600
+      },
+      {
+        "src": "./assets/vol8-poster-960.webp",
+        "width": 960,
+        "height": 1200
+      },
+      {
+        "src": "./assets/vol8-poster-1440.webp",
+        "width": 1440,
+        "height": 1800
+      },
+      {
+        "src": "./assets/vol8-poster.webp",
+        "width": 1638,
+        "height": 2048
+      }
+    ]
+  },
+  "grottoli-portrait": {
+    "src": "./assets/grottoli-portrait.webp",
+    "width": 1001,
+    "height": 1001,
+    "candidates": [
+      {
+        "src": "./assets/grottoli-portrait-480.webp",
+        "width": 480,
+        "height": 480
+      },
+      {
+        "src": "./assets/grottoli-portrait-960.webp",
+        "width": 960,
+        "height": 960
+      },
+      {
+        "src": "./assets/grottoli-portrait.webp",
+        "width": 1001,
+        "height": 1001
+      }
+    ]
+  },
+  "sokotta-portrait": {
+    "src": "./assets/sokotta-portrait.webp",
+    "width": 1362,
+    "height": 2048,
+    "candidates": [
+      {
+        "src": "./assets/sokotta-portrait-480.webp",
+        "width": 480,
+        "height": 722
+      },
+      {
+        "src": "./assets/sokotta-portrait-960.webp",
+        "width": 960,
+        "height": 1444
+      },
+      {
+        "src": "./assets/sokotta-portrait.webp",
+        "width": 1362,
+        "height": 2048
+      }
+    ]
+  },
+  "alex-jimenez-portrait": {
+    "src": "./assets/alex-jimenez-portrait.webp",
+    "width": 1508,
+    "height": 1254,
+    "candidates": [
+      {
+        "src": "./assets/alex-jimenez-portrait-480.webp",
+        "width": 480,
+        "height": 399
+      },
+      {
+        "src": "./assets/alex-jimenez-portrait-960.webp",
+        "width": 960,
+        "height": 798
+      },
+      {
+        "src": "./assets/alex-jimenez-portrait-1440.webp",
+        "width": 1440,
+        "height": 1197
+      },
+      {
+        "src": "./assets/alex-jimenez-portrait.webp",
+        "width": 1508,
+        "height": 1254
+      }
+    ]
   }
 };
