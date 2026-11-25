@@ -518,7 +518,12 @@ window.INSTINCT_CONTENT = {
           "label": "Sebastian Couture"
         }
       ],
-      "mediaIds": [],
+      "mediaIds": [
+        "anniversary-dancefloor",
+        "anniversary-room"
+      ],
+      "albumUrl": "https://www.dropbox.com/scl/fo/y3eqdoqw8j6awq6or425b/AJ3oYXiH1a046DbuNSZypxM?rlkey=e073blcc2rt67ilam1mg7ajn9&st=x8fxzd1x&dl=0",
+      "credit": "Curtis Perry",
       "announcements": [],
       "ticketUrl": "https://simpli.events/e/SNOOKO",
       "ticketLabel": "NOV 13 TICKETS",
@@ -1250,6 +1255,30 @@ window.INSTINCT_CONTENT = {
     }
   },
   "media": {
+    "anniversary-dancefloor": {
+      "id": "anniversary-dancefloor",
+      "eventId": "instinct-anniversary",
+      "type": "photo",
+      "image": "anniversary-dancefloor",
+      "caption": "One year on the dance floor · Instinct Anniversary",
+      "alt": "The anniversary crowd beneath pink lasers and hanging greenery at GRIDWRKS",
+      "credit": "Curtis Perry",
+      "creditUrl": null,
+      "curated": true,
+      "reviewNote": null
+    },
+    "anniversary-room": {
+      "id": "anniversary-room",
+      "eventId": "instinct-anniversary",
+      "type": "photo",
+      "image": "anniversary-room",
+      "caption": "Behind the decks · Instinct Anniversary",
+      "alt": "A DJ at the anniversary decks surrounded by green-lit vines and the crowd at GRIDWRKS",
+      "credit": "Curtis Perry",
+      "creditUrl": null,
+      "curated": true,
+      "reviewNote": null
+    },
     "vol-6-photo-1": {
       "id": "vol-6-photo-1",
       "eventId": "vol-6",

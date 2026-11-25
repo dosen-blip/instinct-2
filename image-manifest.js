@@ -2851,5 +2851,59 @@ window.INSTINCT_IMAGES = {
         "height": 1254
       }
     ]
+  },
+  "anniversary-dancefloor": {
+    "src": "./assets/anniversary-dancefloor.webp",
+    "width": 2048,
+    "height": 1365,
+    "candidates": [
+      {
+        "src": "./assets/anniversary-dancefloor-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/anniversary-dancefloor-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/anniversary-dancefloor-1440.webp",
+        "width": 1440,
+        "height": 960
+      },
+      {
+        "src": "./assets/anniversary-dancefloor.webp",
+        "width": 2048,
+        "height": 1365
+      }
+    ]
+  },
+  "anniversary-room": {
+    "src": "./assets/anniversary-room.webp",
+    "width": 2048,
+    "height": 1365,
+    "candidates": [
+      {
+        "src": "./assets/anniversary-room-480.webp",
+        "width": 480,
+        "height": 320
+      },
+      {
+        "src": "./assets/anniversary-room-960.webp",
+        "width": 960,
+        "height": 640
+      },
+      {
+        "src": "./assets/anniversary-room-1440.webp",
+        "width": 1440,
+        "height": 960
+      },
+      {
+        "src": "./assets/anniversary-room.webp",
+        "width": 2048,
+        "height": 1365
+      }
+    ]
   }
 };

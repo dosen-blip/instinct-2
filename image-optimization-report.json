@@ -35,6 +35,76 @@
     ]
   },
   {
+    "name": "anniversary-dancefloor",
+    "originalBytes": 1492321,
+    "optimizedBytes": 378246,
+    "original": {
+      "width": 3333,
+      "height": 2222
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1365
+    },
+    "qualityChecks": [
+      {
+        "file": "anniversary-dancefloor-480.webp",
+        "quality": 85,
+        "psnr": 42.84
+      },
+      {
+        "file": "anniversary-dancefloor-960.webp",
+        "quality": 85,
+        "psnr": 43.96
+      },
+      {
+        "file": "anniversary-dancefloor-1440.webp",
+        "quality": 85,
+        "psnr": 44.18
+      },
+      {
+        "file": "anniversary-dancefloor.webp",
+        "quality": 85,
+        "psnr": 44.19
+      }
+    ]
+  },
+  {
+    "name": "anniversary-room",
+    "originalBytes": 1719303,
+    "optimizedBytes": 602200,
+    "original": {
+      "width": 3333,
+      "height": 2222
+    },
+    "fallback": {
+      "width": 2048,
+      "height": 1365
+    },
+    "qualityChecks": [
+      {
+        "file": "anniversary-room-480.webp",
+        "quality": 85,
+        "psnr": 41.52
+      },
+      {
+        "file": "anniversary-room-960.webp",
+        "quality": 85,
+        "psnr": 42.57
+      },
+      {
+        "file": "anniversary-room-1440.webp",
+        "quality": 85,
+        "psnr": 42.91
+      },
+      {
+        "file": "anniversary-room.webp",
+        "quality": 85,
+        "psnr": 43.15
+      }
+    ]
+  },
+  {
     "name": "artist-caploch",
     "originalBytes": 7316402,
     "optimizedBytes": 403070,
