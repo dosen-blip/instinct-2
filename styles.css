@@ -2816,7 +2816,6 @@ img[style*="--media-position"] {
     object-fit: contain;
   }
 
-  .mobile-home-welcome,
   .mobile-home-tagline {
     position: absolute;
     left: 55px;
@@ -2826,10 +2825,6 @@ img[style*="--media-position"] {
     font-size: 12px;
     line-height: 19.5px;
     text-align: center;
-  }
-
-  .mobile-home-welcome {
-    top: 103px;
   }
 
   .mobile-home-tagline {

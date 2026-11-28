@@ -323,7 +323,6 @@
 }
 .energy-paused .hero-energy::before, .energy-paused .hero-energy::after { will-change: auto; }
 .is-tracking .hero-energy { opacity: 1; }
-.mobile-home-welcome { z-index: 1; }
 @media (hover: none), (pointer: coarse) {
   .hero-energy { animation: hero-breathe 8s ease-in-out infinite alternate; }
   .energy-paused .hero-energy { animation-play-state: paused; }

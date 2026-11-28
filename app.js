@@ -469,7 +469,6 @@
         <div class="home-opening">
         <section class="mobile-home-hero">
           ${imageTag(asset('mobile-mcp-home-hero'), 'Instinct Groove artwork', { sizes: '390px', priority: true })}
-          <p class="mobile-home-welcome">Welcome to.....</p>
         </section>
         ${homeDefinition()}
         </div>
